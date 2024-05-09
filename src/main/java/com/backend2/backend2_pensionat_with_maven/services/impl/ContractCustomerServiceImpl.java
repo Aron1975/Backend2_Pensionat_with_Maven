@@ -1,8 +1,10 @@
 package com.backend2.backend2_pensionat_with_maven.services.impl;
 
 import com.backend2.backend2_pensionat_with_maven.dtos.ContractCustomerDto;
+import com.backend2.backend2_pensionat_with_maven.dtos.DetailedKundDto;
 import com.backend2.backend2_pensionat_with_maven.models.ContractCustomer;
 import com.backend2.backend2_pensionat_with_maven.dtos.allcustomers;
+import com.backend2.backend2_pensionat_with_maven.models.Kund;
 import com.backend2.backend2_pensionat_with_maven.repos.ContractCustomerRepo;
 import com.backend2.backend2_pensionat_with_maven.services.ContractCustomerService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
-
+import java.util.List;
 
 
 @Service
@@ -18,6 +20,21 @@ import org.springframework.stereotype.Service;
 public class ContractCustomerServiceImpl implements ContractCustomerService {
 
     private final ContractCustomerRepo contractCustomerRepo;
+
+
+    @Override
+    public List<ContractCustomerDto> getAllContractCustomer() {
+        return contractCustomerRepo.findAll().stream().map(c -> contractCustomerToContractCustomerDto(c)).toList();
+    }
+
+    @Override
+    public ContractCustomerDto contractCustomerToContractCustomerDto(ContractCustomer c) {
+        return ContractCustomerDto.builder().id(c.getId()).companyName(c.getCompanyName()).contactName(c.getContactName())
+                .contactTitle(c.getContactTitle()).streetAddress(c.getStreetAddress()).city(c.getCity())
+                .postalCode(c.getPostalCode()).country(c.getCountry()).phone(c.getPhone()).fax(c.getFax()).build();
+    }
+
+
 
     @Override
     public void addUpdateContractCustomers(allcustomers customers) {
