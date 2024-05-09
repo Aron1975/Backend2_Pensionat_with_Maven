@@ -17,4 +17,5 @@ public interface ContractCustomerService {
     public void addUpdateContractCustomers(allcustomers customers);
     public void sparaContractCustomer(ContractCustomerDto customersDto);
     public ContractCustomer contractCustomerDtoToContractCustomer(ContractCustomerDto customerDto);
+    ContractCustomerDto findById(int id);
 }

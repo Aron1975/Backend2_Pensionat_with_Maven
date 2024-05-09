@@ -85,7 +85,9 @@
     <tbody>
     <tr th:each="contractCustomer : ${responseList}">
         <td th:text="${contractCustomer.companyName}"></td>
-        <td th:text="${contractCustomer.contactName}"></td>
+        <td>
+            <a th:href="@{/contractCustomer/details/{id}(id=${contractCustomer.id})}" th:text="${contractCustomer.contactName}"></a>
+        </td>
         <td th:text="${contractCustomer.country}"></td>
     </tr>
     </tbody>

@@ -65,4 +65,11 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
         contractCustomer.setFax(customerDto.getFax());
         return contractCustomer;
     }
+
+    @Override
+    public ContractCustomerDto findById(int id) {
+        return contractCustomerRepo.findById(id)
+                .map(this::contractCustomerToContractCustomerDto)
+                .orElse(null);
+    }
 }
