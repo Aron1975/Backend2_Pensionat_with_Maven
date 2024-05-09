@@ -1,4 +1,4 @@
-package com.backend2.backend2_pensionat_with_maven.fetches;
+package com.backend2.backend2_pensionat_with_maven;
 
 
 import com.backend2.backend2_pensionat_with_maven.dtos.ShipperDto;
@@ -6,17 +6,14 @@ import com.backend2.backend2_pensionat_with_maven.services.impl.ShipperServiceIm
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
-@Component
-@RequiredArgsConstructor
+@ComponentScan
 public class FetchShippers implements CommandLineRunner {
 
     @Autowired
@@ -24,6 +21,7 @@ public class FetchShippers implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        System.out.println("Fetching Shippers..");
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -43,11 +41,11 @@ public class FetchShippers implements CommandLineRunner {
             shipper.setCountry(sh.getCountry());
             shipper.setPhone(sh.getPhone());
             shipper.setFax(sh.getFax());
-            System.out.println(shipper.companyName + " " + shipper.phone);
+            //System.out.println(shipper.companyName + " " + shipper.phone);
 
             shipperService.addUpdateShipper(shipper);
-
         }
+        System.out.println("Shippers updated");
     }
 
 }

@@ -6,7 +6,12 @@ import com.backend2.backend2_pensionat_with_maven.dtos.allcustomers;
 import com.backend2.backend2_pensionat_with_maven.repos.ContractCustomerRepo;
 import com.backend2.backend2_pensionat_with_maven.services.ContractCustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
+
+
+
 
 @Service
 @RequiredArgsConstructor

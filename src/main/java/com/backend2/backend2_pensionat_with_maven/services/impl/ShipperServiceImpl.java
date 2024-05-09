@@ -5,7 +5,11 @@ import com.backend2.backend2_pensionat_with_maven.models.Shipper;
 import com.backend2.backend2_pensionat_with_maven.repos.ShipperRepo;
 import com.backend2.backend2_pensionat_with_maven.services.ShipperService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
 
 @Service
 @RequiredArgsConstructor
