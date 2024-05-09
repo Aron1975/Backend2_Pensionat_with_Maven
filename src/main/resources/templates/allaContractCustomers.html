@@ -78,24 +78,15 @@
     <tr>
         <th scope="col">CompanyName</th>
         <th scope="col">ContactName</th>
-        <th scope="col">StreetAdress</th>
-        <th scope="col">City</th>
-        <th scope="col">PostalCode</th>
         <th scope="col">Country</th>
-        <th scope="col">Phone</th>
-        <th scope="col">Fax</th>
+
     </tr>
     </thead>
     <tbody>
     <tr th:each="contractCustomer : ${responseList}">
         <td th:text="${contractCustomer.companyName}"></td>
         <td th:text="${contractCustomer.contactName}"></td>
-        <td th:text="${contractCustomer.streetAddress}"></td>
-        <td th:text="${contractCustomer.city}"></td>
-        <td th:text="${contractCustomer.postalCode}"></td>
         <td th:text="${contractCustomer.country}"></td>
-        <td th:text="${contractCustomer.phone}"></td>
-        <td th:text="${contractCustomer.fax}"></td>
     </tr>
     </tbody>
 </table>
