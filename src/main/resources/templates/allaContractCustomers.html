@@ -73,12 +73,36 @@
 <h1><p th:text="${titel}" /></h2></h1>
 <h2><p th:text="'Alla ' + ${kat}" /></h2>
 <!--div class="responseList" th:unless="${#lists.isEmpty(responseList)}"-->
-<table class="table">
+<table class="tabulator-table">
     <thead>
-    <tr>
-        <th scope="col">CompanyName</th>
-        <th scope="col">ContactName</th>
-        <th scope="col">Country</th>
+    <tr class="tabulator-row">
+
+        <th >
+            CompanyName
+            <a href="?sortCol=companyName&sortOrder=asc" class="listbutton">Asc</a>
+            <a href="?sortCol=companyName&sortOrder=desc" class="listbutton">Desc</a>
+        </th>
+ <!--   det följande är ett sätt
+        <th >
+            ContactName
+            <a href="?sortCol=contactName&sortOrder=asc"><i class="fa-solid fa-arrow-up-a-z"></i></a>
+            <a href="?sortCol=contactName&sortOrder=desc"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+        </th>
+-->
+
+        <th >
+            ContactName
+            <a href="?sortCol=contactName&sortOrder=asc" class="listbutton">Asc</a>
+            <a href="?sortCol=contactName&sortOrder=desc" class="listbutton">Desc</a>
+        </th>
+
+        <th >
+            Country
+            <a href="?sortCol=country&sortOrder=asc" class="listbutton">Asc</a>
+            <a href="?sortCol=country&sortOrder=desc" class="listbutton">Desc</a>
+        </th>
+
+
 
     </tr>
     </thead>
