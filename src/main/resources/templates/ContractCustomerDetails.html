@@ -19,7 +19,7 @@
     <h1>Contract Customer Details</h1>
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title" th:text="${contractCustomer.companyName}"></h5>
+            <p class="card-text"><strong>Company Name:</strong> <span th:text="${contractCustomer.companyName}"></span></p>
             <p class="card-text"><strong>Contact Name:</strong> <span th:text="${contractCustomer.contactName}"></span></p>
             <p class="card-text"><strong>Contact Title:</strong> <span th:text="${contractCustomer.contactTitle}"></span></p>
             <p class="card-text"><strong>Address:</strong> <span th:text="${contractCustomer.streetAddress}"></span>, <span th:text="${contractCustomer.city}"></span></p>
