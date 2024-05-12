@@ -34,16 +34,33 @@ public class ContractCustomerController {
 
         @RequestMapping("/all")
         public String getAllContractCustomer(Model model, @RequestParam(defaultValue = "companyName") String sortCol,
-                                             @RequestParam(defaultValue = "ASC") String sortOrder)
+                                             @RequestParam(defaultValue = "ASC") String sortOrder,
+                                             @RequestParam(defaultValue = "") String q)
         {
+
+            q = q.trim();
 
             Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortCol);
 
             //List<ContractCustomerDto> responseList = contractCustomerService.getAllContractCustomer();
-            List<ContractCustomer> responseList = contractCustomerRepo.findAll(sort);
-            model.addAttribute("responseList", responseList);
+            model.addAttribute("q", q);
             model.addAttribute("kat", "ContractCustomers");
             model.addAttribute("titel", "ContractCustomers");
+
+            if (!q.isEmpty()){
+                List<ContractCustomer> responseList = contractCustomerRepo.findAllByCompanyNameContains(q, sort);
+                model.addAttribute("responseList", responseList);
+             //  System.out.println("hej");
+            }
+            else {
+             List<ContractCustomer> responseList = contractCustomerRepo.findAll(sort);
+                model.addAttribute("responseList", responseList);
+
+            }
+
+
+
+
             return "/allaContractCustomers";
         }
 

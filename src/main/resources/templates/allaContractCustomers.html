@@ -73,14 +73,24 @@
 <h1><p th:text="${titel}" /></h2></h1>
 <h2><p th:text="'Alla ' + ${kat}" /></h2>
 <!--div class="responseList" th:unless="${#lists.isEmpty(responseList)}"-->
+<form method="GET">
+    Search:
+    <input type="text" name="q" th:value="${q}" />
+</form>
 <table class="table">
     <thead>
     <tr class="tabulator-row">
 
         <th >
             CompanyName
+            <a th:href="@{|?q=${q}&sortCol=companyName&sortOrder=asc|}" class="listbutton">Asc</a>
+            <a th:href="@{|?q=${q}&sortCol=companyName&sortOrder=desc|}" class="listbutton">Asc</a>
+
+
+            <!--
             <a href="?sortCol=companyName&sortOrder=asc" class="listbutton">Asc</a>
             <a href="?sortCol=companyName&sortOrder=desc" class="listbutton">Desc</a>
+            -->
         </th>
  <!--   det följande är ett sätt
         <th >
