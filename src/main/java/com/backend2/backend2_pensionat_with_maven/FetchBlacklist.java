@@ -33,12 +33,7 @@ public class FetchBlacklist implements CommandLineRunner {
             blacklister.setEmail(b.getEmail());
             blacklister.setName(b.getName());
             blacklister.setGroup(b.getGroup());
-
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            String toParse = String.valueOf(b.getCreated());
-            Date date = df.parse(toParse);
-
-            blacklister.setCreated(date);
+            blacklister.setCreated(b.getCreated());
             blacklister.setOk(b.isOk());
             blacklistService.addUpdateBlacklist(blacklister);
             System.out.println(blacklister.created);
