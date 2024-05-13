@@ -48,7 +48,8 @@ public class ContractCustomerController {
             model.addAttribute("titel", "ContractCustomers");
 
             if (!q.isEmpty()){
-                List<ContractCustomer> responseList = contractCustomerRepo.findAllByCompanyNameContains(q, sort);
+             //   List<ContractCustomer> responseList = contractCustomerRepo.findAllByCompanyNameContains(q, sort);
+                List<ContractCustomer> responseList = contractCustomerRepo.findAllByCompanyNameContainsOrContactNameContainsOrCountryContains(q,q,q,sort);
                 model.addAttribute("responseList", responseList);
              //  System.out.println("hej");
             }
