@@ -102,14 +102,14 @@
 
         <th >
             ContactName
-            <a href="?sortCol=contactName&sortOrder=asc" class="listbutton">Asc</a>
-            <a href="?sortCol=contactName&sortOrder=desc" class="listbutton">Desc</a>
+            <a th:href="@{|?q=${q}&sortCol=contactName&sortOrder=asc|}" class="listbutton">Asc</a>
+            <a th:href="@{|?q=${q}&sortCol=contactName&sortOrder=desc|}" class="listbutton">Desc</a>
         </th>
 
         <th >
             Country
-            <a href="?sortCol=country&sortOrder=asc" class="listbutton">Asc</a>
-            <a href="?sortCol=country&sortOrder=desc" class="listbutton">Desc</a>
+            <a th:href="@{|?q=${q}&sortCol=country&sortOrder=asc|}" class="listbutton">Asc</a>
+            <a th:href="@{|?q=${q}&sortCol=country&sortOrder=desc|}" class="listbutton">Desc</a>
         </th>
 
 
