@@ -18,4 +18,6 @@ public interface ContractCustomerService {
     public void sparaContractCustomer(ContractCustomerDto customersDto);
     public ContractCustomer contractCustomerDtoToContractCustomer(ContractCustomerDto customerDto);
     ContractCustomerDto findById(int id);
+    public void sortContractCustomers(List<ContractCustomerDto> customers, String sortField, String sortOrder);
+
 }

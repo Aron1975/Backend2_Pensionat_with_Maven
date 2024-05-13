@@ -12,7 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -24,7 +29,8 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
 
     @Override
     public List<ContractCustomerDto> getAllContractCustomer() {
-        return contractCustomerRepo.findAll().stream().map(c -> contractCustomerToContractCustomerDto(c)).toList();
+        return contractCustomerRepo.findAll().stream().map(this::contractCustomerToContractCustomerDto)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
@@ -71,5 +77,31 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
         return contractCustomerRepo.findById(id)
                 .map(this::contractCustomerToContractCustomerDto)
                 .orElse(null);
+    }
+
+    @Override
+    public void sortContractCustomers(List<ContractCustomerDto> customers, String sortField, String sortOrder) {
+
+        Collator sortingCollator = Collator.getInstance(new Locale("sv", "SE"));
+        sortingCollator.setStrength(Collator.PRIMARY);
+
+        Comparator<ContractCustomerDto> comparator = Comparator.comparing(customer -> {
+            switch (sortField.toLowerCase()) {
+                case "contactname":
+                    return customer.getContactName();
+                case "country":
+                    return customer.getCountry();
+                default:
+                    return customer.getCompanyName();
+            }
+        }, sortingCollator);
+
+        if ("DESC".equalsIgnoreCase(sortOrder)) {
+            comparator = comparator.reversed();
+        }
+        List<ContractCustomerDto> sortableList = new ArrayList<>(customers);
+        sortableList.sort(comparator);
+        customers.clear();
+        customers.addAll(sortableList);
     }
 }

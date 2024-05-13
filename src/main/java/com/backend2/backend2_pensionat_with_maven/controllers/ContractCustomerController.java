@@ -27,46 +27,37 @@ import java.util.List;
 @RequestMapping("/contractCustomer")
 public class ContractCustomerController {
 
-        private final ContractCustomerRepo contractCustomerRepo;
-        private final ContractCustomerService contractCustomerService;
-        @Autowired
-        private final ContractCustomerServiceImpl contractCustomerServiceImpl;
+    private final ContractCustomerRepo contractCustomerRepo;
+    private final ContractCustomerService contractCustomerService;
+    @Autowired
+    private final ContractCustomerServiceImpl contractCustomerServiceImpl;
 
-        @RequestMapping("/all")
-        public String getAllContractCustomer(Model model, @RequestParam(defaultValue = "companyName") String sortCol,
-                                             @RequestParam(defaultValue = "ASC") String sortOrder,
-                                             @RequestParam(defaultValue = "") String q)
-        {
+    @RequestMapping("/all")
+    public String getAllContractCustomer(Model model, @RequestParam(defaultValue = "companyName") String sortCol,
+                                         @RequestParam(defaultValue = "ASC") String sortOrder,
+                                         @RequestParam(defaultValue = "") String q)
+    {
 
-            q = q.trim();
+        q = q.trim();
 
-            Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortCol);
+        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortCol);
 
-            //List<ContractCustomerDto> responseList = contractCustomerService.getAllContractCustomer();
-            model.addAttribute("q", q);
-            model.addAttribute("kat", "ContractCustomers");
-            model.addAttribute("titel", "ContractCustomers");
+        List<ContractCustomerDto> responseList = contractCustomerService.getAllContractCustomer();
+        contractCustomerService.sortContractCustomers(responseList, sortCol, sortOrder);
 
-            if (!q.isEmpty()){
-             //   List<ContractCustomer> responseList = contractCustomerRepo.findAllByCompanyNameContains(q, sort);
-                List<ContractCustomer> responseList = contractCustomerRepo.findAllByCompanyNameContainsOrContactNameContainsOrCountryContains(q,q,q,sort);
-                model.addAttribute("responseList", responseList);
-             //  System.out.println("hej");
-            }
-            else {
-             List<ContractCustomer> responseList = contractCustomerRepo.findAll(sort);
-                model.addAttribute("responseList", responseList);
-
-            }
+        model.addAttribute("q", q);
+        model.addAttribute("kat", "ContractCustomers");
+        model.addAttribute("titel", "ContractCustomers");
+        model.addAttribute("responseList", responseList);
 
 
-
-
-            return "/allaContractCustomers";
+        if (!q.isEmpty()) {
+            List<ContractCustomer> filteredResponse = contractCustomerRepo.findAllByCompanyNameContainsOrContactNameContainsOrCountryContains(q, q, q, sort);
+            model.addAttribute("responseList", filteredResponse);
         }
 
-
-
+        return "/allaContractCustomers";
+    }
 
 
 
