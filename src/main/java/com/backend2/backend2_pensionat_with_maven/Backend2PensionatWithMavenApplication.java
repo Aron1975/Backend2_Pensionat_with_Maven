@@ -25,6 +25,12 @@ public class Backend2PensionatWithMavenApplication {
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
 
+        }else if(Objects.equals(args[0], "fetchBlacklist")){
+            System.out.println("Updating Blacklist");
+            SpringApplication application = new SpringApplication(FetchBlacklist.class);
+            application.setWebApplicationType(WebApplicationType.NONE);
+            application.run(args);
+
         }
 
     }
