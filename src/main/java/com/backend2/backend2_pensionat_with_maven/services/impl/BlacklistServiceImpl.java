@@ -7,6 +7,8 @@ import com.backend2.backend2_pensionat_with_maven.services.BlacklistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -14,15 +16,17 @@ public class BlacklistServiceImpl implements BlacklistService {
 
     private final BlacklistRepo blacklistRepo;
 
-    /*@Override
+    @Override
     public List<BlacklistDto> getAllBlacklist(){
         return blacklistRepo.findAll().stream().map(b -> blacklistToBlacklistDto(b)).toList();
-    }*/
+    }
 
-    /*@Override
+    @Override
     public BlacklistDto blacklistToBlacklistDto(Blacklist b){
-        return BlacklistDto.builder().id(b.getId()).email(b.getEmail()).name(b.getName()).group(b.getGroup()).created(b.getCreated()).ok(b.getOk()).build();
-    }*/
+        return BlacklistDto.builder().id(b.getId()).email(b.getEmail()).name(b.getName()).ok(b.isOk()).build();
+    }
+
+
 
     @Override
     public Blacklist blacklistDtoToBlacklist(BlacklistDto blacklistDto){
@@ -30,8 +34,8 @@ public class BlacklistServiceImpl implements BlacklistService {
         blacklist.setBlacklistId(blacklistDto.getId());
         blacklist.setEmail(blacklistDto.getEmail());
         blacklist.setName(blacklistDto.getName());
-        blacklist.setGroup(blacklistDto.getGroup());
-        blacklist.setCreated(blacklistDto.getCreated());
+        //blacklist.setGroup(blacklistDto.getGroup());
+        //blacklist.setCreated(blacklistDto.getCreated());
         blacklist.setOk(blacklistDto.getOk());
 
         return blacklist;

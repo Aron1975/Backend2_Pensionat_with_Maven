@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,6 +30,7 @@ public class BokningController {
     private final BokningService bokningService;
     private final RumService rumService;
     private final KundService kundService;
+
 
     @RequestMapping("/all")
     public String allBokings(Model model) {
