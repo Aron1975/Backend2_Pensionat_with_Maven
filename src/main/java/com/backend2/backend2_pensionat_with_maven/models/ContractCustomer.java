@@ -1,7 +1,6 @@
 package com.backend2.backend2_pensionat_with_maven.models;
 
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -20,7 +19,7 @@ public class ContractCustomer {
   @Id
   @GeneratedValue
   public int id;
-  private int costumerId;
+  private int customerId;
   public String companyName;
   public String contactName;
   public String contactTitle;

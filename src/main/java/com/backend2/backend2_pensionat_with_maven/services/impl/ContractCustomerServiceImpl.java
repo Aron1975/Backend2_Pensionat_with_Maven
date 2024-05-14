@@ -5,27 +5,23 @@ import com.backend2.backend2_pensionat_with_maven.models.ContractCustomer;
 import com.backend2.backend2_pensionat_with_maven.dtos.allcustomers;
 import com.backend2.backend2_pensionat_with_maven.repos.ContractCustomerRepo;
 import com.backend2.backend2_pensionat_with_maven.services.ContractCustomerService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
-
+import java.util.Comparator;
+import java.util.List;
 
 
 @Service
 @RequiredArgsConstructor
-public class ContractCustomerServiceImpl implements ContractCustomerService {
+public class ContractCustomerServiceImpl implements ContractCustomerService{
 
     private final ContractCustomerRepo contractCustomerRepo;
 
     @Override
-    public void addUpdateContractCustomers(allcustomers customers) {
-        //System.out.println("addUpdateContractCustomers");
-        for(ContractCustomerDto cc : customers.customers) {
-           // System.out.println("cc Id: " + cc.getId());
-            sparaContractCustomer(cc);
-        }
+    public List<ContractCustomer> getAllCustomers(){
+        return contractCustomerRepo.findAll();
     }
 
     @Override
@@ -34,9 +30,82 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
     }
 
     @Override
+    @Transactional
+    public void addUpdateContractCustomers(allcustomers customers) {
+        long startTime = System.nanoTime();
+
+      /*  contractCustomerRepo.deleteAll();
+        for (ContractCustomerDto cc : customers.customers) {
+            sparaContractCustomer(cc);
+        }*/
+
+        int updatingCustomerId;
+        boolean updatedCustomer = false;
+        for(ContractCustomerDto cc : customers.customers) {
+            updatingCustomerId = findIdByCustomerId(cc.id);
+            if(updatingCustomerId == -1) {
+                sparaContractCustomer(cc);
+            }
+            else{
+
+                ContractCustomer customerToUpdate = contractCustomerRepo.getReferenceById(updatingCustomerId);
+                //System.out.println("Updating customer id: " + updatingCustomerId);
+                //System.out.println("customerToUpdate: " + customerToUpdate.id);
+                //customerToUpdate.setId(updatingCustomerId);
+                //System.out.println("customerToUpdate: " + customerToUpdate.getCustomerId());
+                //customerToUpdate.setCustomerId(cc.getId());
+                if(!customerToUpdate.companyName.equals(cc.getCompanyName())) {
+                    customerToUpdate.setCompanyName(cc.getCompanyName());
+                    updatedCustomer = true;
+                }
+                if(!customerToUpdate.contactName.equals(cc.getContactName())) {
+                    customerToUpdate.setContactName(cc.getContactName());
+                    updatedCustomer = true;
+                }
+                if(!customerToUpdate.contactTitle.equals(cc.getContactTitle())) {
+                    customerToUpdate.setContactTitle(cc.getContactTitle());
+                    updatedCustomer = true;
+                }
+                if(!customerToUpdate.streetAddress.equals(cc.getStreetAddress())) {
+                    customerToUpdate.setStreetAddress(cc.getStreetAddress());
+                    updatedCustomer = true;
+                }
+                if(!customerToUpdate.city.equals(cc.getCity())) {
+                    customerToUpdate.setCity(cc.getCity());
+                    updatedCustomer = true;
+                }
+                if(customerToUpdate.postalCode!=cc.getPostalCode()) {
+                    customerToUpdate.setPostalCode(cc.getPostalCode());
+                    updatedCustomer = true;
+                }
+                if(!customerToUpdate.country.equals(cc.getCountry())) {
+                    customerToUpdate.setCountry(cc.getCountry());
+                    updatedCustomer = true;
+                }
+                if(!customerToUpdate.phone.equals(cc.getPhone())) {
+                    customerToUpdate.setPhone(cc.getPhone());
+                    updatedCustomer = true;
+                }
+                if(!customerToUpdate.fax.equals(cc.getFax())) {
+                    customerToUpdate.setFax(cc.getFax());
+                    updatedCustomer = true;
+                }
+                if(updatedCustomer) {
+                    contractCustomerRepo.save(customerToUpdate);
+                    updatedCustomer = false;
+                }
+            }
+            //System.out.println("cc Id: " + cc.getId());
+        }
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        System.out.println("Duration: " + duration/1000000 + " ms");
+    }
+
+    @Override
     public ContractCustomer contractCustomerDtoToContractCustomer(ContractCustomerDto customerDto) {
         ContractCustomer contractCustomer = new ContractCustomer();
-        contractCustomer.setCostumerId(customerDto.getId());
+        contractCustomer.setCustomerId(customerDto.getId());
         contractCustomer.setCompanyName(customerDto.getCompanyName());
         contractCustomer.setContactName(customerDto.getContactName());
         contractCustomer.setContactTitle(customerDto.getContactTitle());
@@ -47,5 +116,11 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
         contractCustomer.setPhone(customerDto.getPhone());
         contractCustomer.setFax(customerDto.getFax());
         return contractCustomer;
+    }
+
+    public int findIdByCustomerId(int customerId) {
+        ContractCustomer c = getAllCustomers().stream().filter(customer -> customer.getCustomerId() == customerId).findFirst().orElse(null);
+        if (c == null) return -1;
+        return c.getId();
     }
 }
