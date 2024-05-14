@@ -1,27 +1,55 @@
 package com.backend2.backend2_pensionat_with_maven.services.impl;
 
 import com.backend2.backend2_pensionat_with_maven.dtos.ContractCustomerDto;
+import com.backend2.backend2_pensionat_with_maven.dtos.DetailedKundDto;
 import com.backend2.backend2_pensionat_with_maven.models.ContractCustomer;
 import com.backend2.backend2_pensionat_with_maven.dtos.allcustomers;
+import com.backend2.backend2_pensionat_with_maven.models.Kund;
 import com.backend2.backend2_pensionat_with_maven.repos.ContractCustomerRepo;
 import com.backend2.backend2_pensionat_with_maven.services.ContractCustomerService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 
 @Service
 @RequiredArgsConstructor
-public class ContractCustomerServiceImpl implements ContractCustomerService{
+public class ContractCustomerServiceImpl implements ContractCustomerService {
 
     private final ContractCustomerRepo contractCustomerRepo;
+
+
+    @Override
+    public List<ContractCustomerDto> getAllContractCustomer() {
+        return contractCustomerRepo.findAll().stream().map(this::contractCustomerToContractCustomerDto)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    @Override
+    public ContractCustomerDto contractCustomerToContractCustomerDto(ContractCustomer c) {
+        return ContractCustomerDto.builder().id(c.getId()).companyName(c.getCompanyName()).contactName(c.getContactName())
+                .contactTitle(c.getContactTitle()).streetAddress(c.getStreetAddress()).city(c.getCity())
+                .postalCode(c.getPostalCode()).country(c.getCountry()).phone(c.getPhone()).fax(c.getFax()).build();
+    }
+
+
 
     @Override
     public List<ContractCustomer> getAllCustomers(){
         return contractCustomerRepo.findAll();
+    }
+
+    public int findIdByCustomerId(int customerId) {
+        ContractCustomer c = getAllCustomers().stream().filter(customer -> customer.getCustomerId() == customerId).findFirst().orElse(null);
+        if (c == null) return -1;
+        return c.getId();
     }
 
     @Override
@@ -118,9 +146,37 @@ public class ContractCustomerServiceImpl implements ContractCustomerService{
         return contractCustomer;
     }
 
-    public int findIdByCustomerId(int customerId) {
-        ContractCustomer c = getAllCustomers().stream().filter(customer -> customer.getCustomerId() == customerId).findFirst().orElse(null);
-        if (c == null) return -1;
-        return c.getId();
+    @Override
+    public ContractCustomerDto findById(int id) {
+        return contractCustomerRepo.findById(id)
+                .map(this::contractCustomerToContractCustomerDto)
+                .orElse(null);
+    }
+
+    @Override
+    public void sortContractCustomers(List<ContractCustomerDto> customers, String sortField, String sortOrder) {
+
+        Collator sortingCollator = Collator.getInstance(new Locale("sv", "SE"));
+        sortingCollator.setStrength(Collator.PRIMARY);
+
+        Comparator<ContractCustomerDto> comparator = Comparator.comparing(customer -> {
+            switch (sortField.toLowerCase()) {
+                case "contactname":
+                    return customer.getContactName();
+                case "country":
+                    return customer.getCountry();
+                default:
+                    return customer.getCompanyName();
+            }
+        }, sortingCollator);
+
+
+        if ("DESC".equalsIgnoreCase(sortOrder)) {
+            comparator = comparator.reversed();
+        }
+        List<ContractCustomerDto> sortableList = new ArrayList<>(customers);
+        sortableList.sort(comparator);
+        customers.clear();
+        customers.addAll(sortableList);
     }
 }
