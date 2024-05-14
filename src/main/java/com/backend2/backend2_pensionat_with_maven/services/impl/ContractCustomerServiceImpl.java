@@ -62,12 +62,12 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
     public void addUpdateContractCustomers(allcustomers customers) {
         long startTime = System.nanoTime();
 
-      /*  contractCustomerRepo.deleteAll();
+        contractCustomerRepo.deleteAll();
         for (ContractCustomerDto cc : customers.customers) {
             sparaContractCustomer(cc);
-        }*/
+        }
 
-        int updatingCustomerId;
+    /*    int updatingCustomerId;
         boolean updatedCustomer = false;
         for(ContractCustomerDto cc : customers.customers) {
             updatingCustomerId = findIdByCustomerId(cc.id);
@@ -82,6 +82,7 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
                 //customerToUpdate.setId(updatingCustomerId);
                 //System.out.println("customerToUpdate: " + customerToUpdate.getCustomerId());
                 //customerToUpdate.setCustomerId(cc.getId());
+
                 if(!customerToUpdate.companyName.equals(cc.getCompanyName())) {
                     customerToUpdate.setCompanyName(cc.getCompanyName());
                     updatedCustomer = true;
@@ -124,7 +125,7 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
                 }
             }
             //System.out.println("cc Id: " + cc.getId());
-        }
+        }*/
         long endTime = System.nanoTime();
         long duration = (endTime - startTime);
         System.out.println("Duration: " + duration/1000000 + " ms");
