@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,26 +37,28 @@ public class ContractCustomerController {
     @RequestMapping("/all")
     public String getAllContractCustomer(Model model, @RequestParam(defaultValue = "companyName") String sortCol,
                                          @RequestParam(defaultValue = "ASC") String sortOrder,
-                                         @RequestParam(defaultValue = "") String q)
-    {
+                                         @RequestParam(defaultValue = "") String q) {
 
         q = q.trim();
+        List<ContractCustomerDto> responseList;
 
-        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortCol);
+        if (!q.isEmpty()) {
+            List<ContractCustomer> filteredResponse = contractCustomerRepo.findAllByCompanyNameContainsOrContactNameContainsOrCountryContains(q, q, q, Sort.unsorted());
+            responseList = filteredResponse.stream()
+                    .map(contractCustomerService::contractCustomerToContractCustomerDto)
+                    .collect(Collectors.toList());
+        } else {
+            responseList = contractCustomerService.getAllContractCustomer();
+        }
 
-        List<ContractCustomerDto> responseList = contractCustomerService.getAllContractCustomer();
-        contractCustomerService.sortContractCustomers(responseList, sortCol, sortOrder);
+
+        List<ContractCustomerDto> sortedResponse = new ArrayList<>(responseList);
+        contractCustomerService.sortContractCustomers(sortedResponse, sortCol, sortOrder);
 
         model.addAttribute("q", q);
         model.addAttribute("kat", "ContractCustomers");
         model.addAttribute("titel", "ContractCustomers");
-        model.addAttribute("responseList", responseList);
-
-
-        if (!q.isEmpty()) {
-            List<ContractCustomer> filteredResponse = contractCustomerRepo.findAllByCompanyNameContainsOrContactNameContainsOrCountryContains(q, q, q, sort);
-            model.addAttribute("responseList", filteredResponse);
-        }
+        model.addAttribute("responseList", sortedResponse);
 
         return "/allaContractCustomers";
     }
