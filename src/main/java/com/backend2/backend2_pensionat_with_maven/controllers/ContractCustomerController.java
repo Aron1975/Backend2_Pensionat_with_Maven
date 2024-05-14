@@ -51,7 +51,6 @@ public class ContractCustomerController {
             responseList = contractCustomerService.getAllContractCustomer();
         }
 
-
         List<ContractCustomerDto> sortedResponse = new ArrayList<>(responseList);
         contractCustomerService.sortContractCustomers(sortedResponse, sortCol, sortOrder);
 
@@ -62,8 +61,6 @@ public class ContractCustomerController {
 
         return "/allaContractCustomers";
     }
-
-
 
     @GetMapping("/details/{id}")
     public String showContractCustomerDetails(@PathVariable int id, Model model) {
