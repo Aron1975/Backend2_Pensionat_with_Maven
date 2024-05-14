@@ -11,19 +11,18 @@ public interface UserService {
 
 
     
-    public List<UserDto> getAllUser();
+    public List<UserDto> getAllUsers();
 
     public UserDto userToUserDto(User u);
 
-    public User UserDtoToUser(UserDto u);
+    public User userDtoToUser(UserDto u);
 
     public void deleteUserById(int id);
 
-    public String spara(UserDto u);
+    public void spara(UserDto u);
 
     public UserDto getUser(int id);
 
-
-
+    public boolean checkIfUserExists(User user, List<User> userList);
 
 }

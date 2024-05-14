@@ -2,18 +2,17 @@ package com.backend2.backend2_pensionat_with_maven.services.impl;
 
 
 import com.backend2.backend2_pensionat_with_maven.dtos.DetailedKundDto;
-import com.backend2.backend2_pensionat_with_maven.dtos.KundDto;
 import com.backend2.backend2_pensionat_with_maven.dtos.UserDto;
-import com.backend2.backend2_pensionat_with_maven.models.Kund;
 import com.backend2.backend2_pensionat_with_maven.models.User;
 import com.backend2.backend2_pensionat_with_maven.repos.BokningRepo;
 import com.backend2.backend2_pensionat_with_maven.repos.KundRepo;
 import com.backend2.backend2_pensionat_with_maven.repos.UserRepo;
-import com.backend2.backend2_pensionat_with_maven.services.KundService;
 import com.backend2.backend2_pensionat_with_maven.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<UserDto> getAllUser() {
+    public List<UserDto> getAllUsers() {
         return userRepo.findAll().stream().map(u -> userToUserDto(u)).toList();
     }
 
@@ -44,7 +43,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    public String spara(UserDto u){
+    public void spara(UserDto u){
         User user = userDtoToUser(u);
         userRepo.save(user);
     }
@@ -65,5 +64,14 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    public boolean checkIfUserExists(User user, List<User> userList) {
+        String uName = user.getUsername();
+        String pWord = user.getPassword();
+
+        boolean userExists = userList.stream().anyMatch(u -> u.getUsername().equals(uName) &&
+                u.getPassword().equals(pWord));
+
+        return userExists;
+    }
 
 }

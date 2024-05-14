@@ -79,10 +79,10 @@
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuAdminLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Admin
+                        Login
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                        <li><a class="dropdown-item" th:href="@{/login/all}">Login</a></li>
+                        <li><a class="dropdown-item" th:href="@{/login/loginForm}">Login</a></li>
                         <li><a class="dropdown-item" href="#">...</a></li>
                         <li><a class="dropdown-item" href="#">...</a></li>
                     </ul>
@@ -145,6 +145,9 @@
             </div>
             <div>
                 <p id="error-msg" th:text="${errorMessage}" />
+            </div>
+            <div>
+                <p th:text="${message}" />
             </div>
         </div>
     </form>

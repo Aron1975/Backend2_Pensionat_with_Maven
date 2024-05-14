@@ -23,7 +23,7 @@ public class BlacklistServiceImpl implements BlacklistService {
 
     @Override
     public BlacklistDto blacklistToBlacklistDto(Blacklist b){
-        return BlacklistDto.builder().id(b.getId()).email(b.getEmail()).name(b.getName()).ok(b.isOk()).build();
+        return BlacklistDto.builder().id(b.getBlacklistId()).email(b.getEmail()).name(b.getName()).ok(b.isOk()).build();
     }
 
 

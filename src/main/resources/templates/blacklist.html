@@ -73,7 +73,7 @@
                         Admin
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                        <li><a class="dropdown-item" th:href="@{/contractCustomer/all}">Login</a></li>
+                        <li><a class="dropdown-item" th:href="@{/login/loginForm}">Login</a></li>
                         <li><a class="dropdown-item" href="#">...</a></li>
                         <li><a class="dropdown-item" href="#">...</a></li>
                     </ul>
@@ -86,6 +86,27 @@
 <h1><p th:text="${titel}"/></h1>
 <h2><p th:text="${kat}"/></h2>
 <div id="maincontainer">
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Namn</th>
+            <th scope="col">Email</th>
+            <th scope="col">OK</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="blacklist : ${responseList}">
+            <td th:text="${blacklist.getId()}"></td>
+            <td th:text="${blacklist.getName()}"></td>
+            <td th:text="${blacklist.getEmail()}"></td>
+            <td th:text="${blacklist.getOk()}"></td>
+        </tr>
+        </tbody>
+    </table>
 
 </div>
 
