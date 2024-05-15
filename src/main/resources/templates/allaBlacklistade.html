@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/fragments/layouts/base_layout}">
+<head>
+    <title>Pensionat</title>
+</head>
+<body class="container-fluid">
+<section layout:fragment="content">
+
+<h1><p th:text="${titel}"/></h1>
+<h2><p th:text="'Allmän info om alla ' + ${kat}"/></h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Email</th>
+        <th scope="col">Namn</th>
+        <th scope="col">OK</th>
+        <!--th scope="col"></th-->
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="bl : ${responseList}">
+        <td th:text="${bl.email}"></td>
+        <td th:text="${bl.name}"></td>
+        <td th:text="${bl.ok}"></td>
+        <!-- <td><a th:href="@{#}" class="btn btn-primary btn-sm">Ändra</a> </td>-->
+        <!-- <td><a th:href="@{/kund/delete/{id}(id=${kund.id})}" class="btn btn-danger btn-sm">Ta bort</a> </td>-->
+    </tr>
+    </tbody>
+</table>
+
+</section>
+</body>
+</html>
