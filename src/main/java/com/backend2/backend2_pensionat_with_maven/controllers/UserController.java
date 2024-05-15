@@ -60,7 +60,7 @@ public class UserController {
             model.addAttribute("titel", "Blacklisted");
             return "blacklist";
         } else {
-            // Lägg till meddelandet i modellen för att visa för användaren på webbsidan
+
             model.addAttribute("message", "Fel användarnamn eller lösenord!");
             return "loginUser";
         }

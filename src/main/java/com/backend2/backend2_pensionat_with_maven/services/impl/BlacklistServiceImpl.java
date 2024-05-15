@@ -4,9 +4,17 @@ import com.backend2.backend2_pensionat_with_maven.dtos.BlacklistDto;
 import com.backend2.backend2_pensionat_with_maven.models.Blacklist;
 import com.backend2.backend2_pensionat_with_maven.repos.BlacklistRepo;
 import com.backend2.backend2_pensionat_with_maven.services.BlacklistService;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 
@@ -15,6 +23,40 @@ import java.util.List;
 public class BlacklistServiceImpl implements BlacklistService {
 
     private final BlacklistRepo blacklistRepo;
+    //private final HttpClient httpClient = HttpClient.newHttpClient();
+
+    /*
+    public boolean isBlacklisted(String email) {
+        String url = "https://javabl.systementor.se/api/grupp10/blacklist";
+        String requestBody = String.format("{\"email\": \"%s\"}", email);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                .build();
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            String responseBody = response.body();
+            boolean isBlacklisted = parseResponse(responseBody);
+            return isBlacklisted;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean parseResponse(String responseBody) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(responseBody);
+            return rootNode.path("ok").asBoolean();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+     */
+
 
     @Override
     public List<BlacklistDto> getAllBlacklist(){

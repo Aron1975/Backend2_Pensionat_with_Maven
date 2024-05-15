@@ -17,5 +17,6 @@ public interface BlacklistService {
 
     void addUpdateBlacklist(BlacklistDto blacklistDto);
 
+    //public boolean isBlacklisted(String email);
 
 }

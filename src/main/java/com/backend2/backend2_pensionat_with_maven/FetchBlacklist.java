@@ -24,7 +24,7 @@ public class FetchBlacklist implements CommandLineRunner {
         System.out.println("Fetching Blacklist..");
 
         JsonMapper jsonMapper = new JsonMapper();
-        Blacklist []theBlacklist =jsonMapper.readValue(new URL("https://javabl.systementor.se/api/stefan/blacklist"),
+        Blacklist []theBlacklist =jsonMapper.readValue(new URL("https://javabl.systementor.se/api/grupp10/blacklist"),
                 Blacklist[].class
         );
         for(Blacklist b : theBlacklist){
