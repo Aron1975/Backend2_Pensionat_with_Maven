@@ -1,20 +1,19 @@
 package com.backend2.backend2_pensionat_with_maven.services.impl;
 
 
-import com.backend2.backend2_pensionat_with_maven.dtos.BokningDto;
-import com.backend2.backend2_pensionat_with_maven.dtos.DetailedBokningDto;
-import com.backend2.backend2_pensionat_with_maven.dtos.KundDto;
-import com.backend2.backend2_pensionat_with_maven.dtos.RumDto;
+import com.backend2.backend2_pensionat_with_maven.dtos.*;
 import com.backend2.backend2_pensionat_with_maven.models.Bokning;
 import com.backend2.backend2_pensionat_with_maven.models.Kund;
 import com.backend2.backend2_pensionat_with_maven.models.Rum;
 import com.backend2.backend2_pensionat_with_maven.repos.BokningRepo;
 import com.backend2.backend2_pensionat_with_maven.repos.KundRepo;
 import com.backend2.backend2_pensionat_with_maven.repos.RumRepo;
+import com.backend2.backend2_pensionat_with_maven.services.BlacklistService;
 import com.backend2.backend2_pensionat_with_maven.services.BokningService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +27,7 @@ public class BokningServiceImpl implements BokningService {
     private final BokningRepo bokningRepo;
     private final KundRepo kundRepo;
     private final RumRepo rumRepo;
+    private final BlacklistService blacklistService;
 
     @Override
     public List<DetailedBokningDto> getAllBokningar() {
@@ -35,15 +35,35 @@ public class BokningServiceImpl implements BokningService {
     }
 
     @Override
-    public void uppdateraBokningMedKund(String kundId) {
+    public boolean uppdateraBokningMedKund(String kundId) {
         List<BokningDto> responseList = getAllBokningar2();
         BokningDto senasteBokning = responseList.get(responseList.size() - 1);
         Long bokningsId = senasteBokning.getId();
         Long kundIdLong = Long.parseLong(kundId);
         Bokning bokning = bokningRepo.findById(bokningsId).get();
         Kund kund = kundRepo.findById(kundIdLong).get();
-        bokning.setKund(kund);
-        bokningRepo.save(bokning);
+
+        String kundEmail = kund.getEmail();
+        boolean isBlacklisted = isCustomerBlacklisted(kundEmail);
+
+        if (!isBlacklisted) {
+            bokning.setKund(kund);
+            bokningRepo.save(bokning);
+            return true;
+        } else {
+            System.out.println("SVARTLISTAD KUND!");
+            return false;
+        }
+    }
+
+    private boolean isCustomerBlacklisted(String email)  {
+        try {
+            List<BlacklistedCustomerDto> blacklist = blacklistService.getAllBlacklists();
+            return blacklist.stream().anyMatch(blacklistDto -> blacklistDto.getEmail().equals(email) && !blacklistDto.isOk());
+        } catch (Exception e) {
+            System.out.println("Nåt gick fel");
+        }
+        return false;
     }
 
     @Override
