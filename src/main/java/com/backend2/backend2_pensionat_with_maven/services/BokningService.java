@@ -14,7 +14,7 @@ public interface BokningService {
 
     public List<DetailedBokningDto> getAllBokningar();
 
-    public void uppdateraBokningMedKund(String kundId);
+    public boolean uppdateraBokningMedKund(String kundId);
     public void deleteBokningWithoutKundId();
     public List<BokningDto> getAllBokningar2();
 

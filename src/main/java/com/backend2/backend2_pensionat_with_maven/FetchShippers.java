@@ -28,7 +28,8 @@ public class FetchShippers implements CommandLineRunner {
         List<ShipperDto> shippers;
         shippers = mapper.readValue(new URL("https://javaintegration.systementor.se/shippers"), new TypeReference<>() {
         });
-        for (ShipperDto sh : shippers) {
+        shipperService.addUpdateShipper(shippers);
+    /*    for (ShipperDto sh : shippers) {
             ShipperDto shipper = new ShipperDto();
             shipper.setId(sh.getId());
             shipper.setEmail(sh.getEmail());
@@ -44,7 +45,7 @@ public class FetchShippers implements CommandLineRunner {
             //System.out.println(shipper.companyName + " " + shipper.phone);
 
             shipperService.addUpdateShipper(shipper);
-        }
+        }*/
         System.out.println("Shippers updated");
     }
 

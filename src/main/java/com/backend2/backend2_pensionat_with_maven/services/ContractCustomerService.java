@@ -14,8 +14,11 @@ public interface ContractCustomerService {
 
     public ContractCustomerDto contractCustomerToContractCustomerDto(ContractCustomer c);
 
+    public List<ContractCustomer> getAllCustomers();
     public void addUpdateContractCustomers(allcustomers customers);
     public void sparaContractCustomer(ContractCustomerDto customersDto);
     public ContractCustomer contractCustomerDtoToContractCustomer(ContractCustomerDto customerDto);
     ContractCustomerDto findById(int id);
+    public void sortContractCustomers(List<ContractCustomerDto> customers, String sortField, String sortOrder);
+
 }
