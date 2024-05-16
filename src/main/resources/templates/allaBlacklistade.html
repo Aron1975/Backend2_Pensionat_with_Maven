@@ -17,6 +17,7 @@
         <th scope="col">Email</th>
         <th scope="col">Namn</th>
         <th scope="col">OK</th>
+        <th scope="col">Ändra</th>
         <!--th scope="col"></th-->
     </tr>
     </thead>
@@ -25,11 +26,16 @@
         <td th:text="${bl.email}"></td>
         <td th:text="${bl.name}"></td>
         <td th:text="${bl.ok}"></td>
+        <!--<td><a th:href="@{/blacklist/redigera/{id}(id=${bl.id})}" class="btn btn-primary btn-sm">Ändra</a></td>-->
+        <td><a th:href="@{/blacklist/redigera/{email}(email=${bl.email})}" class="btn btn-primary btn-sm">Ändra</a></td>
         <!-- <td><a th:href="@{#}" class="btn btn-primary btn-sm">Ändra</a> </td>-->
         <!-- <td><a th:href="@{/kund/delete/{id}(id=${kund.id})}" class="btn btn-danger btn-sm">Ta bort</a> </td>-->
     </tr>
     </tbody>
 </table>
+    <div class="d-grid gap-2">
+        <td><button type="submit" class="btn btn-success">Add to blacklist</button> </td>
+    </div>
 
 </section>
 </body>

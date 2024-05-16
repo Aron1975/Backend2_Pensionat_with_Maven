@@ -1,4 +1,4 @@
-package com.backend2.backend2_pensionat_with_maven;
+/*package com.backend2.backend2_pensionat_with_maven;
 
 
 import com.backend2.backend2_pensionat_with_maven.dtos.BlacklistDto;
@@ -44,3 +44,4 @@ public class FetchBlacklist implements CommandLineRunner {
     }
 
 }
+*/

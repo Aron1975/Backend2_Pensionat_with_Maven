@@ -93,9 +93,8 @@
             <th scope="col">ID</th>
             <th scope="col">Namn</th>
             <th scope="col">Email</th>
-            <th scope="col">OK</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
+            <th scope="col">Blacklisted</th>
+            <th scope="col">Ändra</th>
         </tr>
         </thead>
         <tbody>
@@ -104,10 +103,16 @@
             <td th:text="${blacklist.getName()}"></td>
             <td th:text="${blacklist.getEmail()}"></td>
             <td th:text="${blacklist.getOk()}"></td>
+            <!--<td><button type="submit" class="btn btn-success">Ändra</button> </td>-->
+            <td><a th:href="@{/login/redigera/{id}(id=${blacklist.id})}" class="btn btn-primary btn-sm">Ändra</a></td>
+            <!--<td><a th:href="@{/kund/redigera/{id}(id=${kund.id})}" class="btn btn-primary btn-sm">Ändra</a> </td>-->
         </tr>
         </tbody>
     </table>
 
+</div>
+<div class="d-grid gap-2">
+    <td><button type="submit" class="btn btn-success">Add to blacklist</button> </td>
 </div>
 
 </body>

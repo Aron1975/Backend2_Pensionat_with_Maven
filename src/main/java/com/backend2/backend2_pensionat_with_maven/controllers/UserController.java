@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -48,7 +49,7 @@ public class UserController {
         return "addUser";
     }
 
-    @RequestMapping("/blacklist")
+    /*@RequestMapping("/blacklist")
     public String getAllBlacklisters(Model model, User user) {
         List<User> userList = userRepo.findAll();
         boolean userExists = userService.checkIfUserExists(user, userList);
@@ -65,6 +66,30 @@ public class UserController {
             return "loginUser";
         }
     }
+
+    @GetMapping("/redigera/{id}")
+    public String changeBlacklistStatus(@PathVariable int id) throws IOException, InterruptedException {
+        blacklistService.changeBlacklistStatus(id);
+        return "/index";
+    }
+
+    @RequestMapping("/add")
+    public String addToBlacklist(Model model){
+        model.addAttribute("blacklist", new BlacklistDto());
+        model.addAttribute("kat", "Lägg till till blacklist");
+        model.addAttribute("titel", "Blacklist");
+        return "/addBlacklist";
+    }
+
+    /*@GetMapping("/ny")
+    public String nyKundFrånKundLista(Model model) {
+        model.addAttribute("kund", new DetailedKundDto());
+        model.addAttribute("redirect", "/kund/all");
+        model.addAttribute("cancelRedirect", "/kund/all");
+        model.addAttribute("kat", "Lägg till ny kund");
+        model.addAttribute("titel", "Kund");
+        return "addKund";
+    }*/
 
 
 
