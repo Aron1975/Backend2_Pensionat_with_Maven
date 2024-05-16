@@ -24,21 +24,21 @@ public class RumEvent {
     @Id
     @GeneratedValue
     private long id;
-    private int rumsNummer;
-    private Timestamp timestamp;
+    //private int RoomNo;
+    //private Timestamp timestamp;
 
     @ManyToOne
-    public RumEventType eventType;
+    public RumEventType type;
 
     @JsonTypeInfo(
             use = JsonTypeInfo.Id.NAME,
             include = JsonTypeInfo.As.PROPERTY,
-            property = "eventType")
+            property = "type")
     @JsonSubTypes({
-            @JsonSubTypes.Type(value = Opened.class, name = "opened"),
-            @JsonSubTypes.Type(value = Closed.class, name = "closed"),
-            @JsonSubTypes.Type(value = StartCleaning.class, name = "startCleaning"),
-            @JsonSubTypes.Type(value = FinishCleaning.class, name = "finishCleaning")
+            @JsonSubTypes.Type(value = Opened.class, name = "RoomOpened"),
+            @JsonSubTypes.Type(value = Closed.class, name = "RoomClosed"),
+            @JsonSubTypes.Type(value = StartCleaning.class, name = "RoomCleaningStarted"),
+            @JsonSubTypes.Type(value = FinishCleaning.class, name = "RoomCleaningFinished")
     })
 
     @Entity
@@ -46,29 +46,36 @@ public class RumEvent {
         @Id
         @GeneratedValue
         private long id;
-        public String name;
+        private int RoomNo;
+        private Timestamp timestamp;
+        //public String type;
     }
 
-    @JsonTypeName("opened")
+    @Entity
+    @JsonTypeName("RoomOpened")
     public static class Opened extends RumEventType {
         public String name;
+        //public String type;
     }
 
-    @JsonTypeName("closed")
+    @Entity
+    @JsonTypeName("RoomClosed")
     public static class Closed extends RumEventType {
         public String name;
     }
 
-    @JsonTypeName("startCleaning")
+    @Entity
+    @JsonTypeName("RoomCleaningStarted")
     public static class StartCleaning extends RumEventType {
-        public String name;
-        public String cleaner;
+        //public String name;
+        public String CleaningByUser;
     }
 
-    @JsonTypeName("finishCleaning")
+    @Entity
+    @JsonTypeName("RoomCleaningFinished")
     public static class FinishCleaning extends RumEventType {
-        public String name;
-        public String cleaner;
+       // public String name;
+        public String CleaningByUser;
     }
 
 }
