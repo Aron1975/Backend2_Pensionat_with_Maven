@@ -15,5 +15,7 @@ public interface RumService {
 
     public List<RumDto> getAvailableRum(int antal);
 
+    public RumDto findByNummer(Long id);
+
     
 }
