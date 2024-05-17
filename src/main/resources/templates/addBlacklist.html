@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/fragments/layouts/base_layout}">
+<head>
+    <title>Pensionat</title>
+</head>
+<body class="container-fluid">
+<section layout:fragment="content">
+
+<h1><p th:text="${titel}"/></h1>
+<h2><p th:text="${kat}"/></h2>
+<div id="maincontainer">
+    <div class="row">
+        <form th:action="@{/blacklist/add}" method="post" th:object="${blacklist}"style="max-width: 400px; margin: 0 auto;">
+
+            <div class="border border-secondary p-4 rounded">
+
+                <p>
+                    <input type="text" th:field="*{email}" name="E-mail" class="form-control" placeholder="E-mail" required autofocus/>
+                </p>
+                <p>
+                    <input type="text" th:field="*{name}" name="Name" class="form-control" placeholder="Name" required />
+                </p>
+                <p>
+                    <button type="submit" class="btn btn-md btn-primary">Spara</button>
+                    <a th:href="@{/blacklist/all}" class="btn btn-md btn-danger">Avbryt</a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
