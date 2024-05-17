@@ -40,7 +40,6 @@ public class RumEventServiceImpl implements RumEventService {
             output = "Städning avslutad av: " + finishCleaning.CleaningByUser;
         }
 
-        rumEventRepo.save(event);
 
  /*       RumEventDto.RumEventTypeDto event = new ObjectMapper()
                 .readerFor(RumEventDto.RumEventTypeDto.class)
