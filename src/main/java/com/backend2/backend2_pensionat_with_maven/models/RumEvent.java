@@ -1,5 +1,6 @@
 package com.backend2.backend2_pensionat_with_maven.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -19,6 +20,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RumEvent {
 
     @Id
@@ -28,7 +30,7 @@ public class RumEvent {
     //private Timestamp timestamp;
 
     @ManyToOne
-    public RumEventType type;
+    public RumEventType eventType;
 
     @JsonTypeInfo(
             use = JsonTypeInfo.Id.NAME,
@@ -54,14 +56,14 @@ public class RumEvent {
     @Entity
     @JsonTypeName("RoomOpened")
     public static class Opened extends RumEventType {
-        public String name;
+        //public String name;
         //public String type;
     }
 
     @Entity
     @JsonTypeName("RoomClosed")
     public static class Closed extends RumEventType {
-        public String name;
+        //public String name;
     }
 
     @Entity

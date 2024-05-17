@@ -46,14 +46,15 @@ public class ReadEventsFromQueue implements CommandLineRunner {
 
             System.out.println(" [x] Received '" + message + "'");
             //Json to Pojo
-       /*     RumEventDto eventDto = new ObjectMapper()
+            //RumEventDto eventDto = mapper.readValue(message, RumEventDto.class);
+         /*   RumEventDto eventDto= new ObjectMapper()
                     .readerFor(RumEventDto.class)
-                    .readValue(message); */
+                    .readValue(message);*/
 
             //Pojo to DB
-         //   String messageFromService = rumEventService.sparaRumEvent(eventDto);
+            String messageFromService = rumEventService.sparaRumEvent(message);
 
-          //  System.out.println(" [*] Message from Service: '" + messageFromService + "'");
+            System.out.println(" [*] Message from Service: '" + messageFromService + "'");
         };
         channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
     }
