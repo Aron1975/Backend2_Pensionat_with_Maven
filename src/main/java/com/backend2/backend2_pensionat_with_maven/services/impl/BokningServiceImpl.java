@@ -10,10 +10,10 @@ import com.backend2.backend2_pensionat_with_maven.repos.KundRepo;
 import com.backend2.backend2_pensionat_with_maven.repos.RumRepo;
 import com.backend2.backend2_pensionat_with_maven.services.BlacklistService;
 import com.backend2.backend2_pensionat_with_maven.services.BokningService;
+import com.backend2.backend2_pensionat_with_maven.services.RabattService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +28,7 @@ public class BokningServiceImpl implements BokningService {
     private final KundRepo kundRepo;
     private final RumRepo rumRepo;
     private final BlacklistService blacklistService;
+    private final RabattService rabattService;
 
     @Override
     public List<DetailedBokningDto> getAllBokningar() {
@@ -48,12 +49,28 @@ public class BokningServiceImpl implements BokningService {
 
         if (!isBlacklisted) {
             bokning.setKund(kund);
+
+            LocalDate startDatum = bokning.getStartDatum();
+            LocalDate slutDatum = bokning.getSlutDatum();
+            int antalNätterUnderÅret = getTotalNätterUnderÅret(kund);
+            double discount = rabattService.calculateDiscount(startDatum, slutDatum, antalNätterUnderÅret);
+            double totalPris = bokning.getTotalPris();
+            double prisEfterDiscount = rabattService.applyDiscount(totalPris, discount);
+            bokning.setTotalPris(prisEfterDiscount);
             bokningRepo.save(bokning);
             return true;
         } else {
             System.out.println("SVARTLISTAD KUND!");
             return false;
         }
+    }
+
+    private int getTotalNätterUnderÅret(Kund kund) {
+        LocalDate ettÅrSen = LocalDate.now().minusYears(1);
+        return kund.getBokningList().stream()
+                .filter(bokning -> bokning.getStartDatum().isAfter(ettÅrSen))
+                .mapToInt(bokning -> (int) DAYS.between(bokning.getStartDatum(),
+                        bokning.getSlutDatum())).sum();
     }
 
     private boolean isCustomerBlacklisted(String email)  {
@@ -198,6 +215,8 @@ public class BokningServiceImpl implements BokningService {
 
         bokningRepo.save(bokning);
     }
+
+
 
     @Override
     public void sparaBokningTillKund(DetailedBokningDto b) {
