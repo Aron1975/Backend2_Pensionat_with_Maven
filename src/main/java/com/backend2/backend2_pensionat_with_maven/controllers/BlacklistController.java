@@ -7,9 +7,7 @@ import com.backend2.backend2_pensionat_with_maven.services.BlacklistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -36,12 +34,18 @@ public class BlacklistController {
         return "redirect:/blacklist/all";
     }
 
-    @RequestMapping("/add")
-    public String addToBlacklist(Model model){
-        model.addAttribute("blacklist", new BlacklistDto());
+    @RequestMapping("/new")
+    public String newToBlacklist(Model model){
         model.addAttribute("kat", "Lägg till till blacklist");
         model.addAttribute("titel", "Blacklist");
+        model.addAttribute("blacklist", new BlacklistDto());
         return "/addBlacklist";
+    }
+
+    @PostMapping("/add")
+    public String addToBlacklist(BlacklistDto blacklistDto) throws IOException, InterruptedException{
+        blacklistService.addToBlacklist(blacklistDto);
+        return "redirect:/blacklist/all";
     }
 
 
