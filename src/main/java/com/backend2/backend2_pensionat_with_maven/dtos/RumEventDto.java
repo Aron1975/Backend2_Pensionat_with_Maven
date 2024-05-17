@@ -1,27 +1,15 @@
 package com.backend2.backend2_pensionat_with_maven.dtos;
 
-import com.backend2.backend2_pensionat_with_maven.models.RumEvent;
-
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.annotation.*;
-import com.rabbitmq.tools.json.JSONUtil;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Bean;
 
 import java.sql.Timestamp;
 
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.*;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
 
 @Data
@@ -32,11 +20,8 @@ import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
 public class RumEventDto {
 
     public RumEventTypeDto eventDto;
-    //public String type;
-    //public String TimeStamp;
 
-
-    @JsonTypeInfo(//use = JsonTypeInfo.Id.NAME, include = As.PROPERTY, property="type")
+    @JsonTypeInfo(
             use = JsonTypeInfo.Id.NAME,
             include = PROPERTY,
             property = "type")
@@ -47,35 +32,27 @@ public class RumEventDto {
             @JsonSubTypes.Type(value = FinishCleaning.class, name = "RoomCleaningFinished")
     })
 
-
     public static class RumEventTypeDto{
 
         public int RoomNo;
         public Timestamp TimeStamp;
-        //private String type;
-        //public String type;
     }
 
     @JsonTypeName("RoomOpened")
     public static class Opened extends RumEventDto.RumEventTypeDto {
-        //public String name;
-        //public String type;
     }
 
     @JsonTypeName("RoomClosed")
     public static class Closed extends RumEventDto.RumEventTypeDto {
-        //public String type;
     }
 
     @JsonTypeName("RoomCleaningStarted")
     public static class StartCleaning extends RumEventDto.RumEventTypeDto {
-        //public String name;
         public String CleaningByUser;
     }
 
     @JsonTypeName("RoomCleaningFinished")
     public static class FinishCleaning extends RumEventDto.RumEventTypeDto {
-        // public String name;
         public String CleaningByUser;
     }
 }

@@ -18,18 +18,16 @@ import java.sql.Timestamp;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
 
 @Entity
-@Data
+/*@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder*/
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RumEvent {
 
     @Id
     @GeneratedValue
     private long id;
-    //private int RoomNo;
-    //private Timestamp timestamp;
 
     @ManyToOne
     public RumEventType eventType;
@@ -53,33 +51,43 @@ public class RumEvent {
         private long id;
         public int RoomNo;
         public Timestamp TimeStamp;
-        //public String type;
     }
 
     @Entity
     @JsonTypeName("RoomOpened")
     public static class Opened extends RumEventType {
-        //public String name;
-        //public String type;
+
+        @Id
+        @GeneratedValue
+        private long id;
     }
 
     @Entity
     @JsonTypeName("RoomClosed")
     public static class Closed extends RumEventType {
-        //public String name;
+
+        @Id
+        @GeneratedValue
+        private long id;
     }
 
     @Entity
     @JsonTypeName("RoomCleaningStarted")
     public static class StartCleaning extends RumEventType {
-        //public String name;
+
+        @Id
+        @GeneratedValue
+        private long id;
         public String CleaningByUser;
     }
 
     @Entity
     @JsonTypeName("RoomCleaningFinished")
     public static class FinishCleaning extends RumEventType {
-       // public String name;
+
+        @Id
+        @GeneratedValue
+        private long id;
         public String CleaningByUser;
     }
 

@@ -21,14 +21,28 @@ public class RumEventServiceImpl implements RumEventService {
     @Override
     public String sparaRumEvent(String message) throws JsonProcessingException {
 
-        System.out.println(" I spara RumEvent.....");
-
-     /*   RumEvent.RumEventType event = new ObjectMapper()
-                .readerFor(RumEvent.RumEventType.class)
-                .readValue(message);*/
-
         String output = "";
-        RumEventDto.RumEventTypeDto event = new ObjectMapper()
+
+        RumEvent.RumEventType event = new ObjectMapper()
+                .readerFor(RumEvent.RumEventType.class)
+                .readValue(message);
+
+        if(event instanceof RumEvent.Opened){
+            output = "Dörr öppnad";
+        }
+        else if(event instanceof RumEvent.Closed){
+            output = "Dörr stängd";
+        }
+        else if(event instanceof RumEvent.StartCleaning startCleaning){
+            output = "Städning påbörjad av: " + startCleaning.CleaningByUser;
+        }
+        else if(event instanceof RumEvent.FinishCleaning finishCleaning){
+            output = "Städning avslutad av: " + finishCleaning.CleaningByUser;
+        }
+
+        rumEventRepo.save(event);
+
+ /*       RumEventDto.RumEventTypeDto event = new ObjectMapper()
                 .readerFor(RumEventDto.RumEventTypeDto.class)
                 .readValue(message);
 
@@ -43,7 +57,7 @@ public class RumEventServiceImpl implements RumEventService {
         }
         else if(event instanceof RumEventDto.FinishCleaning finishCleaning){
             output = "Städning avslutad av: " + finishCleaning.CleaningByUser;
-        }
+        }*/
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd - HH:mm:ss");
         System.out.println("Event: Rum: " +  event.RoomNo + " Händelse: " + output + " Tid: " + event.TimeStamp.toLocalDateTime().format(formatter));
         //rumEventRepo.save(event);
