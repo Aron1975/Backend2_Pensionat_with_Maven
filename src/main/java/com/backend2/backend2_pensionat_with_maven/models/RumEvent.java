@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
+import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -34,7 +36,7 @@ public class RumEvent {
 
     @JsonTypeInfo(
             use = JsonTypeInfo.Id.NAME,
-            include = JsonTypeInfo.As.PROPERTY,
+            include = PROPERTY,
             property = "type")
     @JsonSubTypes({
             @JsonSubTypes.Type(value = Opened.class, name = "RoomOpened"),
@@ -44,12 +46,13 @@ public class RumEvent {
     })
 
     @Entity
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class RumEventType {
         @Id
         @GeneratedValue
         private long id;
-        private int RoomNo;
-        private Timestamp timestamp;
+        public int RoomNo;
+        public Timestamp TimeStamp;
         //public String type;
     }
 

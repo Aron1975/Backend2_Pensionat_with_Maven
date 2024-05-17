@@ -25,7 +25,6 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
 
     private final ContractCustomerRepo contractCustomerRepo;
 
-
     @Override
     public List<ContractCustomerDto> getAllContractCustomer() {
         return contractCustomerRepo.findAll().stream().map(this::contractCustomerToContractCustomerDto)

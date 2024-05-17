@@ -7,7 +7,10 @@ import com.backend2.backend2_pensionat_with_maven.services.RumEventService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
@@ -20,14 +23,30 @@ public class RumEventServiceImpl implements RumEventService {
 
         System.out.println(" I spara RumEvent.....");
 
-        RumEventDto event = new RumEventDto();
+     /*   RumEvent.RumEventType event = new ObjectMapper()
+                .readerFor(RumEvent.RumEventType.class)
+                .readValue(message);*/
 
-        event = new ObjectMapper()
-                .readerFor(RumEventDto.class)
+        String output = "";
+        RumEventDto.RumEventTypeDto event = new ObjectMapper()
+                .readerFor(RumEventDto.RumEventTypeDto.class)
                 .readValue(message);
 
-        System.out.println("RumEventDto: " +  event.RumEventTypeDto. + " Time: " + event.eventDto.TimeStamp ); //Dto.RumEventTypeDto.type + " Timestamp: " + eventDto.RumEventTypeDto.TimeStamp);
-        //rumEventRepo.save(rumEvent);
+        if(event instanceof RumEventDto.Opened){
+            output = "Dörr öppnad";
+        }
+        else if(event instanceof RumEventDto.Closed){
+            output = "Dörr stängd";
+        }
+        else if(event instanceof RumEventDto.StartCleaning startCleaning){
+            output = "Städning påbörjad av: " + startCleaning.CleaningByUser;
+        }
+        else if(event instanceof RumEventDto.FinishCleaning finishCleaning){
+            output = "Städning avslutad av: " + finishCleaning.CleaningByUser;
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd - HH:mm:ss");
+        System.out.println("Event: Rum: " +  event.RoomNo + " Händelse: " + output + " Tid: " + event.TimeStamp.toLocalDateTime().format(formatter));
+        //rumEventRepo.save(event);
         return "Event saved";
     }
 }

@@ -24,16 +24,16 @@ import java.sql.Timestamp;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.*;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
 
-/*@Data
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder*/
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Builder
+//@JsonIgnoreProperties(ignoreUnknown = true)
 public class RumEventDto {
 
     public RumEventTypeDto eventDto;
-   // public String type;
-   // public String TimeStamp;
+    //public String type;
+    //public String TimeStamp;
 
 
     @JsonTypeInfo(//use = JsonTypeInfo.Id.NAME, include = As.PROPERTY, property="type")
@@ -51,11 +51,10 @@ public class RumEventDto {
     public static class RumEventTypeDto{
 
         public int RoomNo;
-        public String TimeStamp;
+        public Timestamp TimeStamp;
         //private String type;
         //public String type;
     }
-
 
     @JsonTypeName("RoomOpened")
     public static class Opened extends RumEventDto.RumEventTypeDto {
@@ -63,19 +62,16 @@ public class RumEventDto {
         //public String type;
     }
 
-
     @JsonTypeName("RoomClosed")
     public static class Closed extends RumEventDto.RumEventTypeDto {
         //public String type;
     }
-
 
     @JsonTypeName("RoomCleaningStarted")
     public static class StartCleaning extends RumEventDto.RumEventTypeDto {
         //public String name;
         public String CleaningByUser;
     }
-
 
     @JsonTypeName("RoomCleaningFinished")
     public static class FinishCleaning extends RumEventDto.RumEventTypeDto {
