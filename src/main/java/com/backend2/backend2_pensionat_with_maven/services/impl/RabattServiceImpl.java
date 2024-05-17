@@ -3,7 +3,11 @@ package com.backend2.backend2_pensionat_with_maven.services.impl;
 import com.backend2.backend2_pensionat_with_maven.services.RabattService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -20,13 +24,16 @@ public class RabattServiceImpl implements RabattService {
     @Override
     public double calculateDiscount(LocalDate startDatum, LocalDate slutDatum, int antalNätterUnderÅret) {
         double totalDiscount = 0.0;
-        long antalNätter = DAYS.between(startDatum, slutDatum);
+        long antalNätter = ChronoUnit.DAYS.between(startDatum, slutDatum);
 
         if (antalNätter >= 2) {
             totalDiscount += LONG_STAY_DISCOUNT;
         }
-        if (startDatum.getDayOfWeek() == SUNDAY && slutDatum.getDayOfWeek() == MONDAY) {
-            totalDiscount += SUNDAY_NIGHT_DISCOUNT;
+        for (LocalDate date = startDatum; !date.isAfter(slutDatum); date = date.plusDays(1)) {
+            if (date.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                totalDiscount += SUNDAY_NIGHT_DISCOUNT;
+                break;
+            }
         }
         if (antalNätterUnderÅret >= 10) {
             totalDiscount += LOYAL_CUSTOMER_DISCOUNT;
