@@ -8,7 +8,6 @@ import com.backend2.backend2_pensionat_with_maven.repos.RumRepo;
 import com.backend2.backend2_pensionat_with_maven.services.RumService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

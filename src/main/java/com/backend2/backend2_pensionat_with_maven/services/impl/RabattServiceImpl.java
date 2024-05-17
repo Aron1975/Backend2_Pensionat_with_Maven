@@ -3,9 +3,7 @@ package com.backend2.backend2_pensionat_with_maven.services.impl;
 import com.backend2.backend2_pensionat_with_maven.services.RabattService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
-
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
 import static java.time.temporal.ChronoUnit.DAYS;
