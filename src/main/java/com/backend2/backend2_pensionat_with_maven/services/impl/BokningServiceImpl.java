@@ -49,7 +49,6 @@ public class BokningServiceImpl implements BokningService {
 
         if (!isBlacklisted) {
             bokning.setKund(kund);
-
             LocalDate startDatum = bokning.getStartDatum();
             LocalDate slutDatum = bokning.getSlutDatum();
             int antalNätterUnderÅret = getTotalNätterUnderÅret(kund);
