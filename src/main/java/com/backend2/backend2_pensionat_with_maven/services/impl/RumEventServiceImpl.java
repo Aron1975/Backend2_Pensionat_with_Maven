@@ -20,12 +20,13 @@ public class RumEventServiceImpl implements RumEventService {
 
         System.out.println(" I spara RumEvent.....");
 
+        RumEventDto event = new RumEventDto();
 
-        RumEvent event = new ObjectMapper()
-                .readerFor(RumEvent.class)
+        event = new ObjectMapper()
+                .readerFor(RumEventDto.class)
                 .readValue(message);
 
-        System.out.println("RumEventDto type: " + event ); //Dto.RumEventTypeDto.type + " Timestamp: " + eventDto.RumEventTypeDto.TimeStamp);
+        System.out.println("RumEventDto: " +  event.RumEventTypeDto. + " Time: " + event.eventDto.TimeStamp ); //Dto.RumEventTypeDto.type + " Timestamp: " + eventDto.RumEventTypeDto.TimeStamp);
         //rumEventRepo.save(rumEvent);
         return "Event saved";
     }

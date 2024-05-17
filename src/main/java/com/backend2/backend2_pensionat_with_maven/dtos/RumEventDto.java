@@ -21,6 +21,9 @@ import org.springframework.context.annotation.Bean;
 
 import java.sql.Timestamp;
 
+import static com.fasterxml.jackson.annotation.JsonTypeInfo.*;
+import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
+
 /*@Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -35,7 +38,7 @@ public class RumEventDto {
 
     @JsonTypeInfo(//use = JsonTypeInfo.Id.NAME, include = As.PROPERTY, property="type")
             use = JsonTypeInfo.Id.NAME,
-            include = JsonTypeInfo.As.PROPERTY,
+            include = PROPERTY,
             property = "type")
     @JsonSubTypes({
             @JsonSubTypes.Type(value = Opened.class, name = "RoomOpened"),
