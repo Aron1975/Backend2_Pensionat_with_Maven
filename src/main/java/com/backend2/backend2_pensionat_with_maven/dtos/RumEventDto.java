@@ -1,5 +1,6 @@
 package com.backend2.backend2_pensionat_with_maven.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -16,7 +17,7 @@ import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-//@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RumEventDto {
 
     public RumEventTypeDto eventDto;
