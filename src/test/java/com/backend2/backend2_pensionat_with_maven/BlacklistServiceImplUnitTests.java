@@ -31,9 +31,6 @@ public class BlacklistServiceImplUnitTests {
     @Mock
     private ObjectMapper objectMapper;
 
-
-
-
     private List<BlacklistedCustomerDto> testLista;
 
 

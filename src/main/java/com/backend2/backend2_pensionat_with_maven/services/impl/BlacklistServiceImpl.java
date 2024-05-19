@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -29,8 +30,7 @@ import java.net.URL;
 public class BlacklistServiceImpl implements BlacklistService {
 
     private final ObjectMapper objectMapper;
-    public static final TypeReference<List<BlacklistedCustomerDto>> TYPE_REFERENCE = new TypeReference<>() {
-    };
+    public static final TypeReference<List<BlacklistedCustomerDto>> TYPE_REFERENCE = new TypeReference<>() {};
 
     public BlacklistServiceImpl(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
@@ -41,7 +41,7 @@ public class BlacklistServiceImpl implements BlacklistService {
 
         objectMapper.registerModule(new JavaTimeModule());
         List<BlacklistedCustomerDto> blacklists;
-        blacklists = objectMapper.readValue(new URL("https://javabl.systementor.se/api/grupp10/blacklist"),TYPE_REFERENCE  );
+        blacklists = objectMapper.readValue(new URL("https://javabl.systementor.se/api/grupp10/blacklist"),TYPE_REFERENCE);
 
         return blacklists;
     }
