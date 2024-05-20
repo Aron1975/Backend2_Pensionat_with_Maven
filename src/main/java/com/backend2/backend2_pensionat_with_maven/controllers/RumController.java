@@ -28,21 +28,15 @@ public class RumController {
     private final RumService rumService;
     private final BokningRepo bokningRepo;
     private final BokningService bokningService;
-    private final RumEventServiceImpl rumEvent;
+    private final RumEventServiceImpl rumEventService;
 
     @RequestMapping("/all")
-    public String allRums(Model model) throws JsonProcessingException {
+    public String allRums(Model model){
         List<RumDto> responseList = rumService.getAllRum();
         model.addAttribute("responseList", responseList);
         model.addAttribute("kat", "rum");
         model.addAttribute("titel", "Rum");
-        //Testing
-        int roomNo = 11;
-        List<String> rumEvents = rumEvent.getEventListByRoomNr(roomNo);
-        System.out.println("Rum: " + roomNo);
-        for (String rumEvent : rumEvents) {
-            System.out.println("RumEvent: " + rumEvent);
-        }
+
         return "/allaRum";
     }
 
@@ -97,12 +91,16 @@ public class RumController {
     }
 
     @GetMapping("/details/{nummer}")
-    public String showRumEvents(@PathVariable Long nummer, Model model){
-        RumDto rumDto = rumService.findByNummer(nummer);
-        if (rumDto == null) {
-            return "redirect:/rum/all";
-        }
-        model.addAttribute("rumDto", rumDto);
+    public String showRumEvents(@PathVariable int nummer, Model model) throws JsonProcessingException {
+
+        List<String> responseList = rumEventService.getEventListByRoomNr(nummer);
+    /*    System.out.println("Rum: " + nummer);
+        for (String rumEvent : responseList) {
+            System.out.println("RumEvent: " + rumEvent);
+        }*/
+        model.addAttribute("responseList", responseList);
+        model.addAttribute("kat", "Händelser i rum " + nummer);
+        model.addAttribute("titel", "Event");
         return "RumDetails";
 
 
