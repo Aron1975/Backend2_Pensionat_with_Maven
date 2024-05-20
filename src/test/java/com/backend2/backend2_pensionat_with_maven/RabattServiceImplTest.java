@@ -17,6 +17,7 @@ public class RabattServiceImplTest {
 
     private final RabattServiceImpl rabattService = new RabattServiceImpl();
 
+    //Test för att se om rabatt infaller en bokning som är mer än 2 nätter
     @Test
     public void testCalculateDiscount_LongStay() {
         LocalDate startDatum = LocalDate.of(2024, 5, 1);
@@ -27,6 +28,7 @@ public class RabattServiceImplTest {
         assertEquals(0.005, discount, 0.001);
     }
 
+    //Test för att se om rabatt infaller om en bokning "innehåller" en söndagnatt.
     @Test
     public void testCalculateDiscount_SundayNight() {
         LocalDate startDatum = LocalDate.of(2024, 5, 5); //Söndag
@@ -37,6 +39,7 @@ public class RabattServiceImplTest {
         assertEquals(0.02, discount, 0.001);
     }
 
+    //Test för att se om rabatt infaller om en kund som har minst 10 nätter bokade
     @Test
     public void testCalculateDiscount_LoyalCustomer() {
         LocalDate startDatum = LocalDate.of(2024, 5, 1);
@@ -47,6 +50,7 @@ public class RabattServiceImplTest {
         assertEquals(0.02, discount, 0.001);
     }
 
+    //Test för att se om kund kan få alla rabatter samtidigt om hen har rätt till det
     @Test
     public void testCalculateDiscount_AllDiscounts() {
         LocalDate startDatum = LocalDate.of(2024, 5, 2);//Torsdag
@@ -56,6 +60,7 @@ public class RabattServiceImplTest {
         assertEquals(0.045, discount, 0.001);
     }
 
+    //Test för att se om tillämpningsmetoden fungerar som sig bör
     @Test
     public void testApplyDiscount() {
         double totalPris = 1000.0;
@@ -65,6 +70,7 @@ public class RabattServiceImplTest {
         assertEquals(950.0, discountedPris, 0.001);
     }
 
+    //Test för att kolla att kund inte får rabatter som hen inte ska ha eller har rätt till.
     @Test
     public void testCalculateDiscount_NoDiscounts() {
         LocalDate startDatum = LocalDate.of(2024, 5, 1);
