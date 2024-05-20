@@ -6,6 +6,8 @@ import com.backend2.backend2_pensionat_with_maven.repos.BokningRepo;
 import com.backend2.backend2_pensionat_with_maven.repos.RumRepo;
 import com.backend2.backend2_pensionat_with_maven.services.BokningService;
 import com.backend2.backend2_pensionat_with_maven.services.RumService;
+import com.backend2.backend2_pensionat_with_maven.services.impl.RumEventServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,13 +27,19 @@ public class RumController {
     private final RumService rumService;
     private final BokningRepo bokningRepo;
     private final BokningService bokningService;
+    private final RumEventServiceImpl rumEvent;
 
     @RequestMapping("/all")
-    public String allRums(Model model) {
+    public String allRums(Model model) throws JsonProcessingException {
         List<RumDto> responseList = rumService.getAllRum();
         model.addAttribute("responseList", responseList);
         model.addAttribute("kat", "rum");
         model.addAttribute("titel", "Rum");
+        //Testing
+        List<String> rumEvents = rumEvent.getEventListByRoomNr(5);
+        for (String rumEvent : rumEvents) {
+            System.out.println("RumEvent: " + rumEvent);
+        }
         return "/allaRum";
     }
 

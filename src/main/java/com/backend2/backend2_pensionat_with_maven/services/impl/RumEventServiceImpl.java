@@ -23,13 +23,20 @@ public class RumEventServiceImpl implements RumEventService {
     private final RumEventTypeRepo rumEventTypeRepo;
 
     @Override
-    public List<String> findEventsByRoomNr(int roomNr) throws JsonProcessingException {
-        List<RumEvent.RumEventType> rumEventList = rumEventTypeRepo.findAllByRoomNo(roomNr);
-        List<String> eventListJson = new ArrayList<>();
-        for (RumEvent.RumEventType rumEventType : rumEventList) {
-            eventListJson.add(new ObjectMapper().writeValueAsString(rumEventType));
+    public List<RumEvent.RumEventType> findEventsByRoomNr(int roomNr) throws JsonProcessingException {
+       // List<RumEvent.RumEventType> rumEventList = rumEventTypeRepo.findByRoomNo();
+        return rumEventTypeRepo.findAll().stream().filter(event -> event.RoomNo==roomNr).toList();
+    }
+
+    @Override
+    public List<String> getEventListByRoomNr(int roomNr) throws JsonProcessingException {
+
+        List<RumEvent.RumEventType> rumEventList = findEventsByRoomNr(roomNr);
+        List<String> eventStringList = new ArrayList<>();
+        for (RumEvent.RumEventType event : rumEventList) {
+            eventStringList.add(eventToString(event));
         }
-        return eventListJson;
+        return eventStringList;
     }
 
     @Override
@@ -44,8 +51,6 @@ public class RumEventServiceImpl implements RumEventService {
 
         if(event instanceof RumEvent.Opened){
             output = "Dörr öppnad";
-            //RumEvent opened = new RumEvent.Opened();
-            //rumEventRepo.save(opened);
         }
         else if(event instanceof RumEvent.Closed){
             output = "Dörr stängd";
@@ -79,5 +84,26 @@ public class RumEventServiceImpl implements RumEventService {
         System.out.println("Event: Rum: " +  event.RoomNo + " Händelse: " + output + " Tid: " + event.TimeStamp.toLocalDateTime().format(formatter));
         //rumEventRepo.save(event);
         return "Event saved";
+    }
+
+    public String eventToString(RumEvent.RumEventType event) {
+
+        String eventString = "";
+        if(event instanceof RumEvent.Opened){
+            eventString = "Dörr öppnad";
+        }
+        else if(event instanceof RumEvent.Closed){
+            eventString = "Dörr stängd";
+        }
+        else if(event instanceof RumEvent.StartCleaning startCleaning){
+            eventString = "Städning påbörjad av " + startCleaning.CleaningByUser;
+        }
+        else if(event instanceof RumEvent.FinishCleaning finishCleaning){
+            eventString = "Städning avslutad av " + finishCleaning.CleaningByUser;
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        eventString = eventString + " " + event.TimeStamp.toLocalDateTime().format(formatter);
+        return eventString;
     }
 }

@@ -9,5 +9,6 @@ import java.util.List;
 public interface RumEventService {
 
     public String sparaRumEvent(String message) throws JsonProcessingException;
-    public List<String> findEventsByRoomNr(int roomNr) throws JsonProcessingException;
+    public List<RumEvent.RumEventType> findEventsByRoomNr(int roomNr) throws JsonProcessingException;
+    public List<String> getEventListByRoomNr(int roomNr) throws JsonProcessingException ;
 }
