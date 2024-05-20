@@ -43,7 +43,7 @@ public class RumEventServiceImpl implements RumEventService {
     public String sparaRumEvent(String message) throws JsonProcessingException {
 
         String output = "";
-        RumEvent rumEvent = new RumEvent();
+        //RumEvent rumEvent = new RumEvent();
 
         RumEvent.RumEventType event = new ObjectMapper()
                 .readerFor(RumEvent.RumEventType.class)
@@ -61,6 +61,8 @@ public class RumEventServiceImpl implements RumEventService {
         else if(event instanceof RumEvent.FinishCleaning finishCleaning){
             output = "Städning avslutad av: " + finishCleaning.CleaningByUser;
         }
+
+       // RumEvent rumEvent = new RumEvent(event);
 
         rumEventTypeRepo.save(event);
 

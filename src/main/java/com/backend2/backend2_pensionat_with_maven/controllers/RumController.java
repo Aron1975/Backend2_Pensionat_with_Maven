@@ -36,7 +36,9 @@ public class RumController {
         model.addAttribute("kat", "rum");
         model.addAttribute("titel", "Rum");
         //Testing
-        List<String> rumEvents = rumEvent.getEventListByRoomNr(5);
+        int roomNo = 11;
+        List<String> rumEvents = rumEvent.getEventListByRoomNr(roomNo);
+        System.out.println("Rum: " + roomNo);
         for (String rumEvent : rumEvents) {
             System.out.println("RumEvent: " + rumEvent);
         }

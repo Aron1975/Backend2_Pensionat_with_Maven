@@ -18,10 +18,10 @@ import java.sql.Timestamp;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
 
 @Entity
-/*@Data
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder*/
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RumEvent {
 
