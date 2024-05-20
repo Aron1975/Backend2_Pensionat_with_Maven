@@ -17,15 +17,15 @@ public class RabattServiceImplTest {
 
     private final RabattServiceImpl rabattService = new RabattServiceImpl();
 
-//    @Test
-//    public void testCalculateDiscount_LongStay() {
-//        LocalDate startDatum = LocalDate.of(2024, 5, 1);
-//        LocalDate slutDatum = LocalDate.of(2024, 5, 4); //3 nätter
-//
-//        double discount = rabattService.calculateDiscount(startDatum, slutDatum, 0);
-//
-//        assertEquals(0.005, discount, 0.001);
-//    }
+    @Test
+    public void testCalculateDiscount_LongStay() {
+        LocalDate startDatum = LocalDate.of(2024, 5, 1);
+        LocalDate slutDatum = LocalDate.of(2024, 5, 4); //3 nätter
+
+        double discount = rabattService.calculateDiscount(startDatum, slutDatum, 0);
+
+        assertEquals(0.005, discount, 0.001);
+    }
 
 //    @Test
 //    public void testCalculateDiscount_SundayNight() {
