@@ -65,13 +65,13 @@ public class RabattServiceImplTest {
         assertEquals(950.0, discountedPris, 0.001);
     }
 
-//    @Test
-//    public void testCalculateDiscount_NoDiscounts() {
-//        LocalDate startDatum = LocalDate.of(2024, 5, 1);
-//        LocalDate slutDatum = LocalDate.of(2024, 5, 2); // 1 natt
-//
-//        double discount = rabattService.calculateDiscount(startDatum, slutDatum, 5);
-//        assertEquals(0.0, discount, 0.001);
-//    }
+    @Test
+    public void testCalculateDiscount_NoDiscounts() {
+        LocalDate startDatum = LocalDate.of(2024, 5, 1);
+        LocalDate slutDatum = LocalDate.of(2024, 5, 2); // 1 natt
+
+        double discount = rabattService.calculateDiscount(startDatum, slutDatum, 5);
+        assertEquals(0.0, discount, 0.001);
+    }
 
 }
