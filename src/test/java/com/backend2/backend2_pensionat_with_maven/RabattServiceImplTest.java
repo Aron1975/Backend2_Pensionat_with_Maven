@@ -27,15 +27,15 @@ public class RabattServiceImplTest {
         assertEquals(0.005, discount, 0.001);
     }
 
-//    @Test
-//    public void testCalculateDiscount_SundayNight() {
-//        LocalDate startDatum = LocalDate.of(2024, 5, 5); //Söndag
-//        LocalDate slutDatum = LocalDate.of(2024, 5, 6); //Måndag
-//
-//        double discount = rabattService.calculateDiscount(startDatum, slutDatum, 0);
-//
-//        assertEquals(0.02, discount, 0.001);
-//    }
+    @Test
+    public void testCalculateDiscount_SundayNight() {
+        LocalDate startDatum = LocalDate.of(2024, 5, 5); //Söndag
+        LocalDate slutDatum = LocalDate.of(2024, 5, 6); //Måndag
+
+        double discount = rabattService.calculateDiscount(startDatum, slutDatum, 0);
+
+        assertEquals(0.02, discount, 0.001);
+    }
 
 //    @Test
 //    public void testCalculateDiscount_LoyalCustomer() {
