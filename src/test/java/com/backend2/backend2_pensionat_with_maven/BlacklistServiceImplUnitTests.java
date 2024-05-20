@@ -69,7 +69,7 @@ public class BlacklistServiceImplUnitTests {
     */
 
     @BeforeEach
-    void setUp() throws IOException {   //have to make a "realobjectmapper" otherwise file won't be read correctly by using mock
+    void setUp() throws IOException {   //have to make a "realobjectmapper" (new objectmapper) otherwise file won't be read correctly by using mock
         ObjectMapper realObjectMapper = new ObjectMapper();
         realObjectMapper.registerModule(new JavaTimeModule());
 
