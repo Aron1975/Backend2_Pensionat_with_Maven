@@ -56,14 +56,14 @@ public class RabattServiceImplTest {
         assertEquals(0.045, discount, 0.001);
     }
 
-//    @Test
-//    public void testApplyDiscount() {
-//        double totalPris = 1000.0;
-//        double discount = 0.05;
-//
-//        double discountedPris = rabattService.applyDiscount(totalPris, discount);
-//        assertEquals(950.0, discountedPris, 0.001);
-//    }
+    @Test
+    public void testApplyDiscount() {
+        double totalPris = 1000.0;
+        double discount = 0.05;
+
+        double discountedPris = rabattService.applyDiscount(totalPris, discount);
+        assertEquals(950.0, discountedPris, 0.001);
+    }
 
 //    @Test
 //    public void testCalculateDiscount_NoDiscounts() {
