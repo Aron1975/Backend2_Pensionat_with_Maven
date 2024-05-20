@@ -24,7 +24,12 @@
     <tbody>
     <tr th:each="rum : ${responseList}">
         <td th:text="${rum.rumTyp}"></td>
-        <td th:text="${rum.nummer}"></td>
+
+        <td>
+            <a th:href="@{/rum/details/{nummer}(nummer=${rum.nummer})}" th:text="${rum.nummer}"></a>
+
+        </td>
+
         <td th:text="${rum.storlek} + ' kvm'"></td>
         <td th:text="${rum.pris} + ' kr/natt'"></td>
         <!-- <td><a th:href="@{#}" class="btn btn-primary btn-sm">Ändra</a> </td>-->

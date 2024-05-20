@@ -13,8 +13,6 @@ public class Backend2PensionatWithMavenApplication {
 
         if(args.length == 0) {
             SpringApplication.run(Backend2PensionatWithMavenApplication.class, args);
-
-
         }else if(Objects.equals(args[0], "fetchShippers")){
             System.out.println("Updating Shippers...");
             SpringApplication application = new SpringApplication(FetchShippers.class);
@@ -26,10 +24,14 @@ public class Backend2PensionatWithMavenApplication {
             SpringApplication application = new SpringApplication(FetchContractCustomers.class);
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
-
         }
+        else if(Objects.equals(args[0], "loadRumEvents")){
+            System.out.println("Loading Rum Events...");
+            SpringApplication application = new SpringApplication(ReadEventsFromQueue.class);
+            application.setWebApplicationType(WebApplicationType.NONE);
+            application.run(args);
+        }
+
     }
-
-
 
 }

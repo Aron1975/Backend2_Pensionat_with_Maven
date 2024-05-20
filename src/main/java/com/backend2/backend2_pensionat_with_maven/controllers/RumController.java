@@ -9,6 +9,7 @@ import com.backend2.backend2_pensionat_with_maven.services.RumService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -84,4 +85,20 @@ public class RumController {
 
         return "redirect:/bokning/add";
     }
+
+    @GetMapping("/details/{nummer}")
+    public String showRumEvents(@PathVariable Long nummer, Model model){
+        RumDto rumDto = rumService.findByNummer(nummer);
+        if (rumDto == null) {
+            return "redirect:/rum/all";
+        }
+        model.addAttribute("rumDto", rumDto);
+        return "RumDetails";
+
+
+    }
+
+
+
+
 }
