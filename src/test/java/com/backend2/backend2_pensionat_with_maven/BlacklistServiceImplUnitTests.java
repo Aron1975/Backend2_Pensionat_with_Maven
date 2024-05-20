@@ -8,8 +8,11 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.codehaus.groovy.tools.shell.IO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
@@ -17,11 +20,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-import static com.backend2.backend2_pensionat_with_maven.services.impl.BlacklistServiceImpl.TYPE_REFERENCE;
+//import static com.backend2.backend2_pensionat_with_maven.services.impl.BlacklistServiceImpl.TYPE_REFERENCE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 public class BlacklistServiceImplUnitTests {
 
@@ -30,6 +34,7 @@ public class BlacklistServiceImplUnitTests {
 
     @Mock
     private ObjectMapper objectMapper;
+
 
     private List<BlacklistedCustomerDto> testLista;
 
@@ -75,7 +80,8 @@ public class BlacklistServiceImplUnitTests {
         }
 
         //här populeras testLista med blacklist.json data
-        testLista = realObjectMapper.readValue(file, TYPE_REFERENCE);
+        TypeReference<List<BlacklistedCustomerDto>> typeReference = new TypeReference<>() {};
+        testLista = realObjectMapper.readValue(file, typeReference);
     }
 
 
@@ -90,8 +96,10 @@ public class BlacklistServiceImplUnitTests {
    List<BlacklistedCustomerDto> methodCallResultList = blacklistServiceImpl.getAllBlacklists();
 
    assertEquals(testLista.size(), methodCallResultList.size());
-   verify(objectMapper, times(1)).readValue(url, TYPE_REFERENCE);
+   verify(objectMapper, times(1)).readValue(url, blacklistServiceImpl.getTypeReference());
     assertEquals("Stefan Holmberg", testLista.get(0).getName());
+    assertEquals("Stefan Holmberg", methodCallResultList.get(0).getName());
+    assertEquals(testLista.size(), 13);
 
 }
 

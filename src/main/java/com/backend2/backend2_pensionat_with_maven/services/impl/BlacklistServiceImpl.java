@@ -30,21 +30,30 @@ import java.net.URL;
 public class BlacklistServiceImpl implements BlacklistService {
 
     private final ObjectMapper objectMapper;
-    public static final TypeReference<List<BlacklistedCustomerDto>> TYPE_REFERENCE = new TypeReference<>() {};
+    private final TypeReference<List<BlacklistedCustomerDto>> typeReference;
 
     public BlacklistServiceImpl(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
+        this.typeReference = new TypeReference<>() {};
+        objectMapper.registerModule(new JavaTimeModule());
     }
+
+    //public BlacklistServiceImpl(ObjectMapper objectMapper) {
+    //    this.objectMapper = objectMapper;
+    //}
 
     @Override
     public List<BlacklistedCustomerDto> getAllBlacklists() throws IOException {
-
-        objectMapper.registerModule(new JavaTimeModule());
         List<BlacklistedCustomerDto> blacklists;
-        blacklists = objectMapper.readValue(new URL("https://javabl.systementor.se/api/grupp10/blacklist"),TYPE_REFERENCE);
-
+        blacklists = objectMapper.readValue(new URL("https://javabl.systementor.se/api/grupp10/blacklist"), typeReference);
         return blacklists;
     }
+
+    public TypeReference<List<BlacklistedCustomerDto>> getTypeReference() {
+        return typeReference;
+    }
+
+
     @Override
     public void changeBlacklistStatus(String email) throws IOException, InterruptedException {
 
