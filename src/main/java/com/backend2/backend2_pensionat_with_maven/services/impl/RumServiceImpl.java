@@ -2,6 +2,7 @@ package com.backend2.backend2_pensionat_with_maven.services.impl;
 
 
 
+import com.backend2.backend2_pensionat_with_maven.dtos.ContractCustomerDto;
 import com.backend2.backend2_pensionat_with_maven.dtos.RumDto;
 import com.backend2.backend2_pensionat_with_maven.models.Rum;
 import com.backend2.backend2_pensionat_with_maven.repos.RumRepo;
@@ -36,6 +37,11 @@ public class RumServiceImpl implements RumService {
 
         return getAllRum();
     }
-
+    @Override
+    public RumDto findByNummer(Long id) {
+        return rumRepo.findById(id)
+                .map(this::rumToRumDto)
+                .orElse(null);
+    }
 
 }
