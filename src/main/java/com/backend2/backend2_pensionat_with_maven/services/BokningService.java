@@ -6,6 +6,7 @@ import com.backend2.backend2_pensionat_with_maven.dtos.BokningDto;
 import com.backend2.backend2_pensionat_with_maven.dtos.DetailedBokningDto;
 import com.backend2.backend2_pensionat_with_maven.dtos.RumDto;
 import com.backend2.backend2_pensionat_with_maven.models.Bokning;
+import com.backend2.backend2_pensionat_with_maven.models.Kund;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,7 +28,9 @@ public interface BokningService {
     public List<RumDto> getAvailableRumByDate(List<RumDto> availableRumByCapacity, LocalDate startDate, LocalDate stopDate);
     public List<RumDto> getAvailableRumByDate2(List<RumDto> availableRumByCapacity, LocalDate startDate, LocalDate stopDate, long id);
 
+    public void updateBokningWithDiscount(Bokning bokning, Kund kund);
 
+    public int getTotalNätterUnderÅret(Kund kund);
 
     void uppdateraBokning(String id, int antal, String startDatum, String stopDatum, long bokningsId);
 

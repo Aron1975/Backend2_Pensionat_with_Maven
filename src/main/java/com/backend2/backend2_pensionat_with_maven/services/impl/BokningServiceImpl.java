@@ -32,6 +32,7 @@ public class BokningServiceImpl implements BokningService {
     private final BlacklistService blacklistService;
     private final RabattService rabattService;
 
+
     @Override
     public List<DetailedBokningDto> getAllBokningar() {
         return bokningRepo.findAll().stream().map(this::bokningToDetailedBokningDto).toList();
@@ -73,15 +74,20 @@ public class BokningServiceImpl implements BokningService {
         return true;
     }
 
-    private void updateBokningWithDiscount(Bokning bokning, Kund kund) {
+    public void updateBokningWithDiscount(Bokning bokning, Kund kund) {
         LocalDate startDatum = bokning.getStartDatum();
         LocalDate slutDatum = bokning.getSlutDatum();
         int antalNätterUnderÅret = getTotalNätterUnderÅret(kund);
+        System.out.println("Antal nätter under året: " + antalNätterUnderÅret);
         double discount = rabattService.calculateDiscount(startDatum, slutDatum, antalNätterUnderÅret);
+        System.out.println("Discount calculated: " + discount);
         double totalPris = bokning.getTotalPris();
+        System.out.println("Total price before discount: " + totalPris);
         double prisEfterDiscount = rabattService.applyDiscount(totalPris, discount);
+        System.out.println("Price after discount: " + prisEfterDiscount);
         bokning.setTotalPris(prisEfterDiscount);
     }
+
 
 
     public int getTotalNätterUnderÅret(Kund kund) {
