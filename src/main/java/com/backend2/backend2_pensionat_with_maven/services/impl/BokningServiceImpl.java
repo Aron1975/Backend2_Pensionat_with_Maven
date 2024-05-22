@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -32,39 +34,57 @@ public class BokningServiceImpl implements BokningService {
 
     @Override
     public List<DetailedBokningDto> getAllBokningar() {
-        return bokningRepo.findAll().stream().map(b -> bokningToDetailedBokningDto(b)).toList();
+        return bokningRepo.findAll().stream().map(this::bokningToDetailedBokningDto).toList();
     }
 
     @Override
     public boolean uppdateraBokningMedKund(String kundId) {
         List<BokningDto> responseList = getAllBokningar2();
+
+        if (responseList.isEmpty()) {
+            System.out.println("Inga bokningar hittades.");
+            return false;
+        }
+
         BokningDto senasteBokning = responseList.get(responseList.size() - 1);
         Long bokningsId = senasteBokning.getId();
         Long kundIdLong = Long.parseLong(kundId);
-        Bokning bokning = bokningRepo.findById(bokningsId).get();
-        Kund kund = kundRepo.findById(kundIdLong).get();
 
-        String kundEmail = kund.getEmail();
-        boolean isBlacklisted = isCustomerBlacklisted(kundEmail);
+        Optional<Bokning> optionalBokning = bokningRepo.findById(bokningsId);
+        Optional<Kund> optionalKund = kundRepo.findById(kundIdLong);
 
-        if (!isBlacklisted) {
-            bokning.setKund(kund);
-            LocalDate startDatum = bokning.getStartDatum();
-            LocalDate slutDatum = bokning.getSlutDatum();
-            int antalNätterUnderÅret = getTotalNätterUnderÅret(kund);
-            double discount = rabattService.calculateDiscount(startDatum, slutDatum, antalNätterUnderÅret);
-            double totalPris = bokning.getTotalPris();
-            double prisEfterDiscount = rabattService.applyDiscount(totalPris, discount);
-            bokning.setTotalPris(prisEfterDiscount);
-            bokningRepo.save(bokning);
-            return true;
-        } else {
+        if (!optionalBokning.isPresent() || !optionalKund.isPresent()) {
+            System.out.println("Ingen bokning eller kund hittades med det angivna ID:t.");
+            return false;
+        }
+
+        Bokning bokning = optionalBokning.get();
+        Kund kund = optionalKund.get();
+
+        if (isCustomerBlacklisted(kund.getEmail())) {
             System.out.println("SVARTLISTAD KUND!");
             return false;
         }
+
+        bokning.setKund(kund);
+        updateBokningWithDiscount(bokning, kund);
+
+        bokningRepo.save(bokning);
+        return true;
     }
 
-    private int getTotalNätterUnderÅret(Kund kund) {
+    private void updateBokningWithDiscount(Bokning bokning, Kund kund) {
+        LocalDate startDatum = bokning.getStartDatum();
+        LocalDate slutDatum = bokning.getSlutDatum();
+        int antalNätterUnderÅret = getTotalNätterUnderÅret(kund);
+        double discount = rabattService.calculateDiscount(startDatum, slutDatum, antalNätterUnderÅret);
+        double totalPris = bokning.getTotalPris();
+        double prisEfterDiscount = rabattService.applyDiscount(totalPris, discount);
+        bokning.setTotalPris(prisEfterDiscount);
+    }
+
+
+    public int getTotalNätterUnderÅret(Kund kund) {
         LocalDate ettÅrSen = LocalDate.now().minusYears(1);
         return kund.getBokningList().stream()
                 .filter(bokning -> bokning.getStartDatum().isAfter(ettÅrSen))
@@ -72,7 +92,7 @@ public class BokningServiceImpl implements BokningService {
                         bokning.getSlutDatum())).sum();
     }
 
-    private boolean isCustomerBlacklisted(String email)  {
+    public boolean isCustomerBlacklisted(String email)  {
         try {
             List<BlacklistedCustomerDto> blacklist = blacklistService.getAllBlacklists();
             return blacklist.stream().anyMatch(blacklistDto -> blacklistDto.getEmail().equals(email) && !blacklistDto.isOk());
@@ -118,7 +138,8 @@ public class BokningServiceImpl implements BokningService {
 
     @Override
     public List<BokningDto> getAllBokningar2() {
-        return bokningRepo.findAll().stream().map(b -> bokningToBokningDto(b)).toList();
+        List<Bokning> bokningar = bokningRepo.findAll();
+        return bokningar.stream().map(this::bokningToBokningDto).collect(Collectors.toList());
     }
 
     @Override
@@ -127,6 +148,13 @@ public class BokningServiceImpl implements BokningService {
                 .slutDatum(b.getSlutDatum()).antalGäster(b.getAntalGäster()).antalExtraSängar(b.getAntalExtraSängar()).totalPris(b.getTotalPris())
                 .rum(new RumDto(b.getRum().getId(), b.getRum().getTyp(),b.getRum().getPris(), b.getRum().getStorlek(), b.getRum().getKapacitet(), b.getRum().getNummer())).build();
 
+    }
+
+    @Override
+    public Bokning bokningDtoToBokning(BokningDto b) {
+        return Bokning.builder().id(b.getId()).bokningsDatum(b.getBokningsDatum()).startDatum(b.getStartDatum()).slutDatum(b.getSlutDatum())
+                .antalGäster(b.getAntalGäster()).antalExtraSängar(b.getAntalExtraSängar()).totalPris(b.getTotalPris())
+                .rum(new Rum()).build();
     }
 
     @Override
