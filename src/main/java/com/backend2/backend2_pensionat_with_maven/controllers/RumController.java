@@ -48,7 +48,7 @@ public class RumController {
 
     @RequestMapping("/sök")
     public String findRum(@RequestParam int guests, @RequestParam String startDate, @RequestParam String stopDate, Model model) {
-
+        bokningService.deleteBokningWithoutKundId();
         if(startDate.isBlank() || startDate.isEmpty() || stopDate.isBlank() || stopDate.isEmpty()){
             return "redirect:/rum/";
         }

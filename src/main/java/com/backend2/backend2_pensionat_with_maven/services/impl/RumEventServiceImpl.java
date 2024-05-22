@@ -24,8 +24,9 @@ public class RumEventServiceImpl implements RumEventService {
 
     @Override
     public List<RumEvent.RumEventType> findEventsByRoomNr(int roomNr) throws JsonProcessingException {
-       // List<RumEvent.RumEventType> rumEventList = rumEventTypeRepo.findByRoomNo(roomNr);
+        //List<RumEvent.RumEventType> rumEventList = rumEventTypeRepo.findAllByRoomNoMatches(roomNr);
         return rumEventTypeRepo.findAll().stream().filter(event -> event.RoomNo==roomNr).toList();
+        //return rumEventList;
     }
 
     @Override
@@ -83,7 +84,7 @@ public class RumEventServiceImpl implements RumEventService {
             output = "Städning avslutad av: " + finishCleaning.CleaningByUser;
         }*/
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd - HH:mm:ss");
-        System.out.println("Event: Rum: " +  event.RoomNo + " Händelse: " + output + " Tid: " + event.TimeStamp.toLocalDateTime().format(formatter));
+        //System.out.println("Event: Rum: " +  event.RoomNo + " Händelse: " + output + " Tid: " + event.TimeStamp.toLocalDateTime().format(formatter));
         //rumEventRepo.save(event);
         return "Event saved";
     }

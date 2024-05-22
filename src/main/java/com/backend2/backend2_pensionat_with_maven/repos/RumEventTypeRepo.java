@@ -12,9 +12,9 @@ import java.util.List;
 public interface RumEventTypeRepo extends JpaRepository<RumEvent.RumEventType, Long> {
 
     //"SELECT e FROM Employee e WHERE e.empNumber = ?1", Employee.class);
-
-   /* @Query(value = "SELECT * FROM rum_event$rum_event_type where roomNo=:room_no", nativeQuery = true)
+/*
+    @Query(value = "SELECT * FROM rum_event$rum_event_type where roomNo=:room_no", nativeQuery = true)
     List<RumEvent.RumEventType> findAllByRoomNo(@Param("room_no") int roomNo);*/
 
-    //List<RumEvent.RumEventType> findByRoomNo();
+    //List<RumEvent.RumEventType> findAllByRoomNoMatches(int roomNr);
 }

@@ -54,7 +54,7 @@ public class ReadEventsFromQueue implements CommandLineRunner {
             //Pojo to DB
             String messageFromService = rumEventService.sparaRumEvent(message);
 
-           // System.out.println(" [*] Message from Service: '" + messageFromService + "'");
+            System.out.println(" [*] Message from Service: '" + messageFromService + "'");
         };
         channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
     }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -42,17 +43,25 @@ public class BokningController {
         return "/allaBokningar";  //testing igen
     }
     @RequestMapping("/addkund/{id}")
-    public String uppdateraBokning(@PathVariable String id){
-        bokningService.uppdateraBokningMedKund(id);
+    public String uppdateraBokning(@PathVariable String id, Model model, RedirectAttributes redirectAttrs){
+        if(!bokningService.uppdateraBokningMedKund(id)){
+            redirectAttrs.addFlashAttribute("errorMessage", "Kund Blacklisted!!!");
+            return "redirect:/bokning/addkund";
+        }
+
         return "redirect:/bokning/all";
     }
 
     @RequestMapping("/addkund")
-    public String sparaBokningTillKund(Model model){
+    public String sparaBokningTillKund(Model model, RedirectAttributes redirectAttrs) {
         List<DetailedKundDto> responseList = kundService.getAllKunder();
         model.addAttribute("responseList", responseList);
         model.addAttribute("kat", "kund");
         model.addAttribute("titel", "Bokning");
+
+        if (redirectAttrs != null) {
+            model.addAttribute(redirectAttrs);
+        }
         return "bokaKund";
     }
 
