@@ -6,7 +6,13 @@ import com.backend2.backend2_pensionat_with_maven.dtos.DetailedBokningDto;
 import com.backend2.backend2_pensionat_with_maven.dtos.RumDto;
 import com.backend2.backend2_pensionat_with_maven.models.Bokning;
 import com.backend2.backend2_pensionat_with_maven.models.Kund;
+import com.backend2.backend2_pensionat_with_maven.repos.BlacklistRepo;
+import com.backend2.backend2_pensionat_with_maven.repos.BokningRepo;
+import com.backend2.backend2_pensionat_with_maven.repos.KundRepo;
+import com.backend2.backend2_pensionat_with_maven.repos.RumRepo;
+import com.backend2.backend2_pensionat_with_maven.services.BlacklistService;
 import com.backend2.backend2_pensionat_with_maven.services.BokningService;
+import com.backend2.backend2_pensionat_with_maven.services.KundService;
 import com.backend2.backend2_pensionat_with_maven.services.RabattService;
 import com.backend2.backend2_pensionat_with_maven.services.impl.BokningServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -19,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,18 +54,23 @@ public class BokningServiceImplTest {
 
     @Mock
     private RabattService rabattService;
-
     @Mock
-    private Bokning bokningMock;
+    private Bokning bokning;
     @Mock
-    private Kund kundMock;
-    @InjectMocks
+    private Kund kund;
     private BokningServiceImpl bokningService;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
 
+        bokningService = spy(new BokningServiceImpl(
+                mock(BokningRepo.class),
+                mock(KundRepo.class),
+                mock(RumRepo.class),
+                mock(BlacklistService.class),
+                rabattService
+        ));
 
     }
 
@@ -68,27 +80,17 @@ public class BokningServiceImplTest {
         // Förberedning av testdata
         LocalDate startDatum = LocalDate.now();
         LocalDate slutDatum = startDatum.plusDays(2);
+        bokning.setTotalPris(1000.0);
 
-        Bokning previousBokning = mock(Bokning.class);
-        when(previousBokning.getStartDatum()).thenReturn(LocalDate.now().minusMonths(1));
-        when(previousBokning.getSlutDatum()).thenReturn(LocalDate.now().minusMonths(1).plusDays(2));
-        List<Bokning> bokningList = Arrays.asList(previousBokning);
-        when(kundMock.getBokningList()).thenReturn(bokningList);
+        //Bokning previousBokning = mock(Bokning.class);
+        //when(previousBokning.getStartDatum()).thenReturn(LocalDate.now().minusMonths(1));
+        //when(previousBokning.getSlutDatum()).thenReturn(LocalDate.now().minusMonths(1).plusDays(2));
+        //List<Bokning> bokningList = Arrays.asList(previousBokning);
+        //when(kundMock.getBokningList()).thenReturn(bokningList);
 
-        Kund kundM = mock(Kund.class);
-        kundM.setId(1L);
-        kundM.setEmail("test@example.com");
-        kundM.setFörnamn("Pontus");
-        kundM.setEfternamn("Lundin");
-        kundM.setSsn("9009295412");
-        kundM.setAdress("Viavägen 4");
-        kundM.setStad("Rövhålet");
-        kundM.setMobilnummer("0768750975");
-        kundM.setBokningList(bokningList);
-
-        when(bokningMock.getStartDatum()).thenReturn(startDatum);
-        when(bokningMock.getSlutDatum()).thenReturn(slutDatum);
-        when(bokningMock.getTotalPris()).thenReturn(1000.0);
+        when(bokning.getStartDatum()).thenReturn(startDatum);
+        when(bokning.getSlutDatum()).thenReturn(slutDatum);
+        //when(bokning.getTotalPris()).thenReturn(1000.0);
 
        // assertNotNull(kundMock, "kundMock should not be null before method call");
 
@@ -98,24 +100,27 @@ public class BokningServiceImplTest {
         double expectedPrisEfterDiscount = 1000.0 * (1 - expectedDiscount);
 
         // Stubba metodanrop
-        when(bokningService.getTotalNätterUnderÅret(kundM)).thenReturn(antalNätterUnderÅret);
+        doReturn(antalNätterUnderÅret).when(bokningService).getTotalNätterUnderÅret(kund);
        // when(rabattService.calculateDiscount(eq(startDatum), eq(slutDatum), anyInt())).thenReturn(expectedDiscount);
       //  when(rabattService.applyDiscount(anyDouble(), anyDouble())).thenReturn(expectedPrisEfterDiscount);
+        System.out.println(bokning.getTotalPris());
         when(rabattService.calculateDiscount(any(LocalDate.class), any(LocalDate.class), anyInt())).thenReturn(0.025d);
-        when(rabattService.applyDiscount(eq(1000.0d), eq(0.025d))).thenReturn(975.0d);
+        when(rabattService.applyDiscount(anyDouble(), anyDouble())).thenReturn(975.0d);
 
         System.out.println("Expected Discount: " + expectedDiscount);
         System.out.println("Expected Price After Discount: " + expectedPrisEfterDiscount);
 
         // Directly calling the method with correct mocks
-        bokningService.updateBokningWithDiscount(bokningMock, kundM);
+        bokningService.updateBokningWithDiscount(bokning, kund);
 
         System.out.println("Actual Discount: " + rabattService.calculateDiscount(startDatum, slutDatum, antalNätterUnderÅret));
-        System.out.println("Actual Price After Discount: " + bokningMock.getTotalPris());
+        System.out.println("Actual Price After Discount: " + bokning.getTotalPris());
 
         // Verify the discounted price is correct
-        verify(bokningMock).setTotalPris(expectedPrisEfterDiscount);
-        assertEquals(expectedPrisEfterDiscount, bokningMock.getTotalPris(), 0.001);
+        verify(bokning).setTotalPris(expectedPrisEfterDiscount);
+        assertEquals(expectedPrisEfterDiscount, bokning.getTotalPris(), 0.001);
+
+
 
         // Verify that RabattService methods are called with correct arguments
       //  verify(rabattService).calculateDiscount(startDatum, slutDatum, antalNätterUnderÅret);
@@ -154,6 +159,7 @@ public class BokningServiceImplTest {
 
   */
     }
+
 
 
     /*
@@ -210,10 +216,14 @@ public class BokningServiceImplTest {
     }
 }
 
-
-
-
      */
+
+
+
+
+
+
+
 }
 
 
