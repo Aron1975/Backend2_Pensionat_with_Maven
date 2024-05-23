@@ -28,7 +28,7 @@ public interface BokningService {
     public List<RumDto> getAvailableRumByDate(List<RumDto> availableRumByCapacity, LocalDate startDate, LocalDate stopDate);
     public List<RumDto> getAvailableRumByDate2(List<RumDto> availableRumByCapacity, LocalDate startDate, LocalDate stopDate, long id);
 
-    public void updateBokningWithDiscount(Bokning bokning, Kund kund);
+    public double updateBokningWithDiscount(Bokning bokning, Kund kund);
 
     public int getTotalNätterUnderÅret(Kund kund);
 

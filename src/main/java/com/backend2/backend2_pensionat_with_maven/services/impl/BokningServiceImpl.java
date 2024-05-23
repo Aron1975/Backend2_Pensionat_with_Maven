@@ -12,6 +12,7 @@ import com.backend2.backend2_pensionat_with_maven.services.BlacklistService;
 import com.backend2.backend2_pensionat_with_maven.services.BokningService;
 import com.backend2.backend2_pensionat_with_maven.services.RabattService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,14 +24,24 @@ import java.util.stream.Collectors;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class BokningServiceImpl implements BokningService {
 
-    private final BokningRepo bokningRepo;
-    private final KundRepo kundRepo;
-    private final RumRepo rumRepo;
-    private final BlacklistService blacklistService;
-    private final RabattService rabattService;
+    public final BokningRepo bokningRepo;
+    public final KundRepo kundRepo;
+    public final RumRepo rumRepo;
+    public final BlacklistService blacklistService;
+    public final RabattService rabattService;
+
+    @Autowired
+    public BokningServiceImpl(BokningRepo bokningRepo, KundRepo kundRepo, RumRepo rumRepo,
+                              BlacklistService blacklistService, RabattService rabattService) {
+        this.bokningRepo = bokningRepo;
+        this.kundRepo = kundRepo;
+        this.rumRepo = rumRepo;
+        this.blacklistService = blacklistService;
+        this.rabattService = rabattService;
+    }
 
 
     @Override
@@ -74,7 +85,7 @@ public class BokningServiceImpl implements BokningService {
         return true;
     }
 
-    public void updateBokningWithDiscount(Bokning bokning, Kund kund) {
+    public double updateBokningWithDiscount(Bokning bokning, Kund kund) {
         LocalDate startDatum = bokning.getStartDatum();
         LocalDate slutDatum = bokning.getSlutDatum();
         int antalNätterUnderÅret = getTotalNätterUnderÅret(kund);
@@ -86,6 +97,7 @@ public class BokningServiceImpl implements BokningService {
         double prisEfterDiscount = rabattService.applyDiscount(totalPris, discount);
         System.out.println("Price after discount: " + prisEfterDiscount);
         bokning.setTotalPris(prisEfterDiscount);
+        return prisEfterDiscount;
     }
 
 

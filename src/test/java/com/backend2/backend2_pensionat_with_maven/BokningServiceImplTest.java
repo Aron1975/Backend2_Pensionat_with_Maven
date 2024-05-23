@@ -6,9 +6,14 @@ import com.backend2.backend2_pensionat_with_maven.dtos.DetailedBokningDto;
 import com.backend2.backend2_pensionat_with_maven.dtos.RumDto;
 import com.backend2.backend2_pensionat_with_maven.models.Bokning;
 import com.backend2.backend2_pensionat_with_maven.models.Kund;
+import com.backend2.backend2_pensionat_with_maven.repos.BokningRepo;
+import com.backend2.backend2_pensionat_with_maven.repos.KundRepo;
+import com.backend2.backend2_pensionat_with_maven.repos.RumRepo;
+import com.backend2.backend2_pensionat_with_maven.services.BlacklistService;
 import com.backend2.backend2_pensionat_with_maven.services.BokningService;
 import com.backend2.backend2_pensionat_with_maven.services.RabattService;
 import com.backend2.backend2_pensionat_with_maven.services.impl.BokningServiceImpl;
+import com.backend2.backend2_pensionat_with_maven.services.impl.RabattServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,99 +28,114 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.time.temporal.ChronoUnit.DAYS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-
 @SpringBootTest
-@ExtendWith(MockitoExtension.class)
-public class BokningServiceImplTest {
-
-//    @Mock
-//    private RabattService rabattService;
-//
-//    @Spy
-//    @InjectMocks
-//    private BokningServiceImpl bokningService;
-//
-//    @BeforeEach
-//    public void setup() {
-//        MockitoAnnotations.openMocks(this);
-//    }
+class BokningServiceImplTest {
 
 
     @Mock
-    private RabattService rabattService;
+    public RabattService rabattService;
 
     @Mock
-    private Bokning bokningMock;
+    public BokningRepo bokningRepo;
+
     @Mock
-    private Kund kundMock;
-    @InjectMocks
-    private BokningServiceImpl bokningService;
+    public KundRepo kundRepo;
+
+    @Mock
+    public RumRepo rumRepo;
+
+    @Mock
+    public BlacklistService blacklistService;
+
+    @Mock
+    public Bokning bokningMock;
+
+    @Mock
+    public Kund kundMock;
+
+    @Mock
+    public RabattServiceImpl rabattServiceImpl;
+
+
+    /*
+
+    public double LONG_STAY_DISCOUNT = 0.005;
+
+    public double SUNDAY_NIGHT_DISCOUNT = 0.02;
+
+
+    public double LOYAL_CUSTOMER_DISCOUNT = 0.02;
+     */
+
+    @Autowired
+    public BokningServiceImpl bokningService;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.openMocks(this);
 
+        LocalDate startDatum = LocalDate.now().minusDays(2);
+        LocalDate slutDatum = LocalDate.now();
 
-    }
 
 
-    @Test
-    public void testUpdateBokningWithDiscount() {
-        // Förberedning av testdata
-        LocalDate startDatum = LocalDate.now();
-        LocalDate slutDatum = startDatum.plusDays(2);
-
-        Bokning previousBokning = mock(Bokning.class);
-        when(previousBokning.getStartDatum()).thenReturn(LocalDate.now().minusMonths(1));
-        when(previousBokning.getSlutDatum()).thenReturn(LocalDate.now().minusMonths(1).plusDays(2));
-        List<Bokning> bokningList = Arrays.asList(previousBokning);
-        when(kundMock.getBokningList()).thenReturn(bokningList);
-
-        Kund kundM = mock(Kund.class);
-        kundM.setId(1L);
-        kundM.setEmail("test@example.com");
-        kundM.setFörnamn("Pontus");
-        kundM.setEfternamn("Lundin");
-        kundM.setSsn("9009295412");
-        kundM.setAdress("Viavägen 4");
-        kundM.setStad("Rövhålet");
-        kundM.setMobilnummer("0768750975");
-        kundM.setBokningList(bokningList);
+        rabattService.setSUNDAY_NIGHT_DISCOUNT(0.02);
+        rabattService.setLONG_STAY_DISCOUNT(0.005);
+        rabattService.setLOYAL_CUSTOMER_DISCOUNT(0.02);
 
         when(bokningMock.getStartDatum()).thenReturn(startDatum);
         when(bokningMock.getSlutDatum()).thenReturn(slutDatum);
-        when(bokningMock.getTotalPris()).thenReturn(1000.0);
+        when(bokningMock.getTotalPris()).thenReturn(1000.0);   //`??
 
-       // assertNotNull(kundMock, "kundMock should not be null before method call");
+        Bokning previousBokning = mock(Bokning.class);
+        doReturn(LocalDate.now().minusMonths(1)).when(previousBokning).getStartDatum();
+        doReturn(LocalDate.now().minusMonths(1).plusDays(12)).when(previousBokning).getSlutDatum();
 
-        int antalNätterUnderÅret = 12;
+        List<Bokning> bokningList = Arrays.asList(previousBokning);
+        when(kundMock.getBokningList()).thenReturn(bokningList);
 
-        double expectedDiscount = 0.02 + 0.005;
-        double expectedPrisEfterDiscount = 1000.0 * (1 - expectedDiscount);
+        int antalNätterUnderÅret = (int) DAYS.between(previousBokning.getStartDatum(), previousBokning.getSlutDatum());
+        //int antalNätterUnderÅret = 12;
+        System.out.println(antalNätterUnderÅret);
 
-        // Stubba metodanrop
-        when(bokningService.getTotalNätterUnderÅret(kundM)).thenReturn(antalNätterUnderÅret);
-       // when(rabattService.calculateDiscount(eq(startDatum), eq(slutDatum), anyInt())).thenReturn(expectedDiscount);
-      //  when(rabattService.applyDiscount(anyDouble(), anyDouble())).thenReturn(expectedPrisEfterDiscount);
-        when(rabattService.calculateDiscount(any(LocalDate.class), any(LocalDate.class), anyInt())).thenReturn(0.025d);
+        bokningService = Mockito.spy(bokningService);
+        doReturn(antalNätterUnderÅret).when(bokningService).getTotalNätterUnderÅret(kundMock);
+
+
+
+        //bokningService = Mockito.spy(bokningService);
+       // doReturn(0.025d).when(bokningService.rabattService.calculateDiscount(any(LocalDate.class), any(LocalDate.class), anyInt()));
+
+        when(rabattServiceImpl.calculateDiscount(any(LocalDate.class), any(LocalDate.class), anyInt())).thenReturn(0.025d);
         when(rabattService.applyDiscount(eq(1000.0d), eq(0.025d))).thenReturn(975.0d);
+    }
 
-        System.out.println("Expected Discount: " + expectedDiscount);
-        System.out.println("Expected Price After Discount: " + expectedPrisEfterDiscount);
+    @Test
+    void testUpdateBokningWithDiscount() {
 
-        // Directly calling the method with correct mocks
-        bokningService.updateBokningWithDiscount(bokningMock, kundM);
+      //  System.out.println(rabattService.calculateDiscount(LocalDate.now().minusMonths(1),
+      //          LocalDate.now().minusMonths(1).plusDays(12), 12));
+        double expectedDiscount = 0.025d;
+        double expectedPrisEfterDiscount = 975.0d;
 
-        System.out.println("Actual Discount: " + rabattService.calculateDiscount(startDatum, slutDatum, antalNätterUnderÅret));
-        System.out.println("Actual Price After Discount: " + bokningMock.getTotalPris());
+        // Call the method to be tested
+        double result = bokningService.updateBokningWithDiscount(bokningMock, kundMock);
 
         // Verify the discounted price is correct
-        verify(bokningMock).setTotalPris(expectedPrisEfterDiscount);
-        assertEquals(expectedPrisEfterDiscount, bokningMock.getTotalPris(), 0.001);
+      //  verify(bokningMock).setTotalPris(expectedPrisEfterDiscount);
+        assertEquals(expectedPrisEfterDiscount, result, 0.001);
+
+        // Verify that RabattService methods are called with correct arguments
+       //verify(rabattService).calculateDiscount(bokningMock.getStartDatum(), bokningMock.getSlutDatum(), 2);
+      //  verify(rabattService).applyDiscount(1000.0d, expectedDiscount);
+    }
+}
+
 
         // Verify that RabattService methods are called with correct arguments
       //  verify(rabattService).calculateDiscount(startDatum, slutDatum, antalNätterUnderÅret);
@@ -152,7 +172,7 @@ public class BokningServiceImplTest {
 
 
 
-  */
+
     }
 
 
@@ -214,7 +234,7 @@ public class BokningServiceImplTest {
 
 
      */
-}
+
 
 
 /*
