@@ -1,7 +1,6 @@
 package com.backend2.backend2_pensionat_with_maven;
 
-import com.backend2.backend2_pensionat_with_maven.dtos.RumEventDto;
-import com.backend2.backend2_pensionat_with_maven.models.RumEvent;
+import com.backend2.backend2_pensionat_with_maven.configuration.IntegrationProperties;
 import com.backend2.backend2_pensionat_with_maven.services.impl.RumEventServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -12,18 +11,16 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.jms.annotation.EnableJms;
-import org.springframework.jms.annotation.JmsListener;
 
 import java.nio.charset.StandardCharsets;
-
 
 @ComponentScan
 public class ReadEventsFromQueue implements CommandLineRunner {
 
-    private final String queueName = "b772d127-9330-44ca-8449-4230fec752a2";
+    @Autowired
+    IntegrationProperties integrationProperties;
+    //private final String queueName = "b772d127-9330-44ca-8449-4230fec752a2";
 
     @Autowired
     RumEventServiceImpl rumEventService;
@@ -31,10 +28,19 @@ public class ReadEventsFromQueue implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        final String queueName = integrationProperties.getEventProperties().getQueueName();
+        final String queueHost = integrationProperties.getEventProperties().getQueueHost();
+        final String queueUser = integrationProperties.getEventProperties().getQueueUsername();
+        final String queuePw = integrationProperties.getEventProperties().getQueuePassword();
+
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("128.140.81.47");
-        factory.setUsername("djk47589hjkew789489hjf894");
-        factory.setPassword("sfdjkl54278frhj7");
+//        factory.setHost("128.140.81.47");
+//        factory.setUsername("djk47589hjkew789489hjf894");
+//        factory.setPassword("sfdjkl54278frhj7");
+        factory.setHost(queueHost);
+        factory.setUsername(queueUser);
+        factory.setPassword(queuePw);
+
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
         ObjectMapper mapper = new ObjectMapper();
