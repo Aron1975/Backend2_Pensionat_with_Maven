@@ -175,7 +175,7 @@ class BokningServiceImplTest {
 
     }
 
-
+  //test
     /*
 
         public void updateBokningWithDiscount(Bokning bokning, Kund kund) {
