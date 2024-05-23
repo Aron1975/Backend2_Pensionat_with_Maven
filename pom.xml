@@ -113,6 +113,14 @@
             <!--version>5.21.0</version-->
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/me.paulschwarz/spring-dotenv -->
+        <!--dependency>
+            <groupId>me.paulschwarz</groupId>
+            <artifactId>spring-dotenv</artifactId>
+            <version>2.5.4</version>
+        </dependency-->
+
+
     </dependencies>
 
     <build>
