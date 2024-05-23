@@ -58,6 +58,8 @@ public class BokningServiceImplTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
+
+
     }
 
 
@@ -67,15 +69,26 @@ public class BokningServiceImplTest {
         LocalDate startDatum = LocalDate.now();
         LocalDate slutDatum = startDatum.plusDays(2);
 
-        when(bokningMock.getStartDatum()).thenReturn(startDatum);
-        when(bokningMock.getSlutDatum()).thenReturn(slutDatum);
-        when(bokningMock.getTotalPris()).thenReturn(1000.0);
-
         Bokning previousBokning = mock(Bokning.class);
         when(previousBokning.getStartDatum()).thenReturn(LocalDate.now().minusMonths(1));
         when(previousBokning.getSlutDatum()).thenReturn(LocalDate.now().minusMonths(1).plusDays(2));
         List<Bokning> bokningList = Arrays.asList(previousBokning);
         when(kundMock.getBokningList()).thenReturn(bokningList);
+
+        Kund kundM = mock(Kund.class);
+        kundM.setId(1L);
+        kundM.setEmail("test@example.com");
+        kundM.setFörnamn("Pontus");
+        kundM.setEfternamn("Lundin");
+        kundM.setSsn("9009295412");
+        kundM.setAdress("Viavägen 4");
+        kundM.setStad("Rövhålet");
+        kundM.setMobilnummer("0768750975");
+        kundM.setBokningList(bokningList);
+
+        when(bokningMock.getStartDatum()).thenReturn(startDatum);
+        when(bokningMock.getSlutDatum()).thenReturn(slutDatum);
+        when(bokningMock.getTotalPris()).thenReturn(1000.0);
 
        // assertNotNull(kundMock, "kundMock should not be null before method call");
 
@@ -85,7 +98,7 @@ public class BokningServiceImplTest {
         double expectedPrisEfterDiscount = 1000.0 * (1 - expectedDiscount);
 
         // Stubba metodanrop
-       // when(bokningService.getTotalNätterUnderÅret(any())).thenReturn(antalNätterUnderÅret);
+        when(bokningService.getTotalNätterUnderÅret(kundM)).thenReturn(antalNätterUnderÅret);
        // when(rabattService.calculateDiscount(eq(startDatum), eq(slutDatum), anyInt())).thenReturn(expectedDiscount);
       //  when(rabattService.applyDiscount(anyDouble(), anyDouble())).thenReturn(expectedPrisEfterDiscount);
         when(rabattService.calculateDiscount(any(LocalDate.class), any(LocalDate.class), anyInt())).thenReturn(0.025d);
@@ -95,7 +108,7 @@ public class BokningServiceImplTest {
         System.out.println("Expected Price After Discount: " + expectedPrisEfterDiscount);
 
         // Directly calling the method with correct mocks
-        bokningService.updateBokningWithDiscount(bokningMock, kundMock);
+        bokningService.updateBokningWithDiscount(bokningMock, kundM);
 
         System.out.println("Actual Discount: " + rabattService.calculateDiscount(startDatum, slutDatum, antalNätterUnderÅret));
         System.out.println("Actual Price After Discount: " + bokningMock.getTotalPris());
