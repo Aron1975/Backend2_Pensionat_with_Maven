@@ -1,5 +1,6 @@
 package com.backend2.backend2_pensionat_with_maven;
 
+import com.backend2.backend2_pensionat_with_maven.dtos.BlacklistDto;
 import com.backend2.backend2_pensionat_with_maven.dtos.BlacklistedCustomerDto;
 import com.backend2.backend2_pensionat_with_maven.services.impl.BlacklistServiceImpl;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -12,12 +13,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 //import static com.backend2.backend2_pensionat_with_maven.services.impl.BlacklistServiceImpl.TYPE_REFERENCE;
@@ -29,14 +35,27 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 public class BlacklistServiceImplUnitTests {
 
-    @InjectMocks
-    private BlacklistServiceImpl blacklistServiceImpl;
 
     @Mock
     private ObjectMapper objectMapper;
 
 
     private List<BlacklistedCustomerDto> testLista;
+
+    @Mock
+    private HttpClient httpClient;
+
+    @Mock
+    private HttpResponse<String> httpResponse;
+
+
+   private List<BlacklistedCustomerDto> blacklists;
+
+    @Mock
+    private BlacklistDto blacklistDtoMock;
+
+    @InjectMocks
+    private BlacklistServiceImpl blacklistServiceImpl;
 
 
 /* Metod att testa
@@ -70,8 +89,12 @@ public class BlacklistServiceImplUnitTests {
 
     @BeforeEach
     void setUp() throws IOException {   //have to make a "realobjectmapper" (new objectmapper) otherwise file won't be read correctly by using mock
+        MockitoAnnotations.initMocks(this);
+        blacklists = new ArrayList<>();
         ObjectMapper realObjectMapper = new ObjectMapper();
         realObjectMapper.registerModule(new JavaTimeModule());
+      //  blacklists.add(blacklistDtoMock);
+
 
 
         File file = new File("src/test/java/blacklist.json");
@@ -102,6 +125,61 @@ public class BlacklistServiceImplUnitTests {
     assertEquals(testLista.size(), 13);
 
 }
+
+
+/* class to test
+public void addToBlacklist(BlacklistDto blacklistDto) throws IOException, InterruptedException {
+        String email = blacklistDto.email;
+        String name = blacklistDto.name;
+        boolean emailCheck = true;
+        for (int i = 0; i < getAllBlacklists().size(); i++) {
+            if(getAllBlacklists().get(i).email.toLowerCase().equals(email.toLowerCase())){
+                emailCheck = false;
+            }
+        }
+        if(emailCheck){
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://javabl.systementor.se/api/grupp10/blacklist"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString("{ \"email\":\"" + email + "\", \"name\":\"" + name + "\", \"ok\":\"" + "true" + "\" }" ))
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.statusCode());
+            System.out.println(response.body());
+            System.out.println(email + " " + name);
+        }
+        else{
+            System.out.println("Användare finns redan");
+        }
+
+    }
+ */
+
+
+    @Test
+    void testAddToBlacklistSuccess() throws IOException, InterruptedException {
+
+        blacklistDtoMock.setEmail("testemail@exempel.com");
+        blacklistDtoMock.setName("Alban");
+
+       when(blacklistServiceImpl.getAllBlacklists()).thenReturn(blacklists);
+        when(httpClient.send(any(HttpRequest.class), eq(HttpResponse.BodyHandlers.ofString())))
+                .thenReturn(httpResponse);
+        when(httpResponse.statusCode()).thenReturn(200);
+        when(httpResponse.body()).thenReturn("OK");
+
+        HttpClient httpClientMock = mock(HttpClient.class);
+        HttpRequest httpRequestMock = mock(HttpRequest.class);
+        when(httpClientMock.send(any(HttpRequest.class), eq(HttpResponse.BodyHandlers.ofString())))
+                .thenReturn(httpResponse);
+
+
+        blacklistServiceImpl.addToBlacklist(blacklistDtoMock);
+
+        verify(httpClient, times(1)).send(any(HttpRequest.class), eq(HttpResponse.BodyHandlers.ofString()));
+       // assertEquals(1, blacklists.size());
+    }
 
 
 }
