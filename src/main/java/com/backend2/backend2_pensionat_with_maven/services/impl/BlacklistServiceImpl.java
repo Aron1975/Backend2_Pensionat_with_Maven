@@ -32,9 +32,12 @@ public class BlacklistServiceImpl implements BlacklistService {
     private final ObjectMapper objectMapper;
     private final TypeReference<List<BlacklistedCustomerDto>> typeReference;
 
+    private HttpClient httpClient;
+
     public BlacklistServiceImpl(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
         this.typeReference = new TypeReference<>() {};
+        this.httpClient = httpClient;
         objectMapper.registerModule(new JavaTimeModule());
     }
 
@@ -94,6 +97,7 @@ public class BlacklistServiceImpl implements BlacklistService {
     public void addToBlacklist(BlacklistDto blacklistDto) throws IOException, InterruptedException {
         String email = blacklistDto.email;
         String name = blacklistDto.name;
+        System.out.println(email);
         boolean emailCheck = true;
         for (int i = 0; i < getAllBlacklists().size(); i++) {
             if(getAllBlacklists().get(i).email.toLowerCase().equals(email.toLowerCase())){
@@ -101,7 +105,7 @@ public class BlacklistServiceImpl implements BlacklistService {
             }
         }
         if(emailCheck){
-            HttpClient client = HttpClient.newHttpClient();
+            HttpClient client = httpClient;
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("https://javabl.systementor.se/api/grupp10/blacklist"))
                     .header("Content-Type", "application/json")

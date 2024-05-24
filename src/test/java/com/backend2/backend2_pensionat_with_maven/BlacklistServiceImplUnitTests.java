@@ -54,6 +54,7 @@ public class BlacklistServiceImplUnitTests {
     @Mock
     private BlacklistDto blacklistDtoMock;
 
+
     @InjectMocks
     private BlacklistServiceImpl blacklistServiceImpl;
 
@@ -158,28 +159,63 @@ public void addToBlacklist(BlacklistDto blacklistDto) throws IOException, Interr
 
 
     @Test
-    void testAddToBlacklistSuccess() throws IOException, InterruptedException {
+    void testAddToBlacklistClientCallAmounts() throws IOException, InterruptedException {
 
-        blacklistDtoMock.setEmail("testemail@exempel.com");
-        blacklistDtoMock.setName("Alban");
+        //blacklistDtoMock.setEmail("testemail@exempel.com");
+       // blacklistDtoMock.setName("Alban");
 
-       when(blacklistServiceImpl.getAllBlacklists()).thenReturn(blacklists);
-        when(httpClient.send(any(HttpRequest.class), eq(HttpResponse.BodyHandlers.ofString())))
+       when(blacklistServiceImpl.getAllBlacklists()).thenReturn(blacklists);  //blacklist är null, den kommer vidare till o lägga in
+       when(httpClient.send(any(HttpRequest.class), eq(HttpResponse.BodyHandlers.ofString())))
                 .thenReturn(httpResponse);
-        when(httpResponse.statusCode()).thenReturn(200);
-        when(httpResponse.body()).thenReturn("OK");
-
-        HttpClient httpClientMock = mock(HttpClient.class);
-        HttpRequest httpRequestMock = mock(HttpRequest.class);
-        when(httpClientMock.send(any(HttpRequest.class), eq(HttpResponse.BodyHandlers.ofString())))
-                .thenReturn(httpResponse);
+       when(httpResponse.statusCode()).thenReturn(200);
+       when(httpResponse.body()).thenReturn("OK");
 
 
         blacklistServiceImpl.addToBlacklist(blacklistDtoMock);
 
+        //denna kallas 1 gång pga test icke existerar
         verify(httpClient, times(1)).send(any(HttpRequest.class), eq(HttpResponse.BodyHandlers.ofString()));
-       // assertEquals(1, blacklists.size());
+     //   assertEquals(0, blacklists.size());
     }
 
+
+    @Test
+    void testAddToBlacklistExistsTest() throws IOException, InterruptedException {
+
+        BlacklistDto blacklistDtoMockExist = new BlacklistDto();
+
+
+        blacklistDtoMockExist.setEmail("stefan6@aaa.com");    //denna fi// nns redan på blacklist siten
+        blacklistDtoMockExist.setName("Stefan Holmberg");
+
+        BlacklistedCustomerDto blacklistedCustomerDtoTemp = new BlacklistedCustomerDto();
+        blacklistedCustomerDtoTemp.setName("Stefan Holmberg");
+        blacklistedCustomerDtoTemp.setEmail("stefan6@aaa.com");
+
+        blacklists.add((blacklistedCustomerDtoTemp));
+
+       // System.out.println(blacklists.get(0));
+
+
+
+        //blacklists.add(blacklistDtoMockExist);
+
+      //  when(blacklistDtoMockExist.name).thenReturn(blacklistDtoMockExist.getName());
+      //  when(blacklistDtoMockExist.email).thenReturn(blacklistDtoMockExist.getEmail());
+
+        when(blacklistServiceImpl.getAllBlacklists()).thenReturn(blacklists);
+      //  when(httpClient.send(any(HttpRequest.class), eq(HttpResponse.BodyHandlers.ofString())))
+      //          .thenReturn(httpResponse);
+      //  when(httpResponse.statusCode()).thenReturn(200);
+      //  when(httpResponse.body()).thenReturn("OK");
+
+
+        blacklistServiceImpl.addToBlacklist(blacklistDtoMockExist);
+
+        //denna kallas 0 gånger pga stefan existerar redan i listan som mocken jämför med, och i objektet som skickas in!
+        verify(httpClient, times(0)).send(any(HttpRequest.class), eq(HttpResponse.BodyHandlers.ofString()));
+
+
+    }
 
 }
