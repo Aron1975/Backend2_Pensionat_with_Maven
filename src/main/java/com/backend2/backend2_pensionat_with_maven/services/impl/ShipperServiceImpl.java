@@ -1,16 +1,23 @@
 package com.backend2.backend2_pensionat_with_maven.services.impl;
 
+import com.backend2.backend2_pensionat_with_maven.configuration.IntegrationProperties;
 import com.backend2.backend2_pensionat_with_maven.dtos.DetailedKundDto;
 import com.backend2.backend2_pensionat_with_maven.dtos.ShipperDto;
 import com.backend2.backend2_pensionat_with_maven.models.Shipper;
 import com.backend2.backend2_pensionat_with_maven.repos.ShipperRepo;
 import com.backend2.backend2_pensionat_with_maven.services.ShipperService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLOutput;
 import java.util.List;
 
@@ -20,6 +27,9 @@ import java.util.List;
 public class ShipperServiceImpl implements ShipperService {
 
     private final ShipperRepo shipperRepo;
+
+    @Autowired
+    IntegrationProperties integrationProperties;
 
     @Override
     public List<Shipper> getAllShippers() {
@@ -56,7 +66,21 @@ public class ShipperServiceImpl implements ShipperService {
     }
 
     @Override
-    public void addUpdateShipper(List<ShipperDto> shipperDtoList) {
+    public List<ShipperDto> fetchShippers() throws IOException {
+
+        List<ShipperDto> shippers;
+        String url = integrationProperties.getShipperProperties().getUrl();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        shippers = mapper.readValue(new URL(url), new TypeReference<>() {});
+        return shippers;
+    }
+
+    @Override
+//    public void addUpdateShipper(List<ShipperDto> shipperDtoList) {
+    public void addUpdateShipper() throws IOException {
+
+        List<ShipperDto> shipperDtoList = fetchShippers();
 
         long startTime = System.nanoTime();
 
@@ -67,6 +91,7 @@ public class ShipperServiceImpl implements ShipperService {
 
         int tempId;
         for (ShipperDto sh : shipperDtoList) {
+            System.out.println("Shipper: " + sh);
             if((tempId = findIdByShipperId(sh.getId())) == -1){
                 sparaShipper(sh);
             }
@@ -75,7 +100,6 @@ public class ShipperServiceImpl implements ShipperService {
                 if((!s.companyName.equals(sh.getCompanyName())) || (!s.phone.equals(sh.getPhone()))){
                     updateShipper(tempId, sh);
                 }
-
             }
         }
         long endTime = System.nanoTime();

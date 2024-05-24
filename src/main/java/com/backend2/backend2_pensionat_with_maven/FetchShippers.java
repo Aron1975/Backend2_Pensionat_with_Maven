@@ -19,36 +19,21 @@ public class FetchShippers implements CommandLineRunner {
 
     @Autowired
     ShipperServiceImpl shipperService;
-    @Autowired
-    IntegrationProperties integrationProperties;
+//    @Autowired
+//    IntegrationProperties integrationProperties;
 
     @Override
     public void run(String... args) throws Exception {
         System.out.println("Fetching Shippers..");
 
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        List<ShipperDto> shippers;
-        String url = integrationProperties.getShipperProperties().getUrl();
-        shippers = mapper.readValue(new URL(url), new TypeReference<>() {});
-        shipperService.addUpdateShipper(shippers);
-    /*    for (ShipperDto sh : shippers) {
-            ShipperDto shipper = new ShipperDto();
-            shipper.setId(sh.getId());
-            shipper.setEmail(sh.getEmail());
-            shipper.setCompanyName(sh.getCompanyName());
-            shipper.setContactName(sh.getContactName());
-            shipper.setContactTitle(sh.getContactTitle());
-            shipper.setStreetAddress(sh.getStreetAddress());
-            shipper.setCity(sh.getCity());
-            shipper.setPostalCode(sh.getPostalCode());
-            shipper.setCountry(sh.getCountry());
-            shipper.setPhone(sh.getPhone());
-            shipper.setFax(sh.getFax());
-            //System.out.println(shipper.companyName + " " + shipper.phone);
+//        List<ShipperDto> shippers;
+//        String url = integrationProperties.getShipperProperties().getUrl();
+//        ObjectMapper mapper = new ObjectMapper();
+//        mapper.registerModule(new JavaTimeModule());
+//        shippers = mapper.readValue(new URL(url), new TypeReference<>() {});
+//        shipperService.addUpdateShipper(shippers);
+        shipperService.addUpdateShipper();
 
-            shipperService.addUpdateShipper(shipper);
-        }*/
         System.out.println("Shippers updated");
     }
 
