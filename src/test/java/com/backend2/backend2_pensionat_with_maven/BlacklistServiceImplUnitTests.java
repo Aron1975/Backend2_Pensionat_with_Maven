@@ -40,6 +40,7 @@ public class BlacklistServiceImplUnitTests {
     private ObjectMapper objectMapper;
 
 
+
     private List<BlacklistedCustomerDto> testLista;
 
     @Mock
@@ -47,6 +48,7 @@ public class BlacklistServiceImplUnitTests {
 
     @Mock
     private HttpResponse<String> httpResponse;
+
 
 
    private List<BlacklistedCustomerDto> blacklists;

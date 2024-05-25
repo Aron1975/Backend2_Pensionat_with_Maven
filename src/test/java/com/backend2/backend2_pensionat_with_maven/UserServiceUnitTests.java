@@ -39,8 +39,8 @@ public class UserServiceUnitTests {
 
     User userTempExist = new User();
 
-    List<User> userList;
 
+    List<User> userList;
 
     @InjectMocks
     UserServiceImpl userServiceImpl;  //  = new UserServiceImpl(kundRepo,bokningRepo,userRepo);
