@@ -1,28 +1,27 @@
 package com.backend2.backend2_pensionat_with_maven.services;
 
 
-
 import com.backend2.backend2_pensionat_with_maven.dtos.UserDto;
 import com.backend2.backend2_pensionat_with_maven.models.User;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface UserService {
 
+    List<UserDto> getAllUsers();
 
-    
-    public List<UserDto> getAllUsers();
+    UserDto userToUserDto(User user);
 
-    public UserDto userToUserDto(User u);
+    User userDtoToUser(UserDto userDto);
 
-    public User userDtoToUser(UserDto u);
+    void deleteUserById(UUID id);  // Standardized to use UUID only
 
-    public void deleteUserById(int id);
+    void saveUser(UserDto userDto);  // Renamed from 'spara' for clarity
 
-    public void spara(UserDto u);
+    UserDto getUserById(UUID id);  // Updated to use UUID
 
-    public UserDto getUser(int id);
-
-    public boolean checkIfUserExists(User user, List<User> userList);
-
+    boolean checkIfUserExists(UUID userId);  // Simplified to check existence by UUID
 }
+
+

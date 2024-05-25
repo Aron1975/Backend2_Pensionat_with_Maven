@@ -1,37 +1,39 @@
 package com.backend2.backend2_pensionat_with_maven.services.impl;
 
 
-import com.backend2.backend2_pensionat_with_maven.dtos.DetailedKundDto;
 import com.backend2.backend2_pensionat_with_maven.dtos.UserDto;
 import com.backend2.backend2_pensionat_with_maven.models.User;
-import com.backend2.backend2_pensionat_with_maven.repos.BokningRepo;
-import com.backend2.backend2_pensionat_with_maven.repos.KundRepo;
 import com.backend2.backend2_pensionat_with_maven.repos.UserRepo;
 import com.backend2.backend2_pensionat_with_maven.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final KundRepo kundRepo;
-    private final BokningRepo bokningsRepo;
     private final UserRepo userRepo;
-
 
     @Override
     public List<UserDto> getAllUsers() {
-        return userRepo.findAll().stream().map(u -> userToUserDto(u)).toList();
+        Iterable<User> users = userRepo.findAll();
+        return StreamSupport.stream(users.spliterator(), false)
+                .map(this::userToUserDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public UserDto userToUserDto(User u) {
-        return UserDto.builder().id(u.getId()).username(u.getUsername()).password(u.getPassword()).build();
+    public UserDto userToUserDto(User user) {
+        return UserDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .build();
     }
 
     @Override
@@ -43,35 +45,26 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    public void spara(UserDto u){
-        User user = userDtoToUser(u);
+    @Override
+    public void saveUser(UserDto userDto) {
+        User user = userDtoToUser(userDto);
         userRepo.save(user);
     }
 
     @Override
-    public void deleteUserById(int id){
-        User userToDelete = userRepo.findById(id).orElse(null);
-        if (userToDelete != null){
-            userRepo.deleteById(id);
-        }
+    public void deleteUserById(UUID id) {
+        userRepo.findById(id).ifPresent(userRepo::delete);
     }
 
-    public UserDto getUser(int id){
-        User user = userRepo.findById(id).orElse(null);
-        if (user != null){
-            return userToUserDto(user);
-        }
-        return null;
+    @Override
+    public UserDto getUserById(UUID id) {
+        return userRepo.findById(id)
+                .map(this::userToUserDto)
+                .orElse(null);
     }
 
-    public boolean checkIfUserExists(User user, List<User> userList) {
-        String uName = user.getUsername();
-        String pWord = user.getPassword();
-
-        boolean userExists = userList.stream().anyMatch(u -> u.getUsername().equals(uName) &&
-                u.getPassword().equals(pWord));
-
-        return userExists;
+    @Override
+    public boolean checkIfUserExists(UUID userId) {
+        return userRepo.findById(userId).isPresent();
     }
-
 }
