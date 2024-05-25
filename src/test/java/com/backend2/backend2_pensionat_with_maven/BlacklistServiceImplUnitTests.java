@@ -173,7 +173,7 @@ public void addToBlacklist(BlacklistDto blacklistDto) throws IOException, Interr
 
         blacklistServiceImpl.addToBlacklist(blacklistDtoMock);
 
-        //denna kallas 1 gång pga test icke existerar
+        //denna kallas 1 gång pga test icke existerar, pga blacklists är null
         verify(httpClient, times(1)).send(any(HttpRequest.class), eq(HttpResponse.BodyHandlers.ofString()));
      //   assertEquals(0, blacklists.size());
     }
