@@ -19,7 +19,7 @@ import javax.swing.*;
 import java.io.IOException;
 import java.util.List;
 
-@Controller
+/*@Controller
 @RequiredArgsConstructor
 @RequestMapping("/login")
 public class UserController {
@@ -37,7 +37,7 @@ public class UserController {
 
     @PostMapping("/add")
     public String sparaUser(UserDto user) {
-        userService.spara(user);
+        userService.saveUser(user);
         return "index";
     }
 
@@ -92,8 +92,6 @@ public class UserController {
     }*/
 
 
-
-}
 
 
 
