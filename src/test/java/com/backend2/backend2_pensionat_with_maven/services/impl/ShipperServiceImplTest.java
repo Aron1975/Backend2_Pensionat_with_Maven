@@ -11,9 +11,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -25,15 +27,20 @@ import java.util.List;
 
 import static org.hibernate.cfg.JdbcSettings.URL;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class ShipperServiceImplTest {
 
     private final ShipperRepo shipperRepo = mock(ShipperRepo.class);
-    private final ShipperService shipperService = mock(ShipperService.class);
+
+    @InjectMocks
+    private ShipperServiceImpl shipperService;// = mock(ShipperServiceImpl.class);
+
+    @Value("${integrations.shipper-properties.url}")
+    private String url;
+    //ShipperServiceImpl sut;
 
     @Autowired
     IntegrationProperties integrationProperties;
@@ -50,6 +57,7 @@ class ShipperServiceImplTest {
     void shipperDtoToShipperShouldReturnShipper(){
 
         //Arrange
+        ShipperServiceImpl shipperServ = new ShipperServiceImpl(shipperRepo);
         ShipperDto shipperDto = new ShipperDto();
         shipperDto.setId(100);
         shipperDto.setEmail("Email");
@@ -63,11 +71,16 @@ class ShipperServiceImplTest {
         shipperDto.setPhone("1234567890");
         shipperDto.setFax("Fax");
 
-        Shipper shipper = mock(Shipper.class);
+        //Act
+        Shipper shipper;
+        shipper = shipperServ.shipperDtoToShipper(shipperDto);
 
-        shipper = shipperService.shipperDtoToShipper(shipperDto);
-
-        assertEquals(shipperDto.getId(), shipper.getId());
+        //Assert
+        assertNotNull(shipper);
+        assertEquals(shipperDto.getId(), shipper.getShipperId());
+        assertEquals(shipperDto.getCompanyName(), shipper.getCompanyName());
+        assertEquals(shipperDto.getPhone(), shipper.getPhone());
+        assertEquals(shipper.getCompanyName(), "Company");
     }
 
     @Test
@@ -98,8 +111,29 @@ class ShipperServiceImplTest {
     }
 
     @Test
-    void addUpdateShipper() {
+    void addUpdateShipperShouldSaveNewShipper() throws IOException {
 
+        //sut = new ShipperServiceImpl(shipperRepo);
+
+        //Arrange
+    /*    List<ShipperDto> shipperDtoList;
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        File file = new File("src/test/resources/shippersTestData.json");
+        when(shipperService.fetchShippers()).thenReturn(mapper.readValue(file, new TypeReference<>() {}));
+        when(shipperService.findIdByShipperId(anyInt())).thenReturn(-1);
+        //when(shipperRepo.save(any())).thenReturn(null);
+        //when(shipperService.sparaShipper(any(ShipperDto.class)))
+        //Mockito.doNothing().when(shipperService).sparaShipper(Mockito.any(ShipperDto.class));
+        //shipperDtoList = shipperService.fetchShippers();
+        //when(shipperService.addUpdateShipper()).
+
+        //Act
+
+        shipperService.addUpdateShipper();
+
+        //Assert
+        verify(shipperService, times(3)).sparaShipper(Mockito.any(ShipperDto.class));*/
     }
 
     @Test

@@ -38,6 +38,7 @@ public class BlacklistServiceImpl implements BlacklistService {
 
     //@Autowired
     //IntegrationProperties integrationProperties;
+    //@Value("${integrations.blacklist-properties.url}")
     @Value("${integrations.blacklist-properties.url}")
     private String url;
 

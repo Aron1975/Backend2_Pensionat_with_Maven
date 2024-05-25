@@ -18,4 +18,6 @@ public interface ShipperRepo extends JpaRepository<Shipper, Integer> {
     @Transactional
     @Query("update Shipper s set s.companyName=?1, s.phone=?2 where s.id = ?3")
     public void updateShipperById(String companyName, String phone, Integer id);
+
+
 }

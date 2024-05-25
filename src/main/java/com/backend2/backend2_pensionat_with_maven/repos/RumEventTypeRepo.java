@@ -16,5 +16,5 @@ public interface RumEventTypeRepo extends JpaRepository<RumEvent.RumEventType, L
     @Query(value = "SELECT * FROM rum_event$rum_event_type where roomNo=:room_no", nativeQuery = true)
     List<RumEvent.RumEventType> findAllByRoomNo(@Param("room_no") int roomNo);*/
 
-    //List<RumEvent.RumEventType> findAllByRoomNoMatches(int roomNr);
+   // public List<RumEvent.RumEventType> findByRoomNo(int roomNr);
 }

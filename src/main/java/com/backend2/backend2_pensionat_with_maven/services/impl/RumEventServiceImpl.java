@@ -24,9 +24,10 @@ public class RumEventServiceImpl implements RumEventService {
 
     @Override
     public List<RumEvent.RumEventType> findEventsByRoomNr(int roomNr) throws JsonProcessingException {
-        //List<RumEvent.RumEventType> rumEventList = rumEventTypeRepo.findAllByRoomNoMatches(roomNr);
+
         return rumEventTypeRepo.findAll().stream().filter(event -> event.RoomNo==roomNr).toList();
-        //return rumEventList;
+//        List<RumEvent.RumEventType> rumEventList = rumEventTypeRepo.findByRoomNo(10);
+//        return rumEventList;
     }
 
     @Override

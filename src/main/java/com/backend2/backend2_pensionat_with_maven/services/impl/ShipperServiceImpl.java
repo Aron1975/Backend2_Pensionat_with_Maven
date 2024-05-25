@@ -69,7 +69,8 @@ public class ShipperServiceImpl implements ShipperService {
     public List<ShipperDto> fetchShippers() throws IOException {
 
         List<ShipperDto> shippers;
-        String url = integrationProperties.getShipperProperties().getUrl();
+        String url;// = integrationProperties.getShipperProperties().getUrl();
+        url="https://javaintegration.systementor.se/shippers";
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         shippers = mapper.readValue(new URL(url), new TypeReference<>() {});
@@ -91,7 +92,6 @@ public class ShipperServiceImpl implements ShipperService {
 
         int tempId;
         for (ShipperDto sh : shipperDtoList) {
-            System.out.println("Shipper: " + sh);
             if((tempId = findIdByShipperId(sh.getId())) == -1){
                 sparaShipper(sh);
             }
