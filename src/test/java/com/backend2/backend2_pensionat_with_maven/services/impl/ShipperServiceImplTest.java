@@ -11,9 +11,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,17 +32,21 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+//@SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
 class ShipperServiceImplTest {
 
     private final ShipperRepo shipperRepo = mock(ShipperRepo.class);
 
+    private final ShipperServiceImpl shipperService = mock(ShipperServiceImpl.class);
+
+    private final ObjectMapper mapper = mock(ObjectMapper.class);
+
     @InjectMocks
-    private ShipperServiceImpl shipperService;// = mock(ShipperServiceImpl.class);
+    ShipperServiceImpl sut;
 
     @Value("${integrations.shipper-properties.url}")
     private String url;
-    //ShipperServiceImpl sut;
 
     @Autowired
     IntegrationProperties integrationProperties;
@@ -113,8 +119,16 @@ class ShipperServiceImplTest {
     @Test
     void addUpdateShipperShouldSaveNewShipper() throws IOException {
 
-        //sut = new ShipperServiceImpl(shipperRepo);
+        //Arrange
+        //sut = new ShipperServiceImpl(shipperRepo, objectMapper);
+        List<ShipperDto> shipperDtoList;
+        //ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        File file = new File("src/test/resources/shippersTestData.json");
+        shipperDtoList= mapper.readValue(file, new TypeReference<>() {});
 
+        //Act
+        sut.addUpdateShipper();
         //Arrange
     /*    List<ShipperDto> shipperDtoList;
         ObjectMapper mapper = new ObjectMapper();
@@ -130,10 +144,10 @@ class ShipperServiceImplTest {
 
         //Act
 
-        shipperService.addUpdateShipper();
+        shipperService.addUpdateShipper();  */
 
         //Assert
-        verify(shipperService, times(3)).sparaShipper(Mockito.any(ShipperDto.class));*/
+        verify(shipperRepo, times(8)).save(any(Shipper.class));
     }
 
     @Test

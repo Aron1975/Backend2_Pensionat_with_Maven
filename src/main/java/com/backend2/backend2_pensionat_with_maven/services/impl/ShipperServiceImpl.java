@@ -27,6 +27,7 @@ import java.util.List;
 public class ShipperServiceImpl implements ShipperService {
 
     private final ShipperRepo shipperRepo;
+    //private ObjectMapper mapper;
 
     @Autowired
     IntegrationProperties integrationProperties;
@@ -72,6 +73,7 @@ public class ShipperServiceImpl implements ShipperService {
         String url;// = integrationProperties.getShipperProperties().getUrl();
         url="https://javaintegration.systementor.se/shippers";
         ObjectMapper mapper = new ObjectMapper();
+        mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         shippers = mapper.readValue(new URL(url), new TypeReference<>() {});
         return shippers;
@@ -81,7 +83,8 @@ public class ShipperServiceImpl implements ShipperService {
 //    public void addUpdateShipper(List<ShipperDto> shipperDtoList) {
     public void addUpdateShipper() throws IOException {
 
-        List<ShipperDto> shipperDtoList = fetchShippers();
+        List<ShipperDto> shipperDtoList;
+        shipperDtoList = fetchShippers();
 
         long startTime = System.nanoTime();
 
