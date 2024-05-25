@@ -2,6 +2,7 @@ package com.backend2.backend2_pensionat_with_maven.services.impl;
 
 import com.backend2.backend2_pensionat_with_maven.configuration.IntegrationProperties;
 import com.backend2.backend2_pensionat_with_maven.dtos.ShipperDto;
+import com.backend2.backend2_pensionat_with_maven.models.Shipper;
 import com.backend2.backend2_pensionat_with_maven.repos.ShipperRepo;
 import com.backend2.backend2_pensionat_with_maven.services.ShipperService;
 import com.fasterxml.jackson.core.JsonParser;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,22 +33,41 @@ import static org.mockito.Mockito.when;
 class ShipperServiceImplTest {
 
     private final ShipperRepo shipperRepo = mock(ShipperRepo.class);
-    //private final ShipperService shipperService = new ShipperServiceImpl(shipperRepo);
     private final ShipperService shipperService = mock(ShipperService.class);
 
-    @MockBean
+    @Autowired
     IntegrationProperties integrationProperties;
 
     @Test
-    void getAllShippers() { //H2
+    void getAllShippers() { //Repo
     }
 
     @Test
-    void sparaShipper() {   //H2
+    void sparaShipper() {   //Repo
     }
 
     @Test
-    void shipperDtoToShipper() {
+    void shipperDtoToShipperShouldReturnShipper(){
+
+        //Arrange
+        ShipperDto shipperDto = new ShipperDto();
+        shipperDto.setId(100);
+        shipperDto.setEmail("Email");
+        shipperDto.setCompanyName("Company");
+        shipperDto.setContactName("CN");
+        shipperDto.setContactTitle("CT");
+        shipperDto.setStreetAddress("SA");
+        shipperDto.setCity("Ci");
+        shipperDto.setPostalCode("PC");
+        shipperDto.setCountry("Co");
+        shipperDto.setPhone("1234567890");
+        shipperDto.setFax("Fax");
+
+        Shipper shipper = mock(Shipper.class);
+
+        shipper = shipperService.shipperDtoToShipper(shipperDto);
+
+        assertEquals(shipperDto.getId(), shipper.getId());
     }
 
     @Test
@@ -54,26 +75,26 @@ class ShipperServiceImplTest {
     }
 
     @Test
-    void fetchShippers() throws IOException {
+    void objectMapperShouldReturnShipperDtoObjectTest() throws IOException {
 
+        //Arrange
+        //ObjectMapper objMapper = mock(ObjectMapper.class);
+        List<ShipperDto> shippers;
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        File file = new File("src/test/resources/shippersTestData.json");
+        when(shipperService.fetchShippers()).thenReturn(mapper.readValue(file, new TypeReference<>() {}));
 
+        //Act
+        shippers = shipperService.fetchShippers();
 
-        ObjectMapper objMapper = mock(ObjectMapper.class);
-        File file = new File("src/test/resources/Shippers.json");
-        //when(objMapper.readValue(file, new TypeReference<List<ShipperDto>>() {}))
-          //      .thenReturn(expectedShippers);
-          objMapper.registerModule(new JavaTimeModule());
-        //List<ShipperDto> shippers = objMapper.readValue(file, new TypeReference<List<ShipperDto>>() {});
-
-        //when(objMapper.readValue((JsonParser) any(), new TypeReference<>() {})).thenReturn(objMapper.readValue(file, new TypeReference<>() {}));
-        //when(objMapper.readValue("", new TypeReference<>() {})).thenReturn(objMapper.readValue(file, new TypeReference<>() {}));
-
-        when(integrationProperties.getShipperProperties().getUrl()).thenReturn("");
-        when(shipperService.fetchShippers()).thenReturn(objMapper.readValue(file, new TypeReference<>() {}));
-
-        List<ShipperDto> shippers = shipperService.fetchShippers();
+        //Assert
         assertNotNull(shippers);
-        //when(fetchShippers()).thenReturn(objMapper.readValue(file, new TypeReference<>() {}));
+        assert(shippers.size() == 3);
+        assertEquals(shippers.get(0).getId(), 1);
+        assertEquals(shippers.get(1).getCompanyName(), "Änglund, Svensson AB");
+        assertEquals(shippers.get(2).getPhone(), "076-869-7192");
+        assertNotEquals(shippers.get(2).getId(), 2);
     }
 
     @Test
@@ -82,6 +103,6 @@ class ShipperServiceImplTest {
     }
 
     @Test
-    void updateShipper() {  //H2
+    void updateShipper() {  //Repo
     }
 }
