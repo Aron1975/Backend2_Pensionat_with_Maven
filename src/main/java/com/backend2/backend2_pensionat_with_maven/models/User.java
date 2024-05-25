@@ -1,16 +1,16 @@
 package com.backend2.backend2_pensionat_with_maven.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.util.Collection;
+import java.util.UUID;
 
 @Entity
+@Table(name = "User")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,8 +18,14 @@ import java.util.Date;
 public class User {
 
     @Id
-    @GeneratedValue
-    public int id;
-    public String username;
-    public String password;
+    @GeneratedValue(strategy= GenerationType.UUID)
+    @Column(name="id")
+    private UUID id;
+
+    private String username;
+    private String password;
+    private boolean enabled;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<Role> roles;
 }
