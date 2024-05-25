@@ -1,8 +1,10 @@
 package com.backend2.backend2_pensionat_with_maven;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 import java.util.Objects;
 
@@ -33,7 +35,11 @@ public class Backend2PensionatWithMavenApplication {
             application.run(args);
         }
     }
+    @Bean
+    CommandLineRunner run(UserDataSeeder dataSeeder) {
+        return args -> {
+            dataSeeder.seed();
+        };
 
-
-
+    }
 }
