@@ -85,7 +85,6 @@ public class ShipperServiceImpl implements ShipperService {
 
         List<ShipperDto> shipperDtoList;
         shipperDtoList = fetchShippers();
-
         long startTime = System.nanoTime();
 
      /*   shipperRepo.deleteAll();
@@ -97,11 +96,14 @@ public class ShipperServiceImpl implements ShipperService {
         for (ShipperDto sh : shipperDtoList) {
             if((tempId = findIdByShipperId(sh.getId())) == -1){
                 sparaShipper(sh);
+                System.out.println("Ny Shipper sparad");
+
             }
             else{
                 Shipper s = shipperRepo.findById(tempId).get();
                 if((!s.companyName.equals(sh.getCompanyName())) || (!s.phone.equals(sh.getPhone()))){
                     updateShipper(tempId, sh);
+                    System.out.println("Shipper: " + s.getShipperId() + " uppdaterad");
                 }
             }
         }

@@ -10,29 +10,32 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static org.hibernate.cfg.JdbcSettings.URL;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-//@SpringBootTest
+@SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
 class ShipperServiceImplTest {
 
@@ -40,16 +43,38 @@ class ShipperServiceImplTest {
 
     private final ShipperServiceImpl shipperService = mock(ShipperServiceImpl.class);
 
-    private final ObjectMapper mapper = mock(ObjectMapper.class);
+    private ObjectMapper mapper = new ObjectMapper();
 
-    @InjectMocks
-    ShipperServiceImpl sut;
+    private File file;
 
-    @Value("${integrations.shipper-properties.url}")
+    List<Shipper> shipperList;
+
+    @Mock
+    Shipper fakeShipper;
+
+    @Spy
+    private ShipperServiceImpl sut = new ShipperServiceImpl(shipperRepo);
+
+  /*  @Value("${integrations.shipper-properties.url}")
     private String url;
 
     @Autowired
-    IntegrationProperties integrationProperties;
+    IntegrationProperties integrationProperties;*/
+
+    @BeforeEach
+    void setUp() {
+
+       // sut = new ShipperServiceImpl(shipperRepo);
+        mapper.registerModule(new JavaTimeModule());
+        file = new File("src/test/resources/shippersTestData.json");
+        shipperList = new ArrayList<>();
+        fakeShipper = new Shipper();
+        fakeShipper.setId(100);
+        fakeShipper.setShipperId(1);
+        fakeShipper.setCompanyName("Company");
+        fakeShipper.setPhone("1234567890");
+        shipperList.add(fakeShipper);
+    }
 
     @Test
     void getAllShippers() { //Repo
@@ -63,7 +88,7 @@ class ShipperServiceImplTest {
     void shipperDtoToShipperShouldReturnShipper(){
 
         //Arrange
-        ShipperServiceImpl shipperServ = new ShipperServiceImpl(shipperRepo);
+        //ShipperServiceImpl shipperServ = new ShipperServiceImpl(shipperRepo);
         ShipperDto shipperDto = new ShipperDto();
         shipperDto.setId(100);
         shipperDto.setEmail("Email");
@@ -79,7 +104,8 @@ class ShipperServiceImplTest {
 
         //Act
         Shipper shipper;
-        shipper = shipperServ.shipperDtoToShipper(shipperDto);
+        //shipper = shipperServ.shipperDtoToShipper(shipperDto);
+        shipper = sut.shipperDtoToShipper(shipperDto);
 
         //Assert
         assertNotNull(shipper);
@@ -90,22 +116,40 @@ class ShipperServiceImplTest {
     }
 
     @Test
-    void findIdByShipperId() {
+    void findIdByShipperIdShouldReturnCorrectId() throws IOException {
+
+       // sut = new ShipperServiceImpl(shipperRepo);
+        //Arrange
+//        fakeShipper = new Shipper();
+//        fakeShipper.setId(100);
+//        fakeShipper.setShipperId(1);
+//        fakeShipper.setCompanyName("Company");
+//        fakeShipper.setPhone("1234567890");
+
+        List<ShipperDto> shipperDtoList;
+//        List<Shipper> shipperList = new ArrayList<>();
+//        shipperList.add(fakeShipper);
+        shipperDtoList= mapper.readValue(file, new TypeReference<>() {});
+        when(sut.getAllShippers()).thenReturn(shipperList);
+        assert(shipperDtoList.size() == 3);
+        assert(shipperList.size() == 1);
+        assertEquals(sut.findIdByShipperId(shipperDtoList.get(0).getId()), 100);
+        assertEquals(sut.findIdByShipperId(shipperDtoList.get(1).getId()), -1);
+        assertEquals(sut.findIdByShipperId(shipperDtoList.get(2).getId()), -1);
+
     }
+
 
     @Test
     void objectMapperShouldReturnShipperDtoObjectTest() throws IOException {
 
         //Arrange
-        //ObjectMapper objMapper = mock(ObjectMapper.class);
         List<ShipperDto> shippers;
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        File file = new File("src/test/resources/shippersTestData.json");
-        when(shipperService.fetchShippers()).thenReturn(mapper.readValue(file, new TypeReference<>() {}));
-
+        //when(shipperService.fetchShippers()).thenReturn(mapper.readValue(file, new TypeReference<>() {}));
+        when(sut.fetchShippers()).thenReturn(mapper.readValue(file, new TypeReference<>() {}));
         //Act
-        shippers = shipperService.fetchShippers();
+        //shippers = shipperService.fetchShippers();
+        shippers = sut.fetchShippers();
 
         //Assert
         assertNotNull(shippers);
@@ -120,34 +164,26 @@ class ShipperServiceImplTest {
     void addUpdateShipperShouldSaveNewShipper() throws IOException {
 
         //Arrange
-        //sut = new ShipperServiceImpl(shipperRepo, objectMapper);
+
         List<ShipperDto> shipperDtoList;
-        //ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        File file = new File("src/test/resources/shippersTestData.json");
+//        ObjectMapper mapper = new ObjectMapper();
+//        mapper.registerModule(new JavaTimeModule());
+//        File file = new File("src/test/resources/shippersTestData.json");
         shipperDtoList= mapper.readValue(file, new TypeReference<>() {});
 
+        when(sut.fetchShippers()).thenReturn(shipperDtoList);
+        //when(sut.findIdByShipperId(anyInt())).thenReturn(-1);
+        when(sut.getAllShippers()).thenReturn(shipperList);
+        when(shipperRepo.findById(anyInt())).thenReturn(Optional.ofNullable(shipperList.get(0)));
+        doNothing().when(sut).sparaShipper(Mockito.any(ShipperDto.class));
+        doNothing().when(sut).updateShipper(anyInt(),any(ShipperDto.class));
         //Act
         sut.addUpdateShipper();
-        //Arrange
-    /*    List<ShipperDto> shipperDtoList;
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        File file = new File("src/test/resources/shippersTestData.json");
-        when(shipperService.fetchShippers()).thenReturn(mapper.readValue(file, new TypeReference<>() {}));
-        when(shipperService.findIdByShipperId(anyInt())).thenReturn(-1);
-        //when(shipperRepo.save(any())).thenReturn(null);
-        //when(shipperService.sparaShipper(any(ShipperDto.class)))
-        //Mockito.doNothing().when(shipperService).sparaShipper(Mockito.any(ShipperDto.class));
-        //shipperDtoList = shipperService.fetchShippers();
-        //when(shipperService.addUpdateShipper()).
-
-        //Act
-
-        shipperService.addUpdateShipper();  */
 
         //Assert
-        verify(shipperRepo, times(8)).save(any(Shipper.class));
+        //verify(shipperRepo, times(3)).save(any(Shipper.class));
+        verify(sut, times(2)).sparaShipper(any(ShipperDto.class));
+        verify(sut, times(1)).updateShipper(anyInt(),any(ShipperDto.class));
     }
 
     @Test
