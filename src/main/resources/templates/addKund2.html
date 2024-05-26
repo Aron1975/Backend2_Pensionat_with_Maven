@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/fragments/layouts/base_layout}">
+<head>
+    <title>Pensionat</title>
+</head>
+<body class="container-fluid">
+<section layout:fragment="content">
+
+<h1><p th:text="${titel}"/></h1>
+<h2><p th:text="${kat}"/></h2>
+<div id="maincontainer">
+    <div class="row">
+        <form th:action="@{/kund/add}" method="post" th:object="${kund}">
+            <input type="hidden" th:field="*{id}">
+            <input type="hidden" name="redirect" th:value="${redirect}" />
+
+            <div class="row m-4">
+                <div class="col">
+                    <label>Förnamn</label>
+                </div>
+                <div class="col d-flex align-items-center validation-parent">
+                    <input type="text" th:field="*{förnamn}" th:classappend="${#fields.hasErrors('förnamn')} ? 'is-invalid' : ''">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('förnamn')}" th:errors="*{förnamn}"></div>
+                </div>
+            </div>
+            <div class="row m-4">
+                <div class="col">
+                    <label>Efternamn</label>
+                </div>
+                <div class="col d-flex align-items-center validation-parent">
+                    <input type="text" th:field="*{efternamn}" th:classappend="${#fields.hasErrors('efternamn')} ? 'is-invalid' : ''">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('efternamn')}" th:errors="*{efternamn}"></div>
+                </div>
+            </div>
+            <div class="row m-4">
+                <div class="col">
+                    <label>Personnummer</label>
+                </div>
+                <div class="col d-flex align-items-center validation-parent">
+                    <input type="text" th:field="*{ssn}" th:classappend="${#fields.hasErrors('ssn')} ? 'is-invalid' : ''">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('ssn')}" th:errors="*{ssn}"></div>
+                </div>
+            </div>
+            <div class="row m-4">
+                <div class="col">
+                    <label>E-mail</label>
+                </div>
+                <div class="col d-flex align-items-center validation-parent">
+                    <input type of="text" th:field="*{email}" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                </div>
+            </div>
+            <div class="row m-4">
+                <div class="col">
+                    <label>Mobilnummer</label>
+                </div>
+                <div class="col d-flex align-items-center validation-parent">
+                    <input type="text" th:field="*{mobilnummer}" th:classappend="${#fields.hasErrors('mobilnummer')} ? 'is-invalid' : ''">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('mobilnummer')}" th:errors="*{mobilnummer}"></div>
+                </div>
+            </div>
+            <div class="row m-4">
+                <div class="col">
+                    <label>Stad</label>
+                </div>
+                <div class="col d-flex align-items-center validation-parent">
+                    <input type="text" th:field="*{stad}" th:classappend="${#fields.hasErrors('stad')} ? 'is-invalid' : ''">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('stad')}" th:errors="*{stad}"></div>
+                </div>
+            </div>
+            <div class="row m-4">
+                <div class="col">
+                    <label>Adress</label>
+                </div>
+                <div class="col d-flex align-items-center validation-parent">
+                    <input type="text" th:field="*{adress}" th:classappend="${#fields.hasErrors('adress')} ? 'is-invalid' : ''">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('adress')}" th:errors="*{adress}"></div>
+                </div>
+            </div>
+            <div class="row m-4">
+                <div class="col-5">
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-md btn-primary">Spara</button>
+                </div>
+                <div class="col">
+                    <a th:href="@{${cancelRedirect}}" class="btn btn-md btn-danger">Avbryt</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+</section>
+</body>
+</html>

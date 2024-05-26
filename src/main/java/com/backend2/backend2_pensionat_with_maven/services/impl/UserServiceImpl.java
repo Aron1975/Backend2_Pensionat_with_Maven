@@ -1,20 +1,7 @@
 package com.backend2.backend2_pensionat_with_maven.services.impl;
 
 
-import com.backend2.backend2_pensionat_with_maven.dtos.DetailedKundDto;
-import com.backend2.backend2_pensionat_with_maven.dtos.UserDto;
-import com.backend2.backend2_pensionat_with_maven.models.User;
-import com.backend2.backend2_pensionat_with_maven.repos.BokningRepo;
-import com.backend2.backend2_pensionat_with_maven.repos.KundRepo;
-import com.backend2.backend2_pensionat_with_maven.repos.UserRepo;
-import com.backend2.backend2_pensionat_with_maven.services.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-
+/*
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -74,4 +61,4 @@ public class UserServiceImpl implements UserService {
         return userExists;
     }
 
-}
+}*/
