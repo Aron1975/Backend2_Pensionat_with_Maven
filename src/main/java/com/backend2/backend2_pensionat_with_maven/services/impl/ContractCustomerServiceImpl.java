@@ -1,5 +1,7 @@
 package com.backend2.backend2_pensionat_with_maven.services.impl;
 
+import com.backend2.backend2_pensionat_with_maven.FetchContractCustomers;
+import com.backend2.backend2_pensionat_with_maven.configuration.IntegrationProperties;
 import com.backend2.backend2_pensionat_with_maven.dtos.ContractCustomerDto;
 import com.backend2.backend2_pensionat_with_maven.dtos.DetailedKundDto;
 import com.backend2.backend2_pensionat_with_maven.models.ContractCustomer;
@@ -7,10 +9,17 @@ import com.backend2.backend2_pensionat_with_maven.dtos.allcustomers;
 import com.backend2.backend2_pensionat_with_maven.models.Kund;
 import com.backend2.backend2_pensionat_with_maven.repos.ContractCustomerRepo;
 import com.backend2.backend2_pensionat_with_maven.services.ContractCustomerService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,6 +34,9 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
 
     private final ContractCustomerRepo contractCustomerRepo;
 
+    @Autowired
+    IntegrationProperties integrationProperties;
+
     @Override
     public List<ContractCustomerDto> getAllContractCustomer() {
         return contractCustomerRepo.findAll().stream().map(this::contractCustomerToContractCustomerDto)
@@ -37,8 +49,6 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
                 .contactTitle(c.getContactTitle()).streetAddress(c.getStreetAddress()).city(c.getCity())
                 .postalCode(c.getPostalCode()).country(c.getCountry()).phone(c.getPhone()).fax(c.getFax()).build();
     }
-
-
 
     @Override
     public List<ContractCustomer> getAllCustomers(){
@@ -57,16 +67,31 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
     }
 
     @Override
+    public allcustomers fetchContractCustomers() throws IOException {
+
+        JacksonXmlModule module = new JacksonXmlModule();
+        module.setDefaultUseWrapper(false);
+        ObjectMapper xmlMapper = new XmlMapper(module);
+
+        String url = integrationProperties.getContractCustomerProperties().getUrl();
+
+        return xmlMapper.readValue(new URL(url), allcustomers.class);
+    }
+
+    @Override
     @Transactional
-    public void addUpdateContractCustomers(allcustomers customers) {
+    public void addUpdateContractCustomers() throws IOException {
+
+        allcustomers customers = fetchContractCustomers();
+
         long startTime = System.nanoTime();
 
-        contractCustomerRepo.deleteAll();
+     /*   contractCustomerRepo.deleteAll();
         for (ContractCustomerDto cc : customers.customers) {
             sparaContractCustomer(cc);
-        }
+        }*/
 
-    /*    int updatingCustomerId;
+        int updatingCustomerId;
         boolean updatedCustomer = false;
         for(ContractCustomerDto cc : customers.customers) {
             updatingCustomerId = findIdByCustomerId(cc.id);
@@ -124,7 +149,7 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
                 }
             }
             //System.out.println("cc Id: " + cc.getId());
-        }*/
+        }
         long endTime = System.nanoTime();
         long duration = (endTime - startTime);
         System.out.println("Duration: " + duration/1000000 + " ms");

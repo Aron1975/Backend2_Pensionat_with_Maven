@@ -11,10 +11,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -50,11 +53,16 @@ public class RumController {
     public String findRum(@RequestParam int guests, @RequestParam String startDate, @RequestParam String stopDate, Model model) {
         bokningService.deleteBokningWithoutKundId();
         if(startDate.isBlank() || startDate.isEmpty() || stopDate.isBlank() || stopDate.isEmpty()){
+            model.addAttribute("errorMessage", "Felaktig datumintervall angiven!");
+
+           // return "index";
             return "redirect:/rum/";
         }
         LocalDate chin = LocalDate.parse(startDate);
         LocalDate chout = LocalDate.parse(stopDate);
         if(chout.isBefore(chin)||chout.isEqual(chin)){
+            model.addAttribute("errorMessage", "Felaktig datumintervall angiven!");
+            //return "index";
             return "redirect:/rum/";
         }
 

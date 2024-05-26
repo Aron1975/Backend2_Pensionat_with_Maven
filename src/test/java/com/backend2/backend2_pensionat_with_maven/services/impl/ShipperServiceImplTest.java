@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.context.TestPropertySource;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +36,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+//@TestPropertySource("classpath:application.properties")
+/*@TestPropertySource(properties = {
+        "integrations.shipper-properties.url=https://javaintegration.systementor.se/shippers"
+})*/
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
 class ShipperServiceImplTest {
@@ -55,11 +60,11 @@ class ShipperServiceImplTest {
     @Spy
     private ShipperServiceImpl sut = new ShipperServiceImpl(shipperRepo);
 
-  /*  @Value("${integrations.shipper-properties.url}")
-    private String url;
+   /* @Value("${integrations.shipper-properties.url}")
+    private String url;*/
 
     @Autowired
-    IntegrationProperties integrationProperties;*/
+    IntegrationProperties integrationProperties;
 
     @BeforeEach
     void setUp() {
@@ -81,7 +86,7 @@ class ShipperServiceImplTest {
     }
 
     @Test
-    void sparaShipper() {   //Repo
+    void sparaShipper() {   //Anrop till sparaShipper() testad via addUpdateShipperShouldSaveNewShipperAndUpdateExisting()
     }
 
     @Test
@@ -161,7 +166,7 @@ class ShipperServiceImplTest {
     }
 
     @Test
-    void addUpdateShipperShouldSaveNewShipper() throws IOException {
+    void addUpdateShipperShouldSaveNewShipperAndUpdateExisting() throws IOException {
 
         //Arrange
 
@@ -187,6 +192,6 @@ class ShipperServiceImplTest {
     }
 
     @Test
-    void updateShipper() {  //Repo
+    void updateShipper() {  //Anrop till updateShipper() testad via addUpdateShipperShouldSaveNewShipperAndUpdateExisting()
     }
 }

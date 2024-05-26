@@ -70,7 +70,7 @@ public class ShipperServiceImpl implements ShipperService {
     public List<ShipperDto> fetchShippers() throws IOException {
 
         List<ShipperDto> shippers;
-        String url;// = integrationProperties.getShipperProperties().getUrl();
+        String url;//  = integrationProperties.getShipperProperties().getUrl();
         url="https://javaintegration.systementor.se/shippers";
         ObjectMapper mapper = new ObjectMapper();
         mapper = new ObjectMapper();
