@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 public class ConcreteUserDetails implements UserDetails {
     private User user;
@@ -40,6 +41,4 @@ public class ConcreteUserDetails implements UserDetails {
     public boolean isEnabled() {
         return user.isEnabled();
     }
-
-
 }
