@@ -67,7 +67,7 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
     }
 
     @Override
-    public allcustomers fetchContractCustomers() throws IOException {
+    public List<ContractCustomerDto> fetchContractCustomers() throws IOException {
 
         JacksonXmlModule module = new JacksonXmlModule();
         module.setDefaultUseWrapper(false);
@@ -75,25 +75,27 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
 
         String url = integrationProperties.getContractCustomerProperties().getUrl();
 
-        return xmlMapper.readValue(new URL(url), allcustomers.class);
+        allcustomers myAllCustomers = xmlMapper.readValue(new URL(url), allcustomers.class);
+        return myAllCustomers.customers;
     }
 
     @Override
     @Transactional
     public void addUpdateContractCustomers() throws IOException {
 
-        allcustomers customers = fetchContractCustomers();
+        //allcustomers customers = fetchContractCustomers();
+        List<ContractCustomerDto> customerDtoList = fetchContractCustomers();//customers.customers;
 
         long startTime = System.nanoTime();
 
      /*   contractCustomerRepo.deleteAll();
-        for (ContractCustomerDto cc : customers.customers) {
+        for (ContractCustomerDto cc : customerDtoList) {
             sparaContractCustomer(cc);
         }*/
 
         int updatingCustomerId;
         boolean updatedCustomer = false;
-        for(ContractCustomerDto cc : customers.customers) {
+        for(ContractCustomerDto cc : customerDtoList) {
             updatingCustomerId = findIdByCustomerId(cc.id);
             if(updatingCustomerId == -1) {
                 sparaContractCustomer(cc);

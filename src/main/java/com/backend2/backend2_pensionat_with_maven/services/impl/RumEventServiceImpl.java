@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RumEventServiceImpl implements RumEventService {
 
-    private final RumEventRepo rumEventRepo;
+   // private final RumEventRepo rumEventRepo;
     private final RumEventTypeRepo rumEventTypeRepo;
 
     @Override
@@ -41,17 +41,25 @@ public class RumEventServiceImpl implements RumEventService {
         return eventStringList;
     }
 
-    @Override
-    public String sparaRumEvent(String message) throws JsonProcessingException {
-
-        String output = "";
-        //RumEvent rumEvent = new RumEvent();
+    public RumEvent.RumEventType createRumEventTypeObjectFromMessage(String message) throws JsonProcessingException{
 
         RumEvent.RumEventType event = new ObjectMapper()
                 .readerFor(RumEvent.RumEventType.class)
                 .readValue(message);
+        return event;
+    }
 
-        if(event instanceof RumEvent.Opened){
+    @Override
+    public String sparaRumEvent(String message) throws JsonProcessingException {
+
+       // String output = "";
+       RumEvent.RumEventType event = createRumEventTypeObjectFromMessage(message);
+
+//        RumEvent.RumEventType event = new ObjectMapper()
+//                .readerFor(RumEvent.RumEventType.class)
+//                .readValue(message);
+
+   /*     if(event instanceof RumEvent.Opened){
             output = "Dörr öppnad";
         }
         else if(event instanceof RumEvent.Closed){
@@ -62,7 +70,7 @@ public class RumEventServiceImpl implements RumEventService {
         }
         else if(event instanceof RumEvent.FinishCleaning finishCleaning){
             output = "Städning avslutad av: " + finishCleaning.CleaningByUser;
-        }
+        }*/
 
        // RumEvent rumEvent = new RumEvent(event);
 
@@ -84,7 +92,7 @@ public class RumEventServiceImpl implements RumEventService {
         else if(event instanceof RumEventDto.FinishCleaning finishCleaning){
             output = "Städning avslutad av: " + finishCleaning.CleaningByUser;
         }*/
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd - HH:mm:ss");
+       // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd - HH:mm:ss");
         //System.out.println("Event: Rum: " +  event.RoomNo + " Händelse: " + output + " Tid: " + event.TimeStamp.toLocalDateTime().format(formatter));
         //rumEventRepo.save(event);
         return "Event saved";

@@ -1,0 +1,9 @@
+[
+  {"type":"RoomOpened","TimeStamp":"2024-05-26T04:02:58.829879275","RoomNo":"4"},
+  {"type":"RoomClosed","TimeStamp":"2024-05-26T11:54:58.847417154","RoomNo":"8"},
+  {"type":"RoomOpened","TimeStamp":"2024-05-26T04:02:58.829879275","RoomNo":"5"},
+  {"type":"RoomClosed","TimeStamp":"2024-05-26T11:54:58.847417154","RoomNo":"2"},
+  {"type":"RoomCleaningStarted","TimeStamp":"2024-05-26T20:02:59.023471262","RoomNo":"5","CleaningByUser":"Van Doyle"},
+  {"type":"RoomCleaningFinished","TimeStamp":"2024-05-26T05:52:58.90806558","RoomNo":"2","CleaningByUser":"Oscar Huels"}
+]
+

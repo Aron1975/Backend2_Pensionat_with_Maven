@@ -46,9 +46,9 @@ class ShipperServiceImplTest {
 
     private final ShipperRepo shipperRepo = mock(ShipperRepo.class);
 
-    private final ShipperServiceImpl shipperService = mock(ShipperServiceImpl.class);
+    //private final ShipperServiceImpl shipperService = mock(ShipperServiceImpl.class);
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     private File file;
 
@@ -60,15 +60,12 @@ class ShipperServiceImplTest {
     @Spy
     private ShipperServiceImpl sut = new ShipperServiceImpl(shipperRepo);
 
-   /* @Value("${integrations.shipper-properties.url}")
-    private String url;*/
-
     @Autowired
     IntegrationProperties integrationProperties;
 
     @BeforeEach
     void setUp() {
-
+        sut.integrationProperties = integrationProperties;
        // sut = new ShipperServiceImpl(shipperRepo);
         mapper.registerModule(new JavaTimeModule());
         file = new File("src/test/resources/shippersTestData.json");

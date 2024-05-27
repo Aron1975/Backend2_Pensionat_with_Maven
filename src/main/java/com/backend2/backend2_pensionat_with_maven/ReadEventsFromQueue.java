@@ -50,7 +50,7 @@ public class ReadEventsFromQueue implements CommandLineRunner {
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
 
-          //  System.out.println(" [x] Received '" + message + "'");
+            System.out.println(" [x] Received '" + message + "'");
             //Json to Pojo
             //RumEventDto eventDto = mapper.readValue(message, RumEventDto.class);
           /*  RumEventDto.RumEventTypeDto eventDto= new ObjectMapper()

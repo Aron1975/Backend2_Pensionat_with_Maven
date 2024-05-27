@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,9 @@ public class ShipperServiceImpl implements ShipperService {
 
     @Autowired
     IntegrationProperties integrationProperties;
+
+//    @Value("${integrations.shipper-properties.url}")
+//    private String url;
 
     @Override
     public List<Shipper> getAllShippers() {
@@ -70,8 +74,8 @@ public class ShipperServiceImpl implements ShipperService {
     public List<ShipperDto> fetchShippers() throws IOException {
 
         List<ShipperDto> shippers;
-        String url;//  = integrationProperties.getShipperProperties().getUrl();
-        url="https://javaintegration.systementor.se/shippers";
+        String url = integrationProperties.getShipperProperties().getUrl();
+        //url="https://javaintegration.systementor.se/shippers";
         ObjectMapper mapper = new ObjectMapper();
         mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());

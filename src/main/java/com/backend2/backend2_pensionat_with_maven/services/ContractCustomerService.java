@@ -21,5 +21,5 @@ public interface ContractCustomerService {
     public ContractCustomer contractCustomerDtoToContractCustomer(ContractCustomerDto customerDto);
     ContractCustomerDto findById(int id);
     public void sortContractCustomers(List<ContractCustomerDto> customers, String sortField, String sortOrder);
-    public allcustomers fetchContractCustomers() throws IOException;
+    public List<ContractCustomerDto> fetchContractCustomers() throws IOException;
 }
