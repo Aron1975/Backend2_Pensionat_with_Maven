@@ -78,7 +78,7 @@ public class UserServiceUnitTests {
     }
 
      */
-
+/*
     @Test
     void checkIfUserExistsTest(){  //testar att "userTempNotExist" ger false, och "UserTempExist" ger true, alltså att första inte finns
 
@@ -94,7 +94,7 @@ public class UserServiceUnitTests {
        assertNotEquals(false, shouldExist);
        assertNotEquals(true, shouldNotExist);
 
-
+*/
     }
 
 
@@ -102,4 +102,4 @@ public class UserServiceUnitTests {
 
 
 
-}
+

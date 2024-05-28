@@ -181,4 +181,55 @@
         </plugins>
     </build>
 
+
+
+    <profiles>
+
+        <profile>
+            <id>unit-tests</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.22.2</version>
+                        <configuration>
+                            <includes>
+                                <include>**/BlacklistServiceImplUnitTests.java</include>
+                                <include>**/BokningServiceImplTest.java</include>
+                                <include>**/ContractCustomerServiceImplUnitTests.java</include>
+                                <include>**/RumEventServiceImplUnitTests.java</include>
+                                <include>**/ShipperServiceImplUnitTests.java</include>
+                                <include>**/RabbatServiceImplTest.java</include>
+                                <include></include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+
+        <profile>
+            <id>integration-tests</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.22.2</version>
+                        <configuration>
+                            <includes>
+                                <include>**/BlacklistServiceImplIntegrationTests.java</include>
+                                <include>**/ContractCustomerServiceImplIT.java</include>
+                                <include>**/RumEventServiceImplUnitTestsIt.java</include>
+                                <include>**/ShipperServiceImplUnitTestsIT.java</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>
