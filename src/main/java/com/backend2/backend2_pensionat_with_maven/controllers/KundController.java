@@ -62,7 +62,7 @@ public class KundController {
         model.addAttribute("kund", new DetailedKundDto());
         model.addAttribute("redirect", "/kund/all");
         model.addAttribute("cancelRedirect", "/kund/all");
-        model.addAttribute("kat", "Lägg till ny kund");
+        model.addAttribute("kat", "Lägg till kund");
         model.addAttribute("titel", "Kund");
         return "addKund";
     }
@@ -87,8 +87,4 @@ public class KundController {
         return "addKund";
     }
 
-
-    public boolean checkIfKundHasBokning(long kundId){
-        return bokningRepo.getKundIdList().stream().anyMatch(kund -> kund.getId() == kundId);
-    }
 }
