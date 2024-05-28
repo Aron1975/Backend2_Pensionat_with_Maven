@@ -1,28 +1,23 @@
 package com.backend2.backend2_pensionat_with_maven.services;
 
 
-
-import com.backend2.backend2_pensionat_with_maven.dtos.UserDto;
 import com.backend2.backend2_pensionat_with_maven.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
+    List<User> getUsers();
 
-    
-    public List<UserDto> getAllUsers();
+    Optional<User> findByUsername(String username);
 
-    public UserDto userToUserDto(User u);
 
-    public User userDtoToUser(UserDto u);
+    void createPasswordResetTokenForUser(User user, String passwordToken);
 
-    public void deleteUserById(int id);
+    String validatePasswordResetToken(String passwordResetToken);
 
-    public void spara(UserDto u);
+    User findUserByPasswordToken(String passwordResetToken);
 
-    public UserDto getUser(int id);
-
-    public boolean checkIfUserExists(User user, List<User> userList);
-
+    void resetUserPassword(User user, String newPassword);
 }

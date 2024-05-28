@@ -1,64 +1,51 @@
 package com.backend2.backend2_pensionat_with_maven.services.impl;
 
+import com.backend2.backend2_pensionat_with_maven.Security.PasswordResetTokenService;
+import com.backend2.backend2_pensionat_with_maven.models.User;
+import com.backend2.backend2_pensionat_with_maven.repos.UserRepo;
+import com.backend2.backend2_pensionat_with_maven.services.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
-/*
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final KundRepo kundRepo;
-    private final BokningRepo bokningsRepo;
     private final UserRepo userRepo;
-
-
+    private final PasswordResetTokenService passwordResetTokenService;
+    private final PasswordEncoder passwordEncoder;
     @Override
-    public List<UserDto> getAllUsers() {
-        return userRepo.findAll().stream().map(u -> userToUserDto(u)).toList();
+    public List<User> getUsers() {
+        return (List<User>) userRepo.findAll();
     }
 
     @Override
-    public UserDto userToUserDto(User u) {
-        return UserDto.builder().id(u.getId()).username(u.getUsername()).password(u.getPassword()).build();
+    public Optional<User> findByUsername(String username) {
+        return userRepo.findByUsername(username);
     }
 
     @Override
-    public User userDtoToUser(UserDto dto) {
-        User user = new User();
-        user.setId(dto.getId());
-        user.setUsername(dto.getUsername());
-        user.setPassword(dto.getPassword());
-        return user;
+    public void createPasswordResetTokenForUser(User user, String passwordToken) {
+        passwordResetTokenService.createPasswordResetTokenForUser(user, passwordToken);
     }
 
-    public void spara(UserDto u){
-        User user = userDtoToUser(u);
+    @Override
+    public String validatePasswordResetToken(String passwordResetToken) {
+        return passwordResetTokenService.validatePasswordResetToken(passwordResetToken);
+    }
+
+    @Override
+    public User findUserByPasswordToken(String passwordResetToken) {
+        return passwordResetTokenService.findUserByPasswordToken(passwordResetToken).get();
+    }
+
+    @Override
+    public void resetUserPassword(User user, String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepo.save(user);
     }
-
-    @Override
-    public void deleteUserById(int id){
-        User userToDelete = userRepo.findById(id).orElse(null);
-        if (userToDelete != null){
-            userRepo.deleteById(id);
-        }
-    }
-
-    public UserDto getUser(int id){
-        User user = userRepo.findById(id).orElse(null);
-        if (user != null){
-            return userToUserDto(user);
-        }
-        return null;
-    }
-
-    public boolean checkIfUserExists(User user, List<User> userList) {
-        String uName = user.getUsername();
-        String pWord = user.getPassword();
-
-        boolean userExists = userList.stream().anyMatch(u -> u.getUsername().equals(uName) &&
-                u.getPassword().equals(pWord));
-
-        return userExists;
-    }
-
-}*/
+}

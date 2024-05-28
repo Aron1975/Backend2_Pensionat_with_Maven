@@ -28,7 +28,7 @@ public class UserDataSeeder {
             addRole("Customer");
         }
         if(userRepo.getUserByUsername("asdf") == null){
-            addUser("asdf@123.se","Admin");
+            addUser("o.ekstrom@hotmail.se","Admin");
         }
         if(userRepo.getUserByUsername("hej hej") == null) {
             addUser("hejhej@123.se", "Receptionist");

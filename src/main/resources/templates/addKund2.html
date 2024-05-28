@@ -80,13 +80,31 @@
                 </div>
             </div>
             <div class="row m-4">
+                <div class="col">
+                    <label>Lösenord</label>
+                </div>
+                <div class="col d-flex align-items-center validation-parent">
+                    <input type="text" th:field="*{password}" th:classappend="${#fields.hasErrors('adress')} ? 'is-invalid' : ''">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('adress')}" th:errors="*{adress}"></div>
+                </div>
+            </div>
+            <div class="row m-4">
+                <div class="col">
+                    <label>Bekräfta lösenord</label>
+                </div>
+                <div class="col d-flex align-items-center validation-parent">
+                    <input type="text" th:field="*{confirmpassword}" th:classappend="${#fields.hasErrors('adress')} ? 'is-invalid' : ''">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('adress')}" th:errors="*{adress}"></div>
+                </div>
+            </div>
+            <div class="row m-4">
                 <div class="col-5">
                 </div>
                 <div class="col">
                     <button type="submit" class="btn btn-md btn-primary">Spara</button>
                 </div>
                 <div class="col">
-                    <a th:href="@{${cancelRedirect}}" class="btn btn-md btn-danger">Avbryt</a>
+                    <a th:href="@{/}" class="btn btn-md btn-danger">Avbryt</a>
                 </div>
             </div>
         </form>
