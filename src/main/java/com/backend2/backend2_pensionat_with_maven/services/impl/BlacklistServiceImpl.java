@@ -105,7 +105,7 @@ public class BlacklistServiceImpl implements BlacklistService {
             }
         }
         if(emailCheck){
-            HttpClient client = httpClient;
+            HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("https://javabl.systementor.se/api/grupp10/blacklist"))
                     .header("Content-Type", "application/json")
