@@ -24,27 +24,39 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.net.URL;
 
-//>>>>>>> origin/develop_blacklist
+//>>>>>>> origin/develop_blacklist   //test
 @Service
 //@RequiredArgsConstructor
 public class BlacklistServiceImpl implements BlacklistService {
 
     private final ObjectMapper objectMapper;
-    public static final TypeReference<List<BlacklistedCustomerDto>> TYPE_REFERENCE = new TypeReference<>() {};
+    private final TypeReference<List<BlacklistedCustomerDto>> typeReference;
+
+    private HttpClient httpClient;
 
     public BlacklistServiceImpl(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
+        this.typeReference = new TypeReference<>() {};
+        this.httpClient = HttpClient.newHttpClient();
+        objectMapper.registerModule(new JavaTimeModule());
     }
+
+    //public BlacklistServiceImpl(ObjectMapper objectMapper) {
+    //    this.objectMapper = objectMapper;
+    //}
 
     @Override
     public List<BlacklistedCustomerDto> getAllBlacklists() throws IOException {
-
-        objectMapper.registerModule(new JavaTimeModule());
         List<BlacklistedCustomerDto> blacklists;
-        blacklists = objectMapper.readValue(new URL("https://javabl.systementor.se/api/grupp10/blacklist"),TYPE_REFERENCE);
-
+        blacklists = objectMapper.readValue(new URL("https://javabl.systementor.se/api/grupp10/blacklist"), typeReference);
         return blacklists;
     }
+
+    public TypeReference<List<BlacklistedCustomerDto>> getTypeReference() {
+        return typeReference;
+    }
+
+
     @Override
     public void changeBlacklistStatus(String email) throws IOException, InterruptedException {
 
@@ -85,6 +97,7 @@ public class BlacklistServiceImpl implements BlacklistService {
     public void addToBlacklist(BlacklistDto blacklistDto) throws IOException, InterruptedException {
         String email = blacklistDto.email;
         String name = blacklistDto.name;
+        System.out.println(email);
         boolean emailCheck = true;
         for (int i = 0; i < getAllBlacklists().size(); i++) {
             if(getAllBlacklists().get(i).email.toLowerCase().equals(email.toLowerCase())){
@@ -92,7 +105,7 @@ public class BlacklistServiceImpl implements BlacklistService {
             }
         }
         if(emailCheck){
-            HttpClient client = HttpClient.newHttpClient();
+            HttpClient client = httpClient;
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("https://javabl.systementor.se/api/grupp10/blacklist"))
                     .header("Content-Type", "application/json")
