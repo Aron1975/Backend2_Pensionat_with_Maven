@@ -2,6 +2,7 @@ package com.backend2.backend2_pensionat_with_maven.services.impl;
 
 import com.backend2.backend2_pensionat_with_maven.configuration.IntegrationProperties;
 import com.backend2.backend2_pensionat_with_maven.dtos.ContractCustomerDto;
+import com.backend2.backend2_pensionat_with_maven.dtos.ShipperDto;
 import com.backend2.backend2_pensionat_with_maven.models.ContractCustomer;
 import com.backend2.backend2_pensionat_with_maven.repos.ContractCustomerRepo;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -183,6 +184,25 @@ class ContractCustomerServiceImplUnitTests {
         //Assert
         verify(sut, times(2)).sparaContractCustomer(any(ContractCustomerDto.class));
         verify(sut, times(1)).updateContractCustomer(any(ContractCustomer.class));
+    }
+
+    @Test
+    void objectMapperShouldReturnContractCustomerDtoObjectTest() throws IOException {
+
+        //Arrange
+        List<ContractCustomerDto> contractCustomerDtoList;
+        when(sut.fetchContractCustomers()).thenReturn(xmlMapper.readValue(file, new TypeReference<>() {}));
+
+        //Act
+        contractCustomerDtoList = sut.fetchContractCustomers();
+
+        //Assert
+        assertNotNull(contractCustomerDtoList);
+        assert(contractCustomerDtoList.size() == 3);
+        assertEquals(contractCustomerDtoList.get(0).getId(), 99);
+        assertEquals(contractCustomerDtoList.get(1).getCompanyName(), "Karlsson-Eriksson");
+        assertEquals(contractCustomerDtoList.get(2).getPhone(), "076-904-2433");
+        assertEquals(contractCustomerDtoList.get(2).getPostalCode(), 77616);
     }
 
     @Test

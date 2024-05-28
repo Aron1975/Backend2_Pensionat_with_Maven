@@ -1,15 +1,13 @@
 package com.backend2.backend2_pensionat_with_maven;
 
+import com.backend2.backend2_pensionat_with_maven.configuration.IntegrationProperties;
 import com.backend2.backend2_pensionat_with_maven.dtos.BlacklistedCustomerDto;
-import com.backend2.backend2_pensionat_with_maven.services.impl.BlacklistServiceImpl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -20,9 +18,10 @@ import java.util.List;
 import static org.junit.Assert.assertTrue;
 
 @SpringBootTest
-public class BlacklistServiceImplIntegrationTests {
+public class BlacklistServiceImplIntegrationTestsIT {
 
-
+    @Autowired
+    IntegrationProperties integrationProperties;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -42,7 +41,7 @@ public class BlacklistServiceImplIntegrationTests {
     @BeforeEach
     void setUp() throws IOException {
         objectMapper.registerModule(new JavaTimeModule());
-        URL url = new URL("https://javabl.systementor.se/api/grupp10/blacklist");
+        URL url = new URL(integrationProperties.getBlacklistProperties().getUrl());
         testLista = objectMapper.readValue(url, typeReference);
     }
 

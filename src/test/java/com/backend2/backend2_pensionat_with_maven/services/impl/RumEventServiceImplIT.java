@@ -5,6 +5,5 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@RunWith(MockitoJUnitRunner.class)
-public class ShipperServiceImplUnitTestsIT {
+public class RumEventServiceImplIT {
 }
