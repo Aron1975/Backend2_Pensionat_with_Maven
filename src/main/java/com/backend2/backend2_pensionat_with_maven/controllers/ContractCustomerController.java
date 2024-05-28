@@ -72,4 +72,12 @@ public class ContractCustomerController {
         return "ContractCustomerDetails";
     }
 
+    @RequestMapping("/info")
+    public String visaEnvInfo(Model model) {
+        String info = contractCustomerService.getEnvInfo();
+        model.addAttribute("kat", info);
+        model.addAttribute("titel", "Environment Info");
+
+        return "visa-env-info";
+    }
 }

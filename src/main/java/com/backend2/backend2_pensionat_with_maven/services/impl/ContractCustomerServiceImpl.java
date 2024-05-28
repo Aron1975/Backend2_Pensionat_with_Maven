@@ -45,7 +45,7 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
 
     @Override
     public ContractCustomerDto contractCustomerToContractCustomerDto(ContractCustomer c) {
-        return ContractCustomerDto.builder().id(c.getId()).companyName(c.getCompanyName()).contactName(c.getContactName())
+        return ContractCustomerDto.builder().id(c.getCustomerId()).companyName(c.getCompanyName()).contactName(c.getContactName())
                 .contactTitle(c.getContactTitle()).streetAddress(c.getStreetAddress()).city(c.getCity())
                 .postalCode(c.getPostalCode()).country(c.getCountry()).phone(c.getPhone()).fax(c.getFax()).build();
     }
@@ -64,6 +64,11 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
     @Override
     public void sparaContractCustomer(ContractCustomerDto customerDto) {
         contractCustomerRepo.save(contractCustomerDtoToContractCustomer(customerDto));
+    }
+
+    @Override
+    public void updateContractCustomer(ContractCustomer customer) {
+        contractCustomerRepo.save(customer);
     }
 
     @Override
@@ -101,8 +106,9 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
                 sparaContractCustomer(cc);
             }
             else{
-
+//                System.out.println("Updating customer with id: " + updatingCustomerId);
                 ContractCustomer customerToUpdate = contractCustomerRepo.getReferenceById(updatingCustomerId);
+                //ContractCustomer customerToUpdate = contractCustomerRepo.findById(updatingCustomerId);
                 //System.out.println("Updating customer id: " + updatingCustomerId);
                 //System.out.println("customerToUpdate: " + customerToUpdate.id);
                 //customerToUpdate.setId(updatingCustomerId);
@@ -146,7 +152,8 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
                     updatedCustomer = true;
                 }
                 if(updatedCustomer) {
-                    contractCustomerRepo.save(customerToUpdate);
+                    //contractCustomerRepo.save(customerToUpdate);
+                    updateContractCustomer(customerToUpdate);
                     updatedCustomer = false;
                 }
             }
@@ -205,5 +212,13 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
         sortableList.sort(comparator);
         customers.clear();
         customers.addAll(sortableList);
+    }
+
+    @Override
+    public String getEnvInfo(){
+        String info = integrationProperties.getEnvironment();
+
+        return info;
+
     }
 }

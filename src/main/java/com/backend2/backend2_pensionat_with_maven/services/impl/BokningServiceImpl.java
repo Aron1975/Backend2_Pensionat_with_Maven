@@ -1,6 +1,7 @@
 package com.backend2.backend2_pensionat_with_maven.services.impl;
 
 
+import com.backend2.backend2_pensionat_with_maven.configuration.IntegrationProperties;
 import com.backend2.backend2_pensionat_with_maven.dtos.*;
 import com.backend2.backend2_pensionat_with_maven.models.Bokning;
 import com.backend2.backend2_pensionat_with_maven.models.Kund;
@@ -12,6 +13,7 @@ import com.backend2.backend2_pensionat_with_maven.services.BlacklistService;
 import com.backend2.backend2_pensionat_with_maven.services.BokningService;
 import com.backend2.backend2_pensionat_with_maven.services.RabattService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -214,8 +216,6 @@ public class BokningServiceImpl implements BokningService {
 
         bokningRepo.save(bokning);
     }
-
-
 
     @Override
     public void sparaBokningTillKund(DetailedBokningDto b) {

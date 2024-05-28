@@ -16,4 +16,5 @@ public class IntegrationProperties {
     private ContractCustomerProperties contractCustomerProperties;
     private ShipperProperties shipperProperties;
     private EventProperties eventProperties;
+    private String environment;
 }

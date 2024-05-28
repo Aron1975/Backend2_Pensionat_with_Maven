@@ -5,7 +5,6 @@ import com.backend2.backend2_pensionat_with_maven.repos.RumEventTypeRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import net.minidev.json.parser.JSONParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +21,7 @@ import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
-class RumEventServiceImplTest {
+class RumEventServiceImplUnitTests {
 
     private final RumEventTypeRepo rumEventTypeRepo = mock(RumEventTypeRepo.class);
     @Spy

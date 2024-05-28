@@ -11,4 +11,5 @@ public interface RumEventService {
     public String sparaRumEvent(String message) throws JsonProcessingException;
     public List<RumEvent.RumEventType> findEventsByRoomNr(int roomNr) throws JsonProcessingException;
     public List<String> getEventListByRoomNr(int roomNr) throws JsonProcessingException ;
+    public RumEvent.RumEventType createRumEventTypeObjectFromMessage(String message) throws JsonProcessingException;
 }

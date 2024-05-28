@@ -112,4 +112,5 @@ public class BokningController {
         bokningRepo.deleteById(id);
         return "redirect:/bokning/all";
     }
+
 }

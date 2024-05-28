@@ -41,6 +41,7 @@ public class RumEventServiceImpl implements RumEventService {
         return eventStringList;
     }
 
+    @Override
     public RumEvent.RumEventType createRumEventTypeObjectFromMessage(String message) throws JsonProcessingException{
 
         RumEvent.RumEventType event = new ObjectMapper()

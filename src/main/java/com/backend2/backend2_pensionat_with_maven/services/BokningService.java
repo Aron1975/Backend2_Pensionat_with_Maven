@@ -31,4 +31,5 @@ public interface BokningService {
 
     void sparaBokning(String id, int antal, String startDatum, String stopDatum);
     void sparaBokningTillKund(DetailedBokningDto b);
+
 }

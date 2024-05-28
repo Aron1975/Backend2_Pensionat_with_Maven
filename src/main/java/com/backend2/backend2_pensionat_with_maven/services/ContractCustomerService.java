@@ -18,8 +18,11 @@ public interface ContractCustomerService {
     public List<ContractCustomer> getAllCustomers();
     public void addUpdateContractCustomers() throws IOException;
     public void sparaContractCustomer(ContractCustomerDto customersDto);
+    public void updateContractCustomer(ContractCustomer customer);
     public ContractCustomer contractCustomerDtoToContractCustomer(ContractCustomerDto customerDto);
     ContractCustomerDto findById(int id);
     public void sortContractCustomers(List<ContractCustomerDto> customers, String sortField, String sortOrder);
     public List<ContractCustomerDto> fetchContractCustomers() throws IOException;
+
+    public String getEnvInfo();
 }
