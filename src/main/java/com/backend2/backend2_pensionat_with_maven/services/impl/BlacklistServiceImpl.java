@@ -24,7 +24,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.net.URL;
 
-//>>>>>>> origin/develop_blacklist
+//>>>>>>> origin/develop_blacklist   //test
 @Service
 //@RequiredArgsConstructor
 public class BlacklistServiceImpl implements BlacklistService {
