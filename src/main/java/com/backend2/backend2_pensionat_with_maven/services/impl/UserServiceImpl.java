@@ -24,6 +24,9 @@ public class UserServiceImpl implements UserService {
     private final RoleRepo roleRepo;
     private final PasswordEncoder passwordEncoder;
 
+
+
+
     @Override
     public List<UserDto> getAllUsers() {
         return StreamSupport.stream(userRepo.findAll().spliterator(), false)
