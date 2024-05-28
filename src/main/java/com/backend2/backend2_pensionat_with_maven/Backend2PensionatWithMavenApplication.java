@@ -34,6 +34,4 @@ public class Backend2PensionatWithMavenApplication {
         }
     }
 
-
-
 }
