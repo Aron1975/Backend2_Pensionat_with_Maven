@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/fragments/layouts/base_layout}">
+<head>
+  <title>Create/Edit User</title>
+</head>
+<body class="container-fluid">
+<section layout:fragment="content">
+
+  <h1 th:text="${#strings.isEmpty(user.id) ? 'Lägg till användare' : 'Redigera användare'}"></h1>
+  <form th:action="@{${#strings.isEmpty(user.id) ? '/admin/users' : '/admin/users/' + user.id}}" th:object="${user}" method="post" style="max-width: 400px; margin: 0 auto;">
+    <input type="hidden" th:field="*{id}"/>
+    <div class="border border-secondary p-4 rounded">
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" th:field="*{username}" class="form-control" id="username" required/>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" th:field="*{password}" class="form-control" id="password" required/>
+      </div>
+      <div class="mb-3">
+        <label for="roles" class="form-label">Roles</label>
+        <select multiple th:field="*{roles}" class="form-select" id="roles">
+          <option th:each="role : ${roles}" th:value="${role.name}" th:text="${role.name}"></option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Spara</button>
+      <a th:href="@{/admin/users}" class="btn btn-secondary">Avbryt</a>
+    </div>
+  </form>
+
+</section>
+</body>
+</html>
