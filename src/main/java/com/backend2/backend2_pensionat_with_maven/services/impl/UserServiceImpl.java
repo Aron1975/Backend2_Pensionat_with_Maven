@@ -34,6 +34,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void saveUserVerificationToken(User theUser, String verificationToken) {
+
+    }
+
+    @Override
     public String validatePasswordResetToken(String passwordResetToken) {
         return passwordResetTokenService.validatePasswordResetToken(passwordResetToken);
     }

@@ -23,18 +23,20 @@ public class RegistrationCompleteEventListener implements ApplicationListener<Re
     private final UserService userService;
 
     private final JavaMailSender mailSender;
-    //private User theUser;
+    private String theUser;
 
     @Override
     public void onApplicationEvent(RegistrationCompleteEvent event) {
         //theUser = event.getUser();
         String verificationToken = UUID.randomUUID().toString();
+        //userService.saveUserVerificationToken(theUser, verificationToken);
         String url = event.getApplicationUrl()+"/register/verifyEmail?token="+verificationToken;
         log.info("Click the link to complete your registration : {}", url);
 
     }
 
     public void sendPasswordResetVerificationEmail(String url) throws MessagingException, UnsupportedEncodingException, jakarta.mail.MessagingException {
+        theUser ="o.ekstrom@hotmail.se";
         String subject = "Password Reset Request Verification";
         String senderName = "User Registration Portal Service";
         String mailContent = "<p> Hi, " + ", </p>"+
@@ -45,8 +47,10 @@ public class RegistrationCompleteEventListener implements ApplicationListener<Re
 
         MimeMessage message = mailSender.createMimeMessage();
         var messageHelper = new MimeMessageHelper(message);
-        messageHelper.setFrom("test@test.com", senderName);
-        //messageHelper.setTo(theUser.getUsername());
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println(theUser);
+        messageHelper.setFrom("o.ekstrom@hotmail.se", senderName);
+        messageHelper.setTo(theUser/*.getUsername()*/);
         messageHelper.setSubject(subject);
         messageHelper.setText(mailContent, true);
         mailSender.send(message);
