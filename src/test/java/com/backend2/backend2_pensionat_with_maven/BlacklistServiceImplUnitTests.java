@@ -91,7 +91,7 @@ public class BlacklistServiceImplUnitTests {
     */
 
     @BeforeEach
-    void setUp() throws IOException {   //have to make a "realobjectmapper" (new objectmapper) otherwise file won't be read correctly by using mock
+    void setUp() throws IOException {
         MockitoAnnotations.initMocks(this);
         blacklists = new ArrayList<>();
         ObjectMapper realObjectMapper = new ObjectMapper();
@@ -100,7 +100,7 @@ public class BlacklistServiceImplUnitTests {
 
 
 
-        File file = new File("src/test/java/blacklist.json");
+        File file = new File("src/test/resources/blacklist.json");
         if (!file.exists()) {
             throw new IOException("File not found: " + file.getAbsolutePath());
         }
@@ -184,9 +184,7 @@ public void addToBlacklist(BlacklistDto blacklistDto) throws IOException, Interr
     @Test
     void testAddToBlacklistExistsTest() throws IOException, InterruptedException {
 
-        BlacklistDto blacklistDtoMockExist = new BlacklistDto();   //this was originally a mock and injected, however it didn't keep the
-        //values assigned underneath, it kept coming out as null
-
+        BlacklistDto blacklistDtoMockExist = new BlacklistDto();
 
         blacklistDtoMockExist.setEmail("stefan6@aaa.com");    //denna fi// nns redan på blacklist siten
         blacklistDtoMockExist.setName("Stefan Holmberg");
