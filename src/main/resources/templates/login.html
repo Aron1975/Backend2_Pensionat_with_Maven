@@ -47,23 +47,23 @@
 </head>
 <body class="container-fluid">
 <section layout:fragment="content">
-<h1>Please Log In</h1>
+<h1>Vänligen logga in</h1>
     <div style="text-align: center">
         <div th:if="${param.error}">
-            Invalid username and password.</div>
+            Felaktigt användarnamn eller lösenord</div>
     </div>
 
 <div th:if="${param.logout}">
-    You have been logged out.</div>
+    Du har blivit utloggad</div>
 <form th:action="@{/login}" method="post">
     <div style="text-align: center">
         <div>
-            <input type="text" name="username" placeholder="Username"/>
+            <input type="text" name="username" placeholder="Användarnamn"/>
         </div>
         <div>
-            <input type="password" name="password" placeholder="Password"/>
+            <input type="password" name="password" placeholder="Lösenord"/>
         </div>
-        <input style="justify-content: center" type="submit" value="Log in" class="btn btn-primary" />
+        <input style="justify-content: center" type="submit" value="Bekräfta" class="btn btn-primary" />
         <td><a th:href="@{/}" class="btn btn-danger">Avbryt</a> </td>
     </div>
 
