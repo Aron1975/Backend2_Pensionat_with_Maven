@@ -100,7 +100,7 @@ public class BlacklistServiceImplUnitTests {
 
 
 
-        File file = new File("src/test/java/blacklist.json");
+        File file = new File("src/test/resources/blacklist.json");
         if (!file.exists()) {
             throw new IOException("File not found: " + file.getAbsolutePath());
         }
