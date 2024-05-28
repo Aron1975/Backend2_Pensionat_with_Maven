@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/fragments/layouts/base_layout}">
@@ -35,6 +35,38 @@
     </div>
 </div>
 
-</section>
+</body>
+</html>-->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/fragments/layouts/base_layout}">
+<head>
+    <title>Pensionat</title>
+</head>
+<body class="container-fluid">
+<section layout:fragment="content">
+<h1>Vänligen logga in</h1>
+    <div style="text-align: center">
+        <div th:if="${param.error}">
+            Felaktigt användarnamn eller lösenord</div>
+    </div>
+
+<div th:if="${param.logout}">
+    Du har blivit utloggad</div>
+<form th:action="@{/login}" method="post">
+    <div style="text-align: center">
+        <div>
+            <input type="text" name="username" placeholder="Användarnamn"/>
+        </div>
+        <div>
+            <input type="password" name="password" placeholder="Lösenord"/>
+        </div>
+        <input style="justify-content: center" type="submit" value="Bekräfta" class="btn btn-primary" />
+        <td><a th:href="@{/}" class="btn btn-danger">Avbryt</a> </td>
+    </div>
+
+</form>
 </body>
 </html>

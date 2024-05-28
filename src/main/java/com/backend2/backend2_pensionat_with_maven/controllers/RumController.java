@@ -109,7 +109,7 @@ public class RumController {
         model.addAttribute("responseList", responseList);
         model.addAttribute("kat", "Händelser i rum " + nummer);
         model.addAttribute("titel", "Event");
-        return "RumDetails";
+        return "rumDetails";
 
 
     }

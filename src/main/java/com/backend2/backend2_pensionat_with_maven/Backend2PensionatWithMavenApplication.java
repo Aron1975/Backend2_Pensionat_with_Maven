@@ -12,8 +12,8 @@ import java.util.Objects;
 @SpringBootApplication
 public class Backend2PensionatWithMavenApplication {
 
-    //@Autowired
-    //private UserDataSeeder userDataSeeder;
+    @Autowired
+    private UserDataSeeder userDataSeeder;
 
     public static void main(String[] args) {
 
@@ -40,12 +40,12 @@ public class Backend2PensionatWithMavenApplication {
         }
     }
 
-    /*@Bean
+    @Bean
     CommandLineRunner commandLineRunner() {
         return args -> {
             userDataSeeder.Seed();
         };
-    }*/
+    }
 
 
 }

@@ -1,15 +1,10 @@
 package com.backend2.backend2_pensionat_with_maven.controllers;
 
 import com.backend2.backend2_pensionat_with_maven.dtos.ContractCustomerDto;
-import com.backend2.backend2_pensionat_with_maven.dtos.DetailedKundDto;
 import com.backend2.backend2_pensionat_with_maven.models.ContractCustomer;
-import com.backend2.backend2_pensionat_with_maven.repos.BokningRepo;
 import com.backend2.backend2_pensionat_with_maven.repos.ContractCustomerRepo;
-import com.backend2.backend2_pensionat_with_maven.repos.KundRepo;
 import com.backend2.backend2_pensionat_with_maven.services.ContractCustomerService;
-import com.backend2.backend2_pensionat_with_maven.services.KundService;
 import com.backend2.backend2_pensionat_with_maven.services.impl.ContractCustomerServiceImpl;
-import com.backend2.backend2_pensionat_with_maven.services.impl.KundServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -69,7 +64,7 @@ public class ContractCustomerController {
             return "redirect:/contractCustomer/all";
         }
         model.addAttribute("contractCustomer", contractCustomer);
-        return "ContractCustomerDetails";
+        return "contractCustomerDetails";
     }
 
     @RequestMapping("/info")

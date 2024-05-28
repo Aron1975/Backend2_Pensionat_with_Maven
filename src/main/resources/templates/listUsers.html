@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/fragments/layouts/base_layout}">
+<head>
+    <title>Användarhantering</title>
+</head>
+<body class="container-fluid">
+<section layout:fragment="content">
+
+    <h1>Användarhantering</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Roles</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.roles}"></td>
+            <td>
+                <a th:href="@{/admin/users/edit/{id}(id=${user.id})}" class="btn btn-primary btn-sm">Ändra</a>
+                <a th:href="@{/admin/users/delete/{id}(id=${user.id})}" class="btn btn-danger btn-sm">Ta bort</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="d-grid gap-2">
+        <a th:href="@{/admin/users/new}" class="btn btn-success">Lägg till ny användare</a>
+    </div>
+
+</section>
+</body>
+</html>
