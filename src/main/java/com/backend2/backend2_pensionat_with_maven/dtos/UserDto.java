@@ -5,12 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class UserDto {
-    public int id;
-    public String username;
-    public String password;
+    private UUID id;
+    private String username;
+    private String password;
+    private Set<String> roles;
 }
