@@ -1,19 +1,20 @@
 package com.backend2.backend2_pensionat_with_maven.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Builder
 @Entity
 @Table(name = "User")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Data
 public class User {
 
     @Id
@@ -21,11 +22,21 @@ public class User {
     @Column(name="id")
     private UUID id;
 
-    private String username;
+    @OneToMany(fetch = FetchType.EAGER)
+    private Collection<Role> roles;
+
+    private String email;
     private String password;
     private boolean enabled;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    private Collection<Role> roles;
+    public String getEmail(){
+        return email;
+    }
+
+    public void setPassword(final String password) {
+        this.password = password;
+    }
+
+
 }
 

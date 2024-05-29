@@ -23,4 +23,9 @@ public class LoginController {
         return "/login";
     }
 
+    /*@GetMapping("/forgotPassword")
+    public String forgotPassword(){
+        return "/forgotPassword";
+    }*/
+
 }

@@ -44,7 +44,7 @@ public class UserDataSeeder {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String hash = encoder.encode("Hejsan123#");
-        User user = User.builder().enabled(true).password(hash).username(mail).roles(roles).build();
+        User user = User.builder().enabled(true).password(hash).email(mail).roles(roles).build();
         userRepo.save(user);
     }
 

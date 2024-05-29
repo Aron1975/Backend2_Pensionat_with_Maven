@@ -39,7 +39,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/",  "/js/**", "/css/**", "/images/**", "/login/**", "/logout", "/rum/sök", "/rum/all", "/register/**" ).permitAll()
+                        .requestMatchers("/**",  "/js/**", "/css/**", "/images/**", "/login/**", "/logout", "/rum/sök", "/rum/all", "/user/**", "/forgotPassword.html" ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

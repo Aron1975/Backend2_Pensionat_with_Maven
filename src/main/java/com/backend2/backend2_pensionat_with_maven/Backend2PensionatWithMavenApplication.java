@@ -1,6 +1,5 @@
 package com.backend2.backend2_pensionat_with_maven;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,8 +9,8 @@ import java.util.Objects;
 @SpringBootApplication
 public class Backend2PensionatWithMavenApplication {
 
-    @Autowired
-    private UserDataSeeder userDataSeeder;
+    //@Autowired
+    //private UserDataSeeder userDataSeeder;
 
     public static void main(String[] args) {
 

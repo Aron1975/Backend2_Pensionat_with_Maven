@@ -1,14 +1,6 @@
 package com.backend2.backend2_pensionat_with_maven.Security;
 
-import com.backend2.backend2_pensionat_with_maven.models.User;
-import com.backend2.backend2_pensionat_with_maven.repos.PasswordResetTokenRepo;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.util.Calendar;
-import java.util.Optional;
-
-@Service
+/*@Service
 @RequiredArgsConstructor
 public class PasswordResetTokenService {
     private final PasswordResetTokenRepo passwordResetTokenRepo;
@@ -35,4 +27,4 @@ public class PasswordResetTokenService {
         return Optional.ofNullable(passwordResetTokenRepo.findByToken(passwordToken).getUser());
     }
 
-}
+}*/
