@@ -63,14 +63,6 @@ class ShipperServiceImplUnitTests {
     }
 
     @Test
-    void getAllShippers() { //Repo
-    }
-
-    @Test
-    void sparaShipper() {   //Anrop till sparaShipper() testad via addUpdateShipperShouldSaveNewShipperAndUpdateExisting()
-    }
-
-    @Test
     void shipperDtoToShipperShouldReturnShipper(){
 
         //Arrange
@@ -102,9 +94,12 @@ class ShipperServiceImplUnitTests {
     @Test
     void findIdByShipperIdShouldReturnCorrectIdOrMinusOne() throws IOException {
 
+        //Arrange
         List<ShipperDto> shipperDtoList;
         shipperDtoList= mapper.readValue(file, new TypeReference<>() {});
         when(sut.getAllShippers()).thenReturn(shipperList);
+
+        //Act/Assert
         assert(shipperDtoList.size() == 3);
         assert(shipperList.size() == 1);
         assertEquals(sut.findIdByShipperId(shipperDtoList.get(0).getId()), 100);
@@ -152,9 +147,5 @@ class ShipperServiceImplUnitTests {
         //Assert
         verify(sut, times(2)).sparaShipper(any(ShipperDto.class));
         verify(sut, times(1)).updateShipper(anyInt(),any(ShipperDto.class));
-    }
-
-    @Test
-    void updateShipper() {  //Anrop till updateShipper() testad via addUpdateShipperShouldSaveNewShipperAndUpdateExisting()
     }
 }

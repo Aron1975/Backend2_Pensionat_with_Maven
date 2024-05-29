@@ -192,14 +192,14 @@
                         <!--version>2.22.2</version-->
                         <configuration>
                             <includes>
-                                <!--include>**/BlacklistServiceImplUnitTests.java</include>
+                                <include>**/BlacklistServiceImplUnitTests.java</include>
                                 <include>**/BokningServiceImplTest.java</include>
                                 <include>**/ContractCustomerServiceImplUnitTests.java</include>
                                 <include>**/RumEventServiceImplUnitTests.java</include>
                                 <include>**/ShipperServiceImplUnitTests.java</include>
-                                <include>**/RabbatServiceImplTest.java</include-->
-                                <include>**/*Test.java</include>
-                                <include>**/*Tests.java</include>
+                                <include>**/RabbatServiceImplTest.java</include>
+                                <!--include>**/*Test.java</include>
+                                <include>**/*Tests.java</include-->
                             </includes>
                         </configuration>
                     </plugin>
@@ -218,7 +218,7 @@
                         <!--version>2.22.2</version-->
                         <configuration>
                             <includes>
-                                <!--include>**/BlacklistServiceImplIntegrationTests.java</include>
+                                <!--include>**/BlacklistServiceImplIntegrationTestsIT.java</include>
                                 <include>**/RumEventServiceImplIt.java</include>
                                 <include>**/ShipperServiceImplIT.java</include>
                                 <include>**/ContractCustomerServiceImplIT.java</include-->

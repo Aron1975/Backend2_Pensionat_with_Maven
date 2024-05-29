@@ -13,11 +13,13 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
+import java.nio.file.attribute.AclEntryType;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
@@ -30,9 +32,10 @@ class RumEventServiceImplUnitTests {
     private File file;
     private ObjectMapper mapper;
     private List<String> fakeMessages;
+    List<RumEvent.RumEventType> rumEvents = new ArrayList<>();
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws JsonProcessingException {
         mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
@@ -44,25 +47,14 @@ class RumEventServiceImplUnitTests {
         fakeMessages.add("{\"type\":\"RoomClosed\",\"TimeStamp\":\"2024-05-26T11:54:58.847417154\",\"RoomNo\":\"2\"}");
         fakeMessages.add("{\"type\":\"RoomCleaningStarted\",\"TimeStamp\":\"2024-05-26T20:02:59.023471262\",\"RoomNo\":\"5\",\"CleaningByUser\":\"Van Doyle\"}");
         fakeMessages.add("{\"type\":\"RoomCleaningFinished\",\"TimeStamp\":\"2024-05-26T05:52:58.90806558\",\"RoomNo\":\"2\",\"CleaningByUser\":\"Oscar Huels\"}");
-    }
 
-    @Test
-    void findEventsByRoomNr() { //Repo
-    }
-
-    @Test
-    void getEventListByRoomNr() {
+        for(String message: fakeMessages){
+            rumEvents.add(sut.createRumEventTypeObjectFromMessage(message));
+        }
     }
 
     @Test
     void createRumEventTypeObjectFromMessageShouldMapCorrectly() throws JsonProcessingException {
-        //Arrrange
-        List<RumEvent.RumEventType> rumEvents = new ArrayList<>();
-
-        //Act
-        for(String message: fakeMessages){
-            rumEvents.add(sut.createRumEventTypeObjectFromMessage(message));
-        }
 
         //Assert
         assertEquals(rumEvents.size(), 6);
@@ -73,11 +65,28 @@ class RumEventServiceImplUnitTests {
     }
 
     @Test
-    void sparaRumEvent() {
+    void eventToStringCreatesCorrectStringFromRumEventTypeObject() throws JsonProcessingException {
 
+        //Assert
+        assertTrue(sut.eventToString(rumEvents.get(2)).contains("Dörr öppnad"));
+        assertTrue(sut.eventToString(rumEvents.get(3)).contains("Dörr stängd"));
+        assertTrue(sut.eventToString(rumEvents.get(4)).contains("Städning påbörjad av"));
+        assertTrue(sut.eventToString(rumEvents.get(4)).contains("Van Doyle"));
+        assertTrue(sut.eventToString(rumEvents.get(5)).contains("Städning avslutad av"));
+        assertTrue(sut.eventToString(rumEvents.get(5)).contains("Oscar Huels"));
     }
 
     @Test
-    void eventToString() {
+    void findEventsByRoomReturnsCorrectNumberOfRumEvents() throws JsonProcessingException {
+
+        //Arrange
+        when(rumEventTypeRepo.findAll()).thenReturn(rumEvents);
+        //Act/Assert
+        assertEquals(sut.findEventsByRoomNr(1).size(), 0);
+        assertEquals(sut.findEventsByRoomNr(2).size(), 2);
+        assertNotEquals(sut.findEventsByRoomNr(3).size(), 1);
+        assertEquals(sut.findEventsByRoomNr(4).size(), 1);
+        assertEquals(sut.findEventsByRoomNr(5).size(), 2);
+        assertEquals(sut.findEventsByRoomNr(8).size(), 1);
     }
 }

@@ -79,22 +79,6 @@ class ContractCustomerServiceImplUnitTests {
     }
 
     @Test
-    void getAllContractCustomer() { //Repo
-    }
-
-    @Test
-    void getAllCustomers() { //Repo
-    }
-
-    @Test
-    void findById() { //Repo
-    }
-
-    @Test
-    void sparaContractCustomer() { //Repo
-    }
-
-    @Test
     void contractCustomerToContractCustomerDtoShouldReturnContractCustomerDto() throws IOException {
 
         //Act
@@ -154,9 +138,13 @@ class ContractCustomerServiceImplUnitTests {
 
     @Test
     void findIdByCustomerIdShouldReturnCorrectIdOrMinusOne() throws IOException {
+
+        //Arrange
         List<ContractCustomerDto> contractCustomerDtoList;
         contractCustomerDtoList= xmlMapper.readValue(file, new TypeReference<>() {});
         when(sut.getAllCustomers()).thenReturn(contractCustomerList);
+
+        //Act/Assert
         assert(contractCustomerDtoList.size() == 3);
         assert(contractCustomerList.size() == 1);
         assertEquals(sut.findIdByCustomerId(contractCustomerDtoList.get(0).getId()), 55);
@@ -205,7 +193,7 @@ class ContractCustomerServiceImplUnitTests {
         assertEquals(contractCustomerDtoList.get(2).getPostalCode(), 77616);
     }
 
-    @Test
+    @Test   //Test it?
     void sortContractCustomers() {
     }
 }
