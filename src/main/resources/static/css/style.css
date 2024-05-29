@@ -1,11 +1,15 @@
 body{
-    background: cornflowerblue;
+    background: #f0f4f8;
+    flex-direction: column;
     align-items: center;
+    font-family: 'Arial', sans-serif;
+
 }
 
 h1, h2{
     text-align: center;
-    margin-top: 10px;
+    margin-top: 20px;
+    color: #333;
 }
 
 button{
@@ -54,13 +58,13 @@ button{
 #moose{
     display: flex;
     justify-content: center;
-  /*  color: gold;
-    font-size: 20px;
-    text-align: center;*/
+    /*  color: gold;
+      font-size: 20px;
+      text-align: center;*/
 }
 #moose2{
- /*   display: flex;
-    justify-content: center;*/
+    /*   display: flex;
+       justify-content: center;*/
     color: gold;
     font-size: 20px;
     text-align: center;
@@ -77,4 +81,27 @@ button{
     color: darkred;
     margin-top: 15px;
     font-size: 20px;
+}
+.navbar {
+    width: 100%;
+    padding: 15px 30px;
+}
+
+.navbar-nav {
+    flex-direction: row;
+    align-items: center;
+}
+
+.nav-item {
+    margin-left: 20px;
+}
+
+.nav-link {
+    color: #ffffff !important;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+.nav-link:hover {
+    background: #0056b3;
 }
