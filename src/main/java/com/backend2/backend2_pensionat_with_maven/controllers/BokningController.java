@@ -9,6 +9,7 @@ import com.backend2.backend2_pensionat_with_maven.repos.BokningRepo;
 import com.backend2.backend2_pensionat_with_maven.services.BokningService;
 import com.backend2.backend2_pensionat_with_maven.services.KundService;
 import com.backend2.backend2_pensionat_with_maven.services.RumService;
+import com.backend2.backend2_pensionat_with_maven.services.impl.EmailServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +32,7 @@ public class BokningController {
     private final BokningService bokningService;
     private final RumService rumService;
     private final KundService kundService;
+    private final EmailServiceImpl emailService;
 
 
     @RequestMapping("/all")
@@ -68,6 +70,8 @@ public class BokningController {
     @RequestMapping("/{id}/add")
     public String sparaBokning(@PathVariable String id, @RequestParam int antal, @RequestParam String startDatum, @RequestParam String stopDatum) {
         bokningService.sparaBokning(id, antal, startDatum, stopDatum);
+        emailService.sendSimpleMessage("kristopher70@ethereal.email", "Bokningsbekräftelse", "Välkommen till" +
+                "pensionatet");
         return "redirect:/bokning/addkund";
     }
 
