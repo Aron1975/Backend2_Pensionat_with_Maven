@@ -43,7 +43,8 @@ public class PasswordController {
         List<UserDto> userDtoList = userServiceImpl.getAllUsers();
         User user = new User();
         user.setUsername(email);
-        UserDto userDtoTemp = userServiceImpl.userToUserDto(user);
+        UserDto userDtoTemp = userServiceImpl.userToUserDto(user);    //nullpointer händer här, role finns inte
+        //försöker fixa imorn
 
         // Optional<User> user = userRepo.getUserByUserName(email);  //problem
 
