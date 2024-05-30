@@ -41,17 +41,15 @@ public class PasswordController {
 
         System.out.println("tog oss hit");
         List<UserDto> userDtoList = userServiceImpl.getAllUsers();
-        User user = new User();
-        user.setUsername(email);
-        UserDto userDtoTemp = userServiceImpl.userToUserDto(user);    //nullpointer händer här, role finns inte
-        //försöker fixa imorn
+        UserDto userDtoTemp = new UserDto();
+        userDtoTemp.setUsername(email);
 
         // Optional<User> user = userRepo.getUserByUserName(email);  //problem
 
         for (UserDto userDto : userDtoList) {
             if (userDto.getUsername().equals(userDtoTemp.getUsername())) {
 
-                System.out.println("hej");
+                System.out.println("hej");   //fungerar
 
             }
 
