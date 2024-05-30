@@ -34,7 +34,7 @@ public interface BokningService {
 
     void uppdateraBokning(String id, int antal, String startDatum, String stopDatum, long bokningsId);
 
-    void sparaBokning(String id, int antal, String startDatum, String stopDatum);
+    Bokning sparaBokning(String id, int antal, String startDatum, String stopDatum);
     void sparaBokningTillKund(DetailedBokningDto b);
-
+    public String getEmailMessage(Bokning bokning);
 }

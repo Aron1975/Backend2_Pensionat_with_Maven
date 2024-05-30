@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -100,8 +101,6 @@ public class BokningServiceImpl implements BokningService {
         bokning.setTotalPris(prisEfterDiscount);
         return prisEfterDiscount;
     }
-
-
 
     public int getTotalNätterUnderÅret(Kund kund) {
         LocalDate ettÅrSen = LocalDate.now().minusYears(1);
@@ -240,7 +239,7 @@ public class BokningServiceImpl implements BokningService {
     }
 
     @Override
-    public void sparaBokning(String id, int antal, String startDatum, String stopDatum) {
+    public Bokning sparaBokning(String id, int antal, String startDatum, String stopDatum) {
         Long rumId = Long.parseLong(id);
         Rum rum = rumRepo.findById(rumId).get();
 
@@ -259,11 +258,20 @@ public class BokningServiceImpl implements BokningService {
                 .rum(rum)
                 .build();
 
-        bokningRepo.save(bokning);
+        return bokningRepo.save(bokning);
     }
 
     @Override
     public void sparaBokningTillKund(DetailedBokningDto b) {
 
+    }
+
+    @Override
+    public String getEmailMessage(Bokning bokning) {
+
+        long antalNätter = ChronoUnit.DAYS.between(bokning.getStartDatum(), bokning.getSlutDatum());
+        String emailMessage= String.format("Tack för din bokning! \n Välkommen till Pensionatet! \n Din bokning: \n Incheckning: %s \n Utcheckning: %s \n %d nätter \n %d gäster \n Pris: %.1f Kr", bokning.getStartDatum(), bokning.getSlutDatum(), antalNätter, bokning.getAntalGäster(), bokning.getTotalPris());
+
+        return emailMessage.toString();
     }
 }

@@ -5,6 +5,7 @@ package com.backend2.backend2_pensionat_with_maven.controllers;
 import com.backend2.backend2_pensionat_with_maven.dtos.DetailedBokningDto;
 import com.backend2.backend2_pensionat_with_maven.dtos.DetailedKundDto;
 import com.backend2.backend2_pensionat_with_maven.dtos.RumDto;
+import com.backend2.backend2_pensionat_with_maven.models.Bokning;
 import com.backend2.backend2_pensionat_with_maven.repos.BokningRepo;
 import com.backend2.backend2_pensionat_with_maven.services.BokningService;
 import com.backend2.backend2_pensionat_with_maven.services.KundService;
@@ -69,9 +70,9 @@ public class BokningController {
 
     @RequestMapping("/{id}/add")
     public String sparaBokning(@PathVariable String id, @RequestParam int antal, @RequestParam String startDatum, @RequestParam String stopDatum) {
-        bokningService.sparaBokning(id, antal, startDatum, stopDatum);
-        emailService.sendSimpleMessage("kristopher70@ethereal.email", "Bokningsbekräftelse", "Välkommen till" +
-                "pensionatet");
+        Bokning bokning = bokningService.sparaBokning(id, antal, startDatum, stopDatum);
+        String emailText = bokningService.getEmailMessage(bokning);
+        emailService.sendSimpleMessage("kristopher70@ethereal.email", "Bokningsbekräftelse", emailText);
         return "redirect:/bokning/addkund";
     }
 
