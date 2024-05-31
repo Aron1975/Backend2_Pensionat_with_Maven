@@ -68,15 +68,6 @@ public class KundController {
         model.addAttribute("titel", "Kund");
         return "addKund";
     }
-    @GetMapping("/registrera")
-    public String nyKundFrånRegistrera(Model model) {
-        model.addAttribute("kund", new DetailedKundDto());
-        model.addAttribute("redirect", "/kund/all");
-        model.addAttribute("cancelRedirect", "/kund/all");
-        model.addAttribute("kat", "Lägg till ny kund");
-        model.addAttribute("titel", "Kund");
-        return "addKund2";
-    }
     @GetMapping("/nyFrånBokning")
     public String nyKundFrånBokning(Model model) {
         model.addAttribute("kund", new DetailedKundDto());
