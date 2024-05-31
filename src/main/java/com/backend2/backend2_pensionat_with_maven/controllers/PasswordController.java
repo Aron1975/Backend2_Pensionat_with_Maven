@@ -2,9 +2,11 @@ package com.backend2.backend2_pensionat_with_maven.controllers;
 
 import ch.qos.logback.core.model.Model;
 import com.backend2.backend2_pensionat_with_maven.dtos.UserDto;
+import com.backend2.backend2_pensionat_with_maven.models.PasswordResetToken;
 import com.backend2.backend2_pensionat_with_maven.models.User;
 import com.backend2.backend2_pensionat_with_maven.repos.RoleRepo;
 import com.backend2.backend2_pensionat_with_maven.repos.UserRepo;
+import com.backend2.backend2_pensionat_with_maven.services.impl.ForgotPassWordServiceImpl;
 import com.backend2.backend2_pensionat_with_maven.services.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,10 @@ public class PasswordController {
 
 
     @Autowired
-    UserServiceImpl userServiceImpl;
+    private ForgotPassWordServiceImpl forgotPassWordService;
+
+    @Autowired
+    private UserServiceImpl userServiceImpl;
 
     @GetMapping("/forgotPassword")
     public String forgotPassword() {
@@ -49,7 +54,18 @@ public class PasswordController {
         for (UserDto userDto : userDtoList) {
             if (userDto.getUsername().equals(userDtoTemp.getUsername())) {
 
-                System.out.println("hej");   //fungerar
+                PasswordResetToken passwordResetToken = new PasswordResetToken();
+                passwordResetToken.setExpireTime(forgotPassWordService.expireTimeRange());
+                passwordResetToken.setToken(forgotPassWordService.generateToken());
+                passwordResetToken.setUser(userServiceImpl.userDtoToUser(userDto));
+                passwordResetToken.setUsed(false);
+
+                String emailLink = "http:localhost:8080/resetPasswordLandingPage?token= " + passwordResetToken.getToken();
+
+
+
+
+             //   System.out.println("hej");   //fungerar
 
             }
 
