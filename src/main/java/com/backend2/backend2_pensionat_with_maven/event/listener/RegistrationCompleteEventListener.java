@@ -37,13 +37,13 @@ public class RegistrationCompleteEventListener implements ApplicationListener<Re
 
     public void sendPasswordResetVerificationEmail(String url) throws MessagingException, UnsupportedEncodingException, jakarta.mail.MessagingException {
         theUser ="o.ekstrom@hotmail.se";
-        String subject = "Password Reset Request Verification";
-        String senderName = "User Registration Portal Service";
-        String mailContent = "<p> Hi, " + ", </p>"+
-                "<p>Thank you for registering with us,"+"" +
-                "Please, follow the link below to complete your registration.</p>"+
-                "<a href=\"" +url+ "\">Verify your email to activate your account</a>"+
-                "<p> Thank you <br> Users Registration Portal Service";
+        String subject = "Återställning av lösenord";
+        String senderName = "Pensionatet";
+        String mailContent = "<p> Hej.</p>"+
+                "<p>Du har begärt återställning av ditt lösenord," +
+                "Har du inte begärt detta så kan du ignorera detta mail.</p>"+
+                "<a href=\"" +url+ "\">Följ länken för att återställa ditt lösenord.</a>"+
+                "<p> MVH <br> Pensionatet";
 
         MimeMessage message = mailSender.createMimeMessage();
         var messageHelper = new MimeMessageHelper(message);
