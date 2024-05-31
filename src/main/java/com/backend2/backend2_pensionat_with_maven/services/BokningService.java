@@ -7,6 +7,7 @@ import com.backend2.backend2_pensionat_with_maven.dtos.DetailedBokningDto;
 import com.backend2.backend2_pensionat_with_maven.dtos.RumDto;
 import com.backend2.backend2_pensionat_with_maven.models.Bokning;
 import com.backend2.backend2_pensionat_with_maven.models.Kund;
+import jakarta.mail.MessagingException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,7 +16,7 @@ public interface BokningService {
 
     public List<DetailedBokningDto> getAllBokningar();
 
-    public boolean uppdateraBokningMedKund(String kundId);
+    public boolean uppdateraBokningMedKund(String kundId) throws MessagingException;
     public void deleteBokningWithoutKundId();
     public List<BokningDto> getAllBokningar2();
 

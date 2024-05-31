@@ -4,6 +4,7 @@ package com.backend2.backend2_pensionat_with_maven.controllers;
 
 import com.backend2.backend2_pensionat_with_maven.dtos.DetailedBokningDto;
 import com.backend2.backend2_pensionat_with_maven.dtos.DetailedKundDto;
+import com.backend2.backend2_pensionat_with_maven.dtos.EmailDetailsDto;
 import com.backend2.backend2_pensionat_with_maven.dtos.RumDto;
 import com.backend2.backend2_pensionat_with_maven.models.Bokning;
 import com.backend2.backend2_pensionat_with_maven.repos.BokningRepo;
@@ -11,14 +12,13 @@ import com.backend2.backend2_pensionat_with_maven.services.BokningService;
 import com.backend2.backend2_pensionat_with_maven.services.KundService;
 import com.backend2.backend2_pensionat_with_maven.services.RumService;
 import com.backend2.backend2_pensionat_with_maven.services.impl.EmailServiceImpl;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.thymeleaf.context.Context;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -46,12 +46,11 @@ public class BokningController {
         return "/allaBokningar";  //testing igen
     }
     @RequestMapping("/addkund/{id}")
-    public String uppdateraBokning(@PathVariable String id, Model model, RedirectAttributes redirectAttrs){
+    public String uppdateraBokning(@PathVariable String id, Model model, RedirectAttributes redirectAttrs) throws MessagingException {
         if(!bokningService.uppdateraBokningMedKund(id)){
             redirectAttrs.addFlashAttribute("errorMessage", "Kund Blacklisted!!!");
             return "redirect:/bokning/addkund";
         }
-
         return "redirect:/bokning/all";
     }
 
@@ -69,10 +68,16 @@ public class BokningController {
     }
 
     @RequestMapping("/{id}/add")
-    public String sparaBokning(@PathVariable String id, @RequestParam int antal, @RequestParam String startDatum, @RequestParam String stopDatum) {
+    public String sparaBokning(@PathVariable String id, @RequestParam int antal, @RequestParam String startDatum, @RequestParam String stopDatum) throws MessagingException {
         Bokning bokning = bokningService.sparaBokning(id, antal, startDatum, stopDatum);
-        String emailText = bokningService.getEmailMessage(bokning);
-        emailService.sendSimpleMessage("kristopher70@ethereal.email", "Bokningsbekräftelse", emailText);
+        //String emailText = bokningService.getEmailMessage(bokning);
+       /* Context context = new Context();
+        // Set variables for the template from the POST request data
+        context.setVariable("namn", "Anonymus");
+        context.setVariable("antal", "Blalalalalal");
+        context.setVariable("startdate", "Julafton");
+        context.setVariable("slutdate", "Nyårsafton");*/
+                //emailService.sendSimpleMessage("kristopher70@ethereal.email", "Bokningsbekräftelse 1", emailText);
         return "redirect:/bokning/addkund";
     }
 
@@ -80,6 +85,7 @@ public class BokningController {
     @RequestMapping("/uppdatera/{id}/")
     public String uppdateraBokning(@PathVariable String id,@RequestParam int antal, @RequestParam String startDatum, @RequestParam String stopDatum, @RequestParam long bokningsId) {
         bokningService.uppdateraBokning(id, antal, startDatum, stopDatum, bokningsId);
+
         return "redirect:/bokning/all";
     }
 
@@ -118,4 +124,15 @@ public class BokningController {
         return "redirect:/bokning/all";
     }
 
+    @PostMapping("/sendEmail")
+    public String sendEmail(@RequestBody EmailDetailsDto emailDetails) throws MessagingException {
+        System.out.println("HalloHej");
+        Context context = new Context();
+        // Set variables for the template from the POST request data
+        context.setVariable("name", emailDetails.getName());
+        context.setVariable("message", emailDetails.getMessage());
+        context.setVariable("subject", emailDetails.getSubject());
+        emailService.sendMessageWithTemplate(emailDetails.getTo(), emailDetails.getSubject(), "emailTemplate", context);
+        return "redirect:/bokning/all";
+    }
 }

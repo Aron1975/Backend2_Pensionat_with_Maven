@@ -12,6 +12,7 @@ import com.backend2.backend2_pensionat_with_maven.repos.RumRepo;
 import com.backend2.backend2_pensionat_with_maven.services.BlacklistService;
 import com.backend2.backend2_pensionat_with_maven.services.BokningService;
 import com.backend2.backend2_pensionat_with_maven.services.RabattService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,8 +35,9 @@ public class BokningServiceImpl implements BokningService {
     public final RumRepo rumRepo;
     public final BlacklistService blacklistService;
     public final RabattService rabattService;
+    private EmailServiceImpl emailService;
 
-    @Autowired
+    //@Autowired
     public BokningServiceImpl(BokningRepo bokningRepo, KundRepo kundRepo, RumRepo rumRepo,
                               BlacklistService blacklistService, RabattService rabattService) {
         this.bokningRepo = bokningRepo;
@@ -45,6 +47,17 @@ public class BokningServiceImpl implements BokningService {
         this.rabattService = rabattService;
     }
 
+    @Autowired
+    public BokningServiceImpl(BokningRepo bokningRepo, KundRepo kundRepo, RumRepo rumRepo,
+                              BlacklistService blacklistService, RabattService rabattService, EmailServiceImpl emailService) {
+        this.bokningRepo = bokningRepo;
+        this.kundRepo = kundRepo;
+        this.rumRepo = rumRepo;
+        this.blacklistService = blacklistService;
+        this.rabattService = rabattService;
+        this.emailService = emailService;
+    }
+
 
     @Override
     public List<DetailedBokningDto> getAllBokningar() {
@@ -52,7 +65,7 @@ public class BokningServiceImpl implements BokningService {
     }
 
     @Override
-    public boolean uppdateraBokningMedKund(String kundId) {
+    public boolean uppdateraBokningMedKund(String kundId) throws MessagingException {
         List<BokningDto> responseList = getAllBokningar2();
 
         if (responseList.isEmpty()) {
@@ -83,7 +96,9 @@ public class BokningServiceImpl implements BokningService {
         bokning.setKund(kund);
         updateBokningWithDiscount(bokning, kund);
 
-        bokningRepo.save(bokning);
+        bokning = bokningRepo.save(bokning);
+        emailService.sendConfirmationMail(bokning);
+
         return true;
     }
 
