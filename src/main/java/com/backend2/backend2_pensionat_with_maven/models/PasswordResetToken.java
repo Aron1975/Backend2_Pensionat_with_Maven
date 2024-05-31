@@ -19,6 +19,8 @@ import java.util.Date;
         @JoinColumn(nullable = false, name = "user_id")
         private User user;
 
+        @Column(nullable = false)
+        private boolean isUsed;
         private Date expiryDate;
     }
 
