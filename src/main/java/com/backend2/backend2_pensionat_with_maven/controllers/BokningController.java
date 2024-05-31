@@ -70,14 +70,6 @@ public class BokningController {
     @RequestMapping("/{id}/add")
     public String sparaBokning(@PathVariable String id, @RequestParam int antal, @RequestParam String startDatum, @RequestParam String stopDatum) throws MessagingException {
         Bokning bokning = bokningService.sparaBokning(id, antal, startDatum, stopDatum);
-        //String emailText = bokningService.getEmailMessage(bokning);
-       /* Context context = new Context();
-        // Set variables for the template from the POST request data
-        context.setVariable("namn", "Anonymus");
-        context.setVariable("antal", "Blalalalalal");
-        context.setVariable("startdate", "Julafton");
-        context.setVariable("slutdate", "Nyårsafton");*/
-                //emailService.sendSimpleMessage("kristopher70@ethereal.email", "Bokningsbekräftelse 1", emailText);
         return "redirect:/bokning/addkund";
     }
 

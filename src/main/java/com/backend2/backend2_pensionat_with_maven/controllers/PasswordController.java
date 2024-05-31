@@ -1,6 +1,8 @@
 package com.backend2.backend2_pensionat_with_maven.controllers;
 
 import ch.qos.logback.core.model.Model;
+import com.backend2.backend2_pensionat_with_maven.Security.PasswordResetToken;
+import com.backend2.backend2_pensionat_with_maven.Security.PasswordResetTokenService;
 import com.backend2.backend2_pensionat_with_maven.dtos.UserDto;
 import com.backend2.backend2_pensionat_with_maven.models.PasswordResetTokenRickard;
 import com.backend2.backend2_pensionat_with_maven.services.impl.ForgotPassWordServiceImpl;
@@ -13,12 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
 public class PasswordController {
 
 
+    @Autowired
+    private PasswordResetTokenService passwordResetTokenService;
 
     @Autowired
     private ForgotPassWordServiceImpl forgotPassWordService;
@@ -48,7 +53,13 @@ public class PasswordController {
         for (UserDto userDto : userDtoList) {
             if (userDto.getUsername().equals(userDtoTemp.getUsername())) {
 
-                PasswordResetTokenRickard passwordResetToken = new PasswordResetTokenRickard();
+                String passwordResetToken = UUID.randomUUID().toString();
+                passwordResetTokenService.createPasswordResetTokenForUser(userServiceImpl.userDtoToUser(userDto), passwordResetToken);
+                //userService.createPasswordResetTokenForUser(user.get(), passwordResetToken);
+
+                System.out.println("Token: " + passwordResetToken);
+
+           /*     PasswordResetToken passwordResetToken = new PasswordResetToken();
                 passwordResetToken.setExpireTime(forgotPassWordService.expireTimeRange());
                 passwordResetToken.setToken(forgotPassWordService.generateToken());
                 passwordResetToken.setUser(userServiceImpl.userDtoToUser(userDto));
@@ -56,7 +67,7 @@ public class PasswordController {
 
                 String emailLink = "http:localhost:8080/resetPasswordLandingPage?token= " + passwordResetToken.getToken();
 
-
+                */
 
 
              //   System.out.println("hej");   //fungerar
