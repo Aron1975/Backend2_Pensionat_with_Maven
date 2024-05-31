@@ -36,7 +36,7 @@ public class RegistrationCompleteEventListener implements ApplicationListener<Re
     }
 
     public void sendPasswordResetVerificationEmail(String url) throws MessagingException, UnsupportedEncodingException, jakarta.mail.MessagingException {
-        theUser ="unique4@ethereal.email";
+        theUser ="bernice54@ethereal.email";
         String subject = "Återställning av lösenord";
         String senderName = "Pensionatet";
         String mailContent = "<p> Hej.</p>"+
@@ -49,7 +49,7 @@ public class RegistrationCompleteEventListener implements ApplicationListener<Re
         var messageHelper = new MimeMessageHelper(message);
         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         System.out.println(theUser);
-        messageHelper.setFrom("unique4@ethereal.email", senderName);
+        messageHelper.setFrom("bernice54@ethereal.email", senderName);
         messageHelper.setTo(theUser/*.getUsername()*/);
         messageHelper.setSubject(subject);
         messageHelper.setText(mailContent, true);

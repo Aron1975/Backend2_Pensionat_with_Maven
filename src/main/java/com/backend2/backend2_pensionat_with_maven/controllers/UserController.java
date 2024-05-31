@@ -1,6 +1,7 @@
 package com.backend2.backend2_pensionat_with_maven.controllers;
 
 import com.backend2.backend2_pensionat_with_maven.Security.PasswordResetRequest;
+import com.backend2.backend2_pensionat_with_maven.Security.PasswordResetTokenService;
 import com.backend2.backend2_pensionat_with_maven.event.listener.RegistrationCompleteEventListener;
 import com.backend2.backend2_pensionat_with_maven.models.User;
 import com.backend2.backend2_pensionat_with_maven.services.UserService;
@@ -22,29 +23,28 @@ import java.util.UUID;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-//@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
     private final UserServiceImpl userServiceImpl;
     private final RegistrationCompleteEventListener eventListener;
-
-
+    private final PasswordResetTokenService passwordResetTokenService;
 
     @GetMapping("/user/forgotPassword")
-    public String forgotPassword(){
+    public String forgotPassword() {
         return "forgotPassword";
     }
+
     @PostMapping("/user/password-reset-request")
     public String resetPasswordRequest(final HttpServletRequest request, @RequestParam(name = "email") String email) throws MessagingException, UnsupportedEncodingException {
         System.out.println(email);
 
         Optional<User> user = userService.findByUsername(email);
         String passwordResetUrl = "";
-        if (user.isPresent()){
+        if (user.isPresent()) {
             System.out.println(user);
             String passwordResetToken = UUID.randomUUID().toString();
-            userService.createPasswordResetTokenForUser(user.get(), passwordResetToken);
+            passwordResetTokenService.createPasswordResetTokenForUser(user.get(), passwordResetToken);
             passwordResetUrl = passwordResetEmailLink(user.get(), applicationUrl(request), passwordResetToken);
             System.out.println(passwordResetUrl);
         }
@@ -52,57 +52,52 @@ public class UserController {
     }
 
     private String passwordResetEmailLink(User user, String applicationUrl, String passwordResetToken) throws MessagingException, UnsupportedEncodingException {
-        String url = applicationUrl+"/user/reset-password?token="+passwordResetToken;
+        String url = applicationUrl + "/user/reset-password?token=" + passwordResetToken;
         eventListener.sendPasswordResetVerificationEmail(url);
         log.info("Click the link to reset your password : {}", url);
         return url;
     }
 
     @GetMapping("/user/reset-password")
-    public String resetPassword(@RequestParam("token") String passwordResetToken, Model model){
+    public String resetPassword(@RequestParam("token") String passwordResetToken, Model model) {
         System.out.println("Kommer till sida för att ange nytt lösenord osv");
-        String tokenValidationResult = userService.validatePasswordResetToken(passwordResetToken);
-        if(!tokenValidationResult.equalsIgnoreCase("valid")){
+        String tokenValidationResult = passwordResetTokenService.validatePasswordResetToken(passwordResetToken);
+        if (!tokenValidationResult.equalsIgnoreCase("valid")) {
             return "Invalid password reset token";
         }
         model.addAttribute("token", passwordResetToken);
-        User user = userService.findUserByPasswordToken(passwordResetToken);
-        if (user != null){
+        Optional<User> user = passwordResetTokenService.findUserByPasswordToken(passwordResetToken);
+        if (user.isPresent()) {
             System.out.println("Token finns och användare hittad");
         }
         return "changePassword";
     }
 
     @PostMapping("/user/change-password")
-    public String updatePassword(@RequestParam("token") String passwordResetToken, @RequestParam("newPassword") String password, @RequestParam("confirmPassword") String confirmpassword){
+    public String updatePassword(@RequestParam("token") String passwordResetToken, @RequestParam("newPassword") String password, @RequestParam("confirmPassword") String confirmPassword) {
         PasswordResetRequest passwordResetRequest = new PasswordResetRequest();
         passwordResetRequest.setNewPassword(password);
-        passwordResetRequest.setConfirmPassword(confirmpassword);
+        passwordResetRequest.setConfirmPassword(confirmPassword);
         System.out.println(passwordResetRequest);
         System.out.println("Kommer till sida för token osv");
-        String tokenValidationResult = userService.validatePasswordResetToken(passwordResetToken);
-        if(!tokenValidationResult.equalsIgnoreCase("valid")){
+        String tokenValidationResult = passwordResetTokenService.validatePasswordResetToken(passwordResetToken);
+        if (!tokenValidationResult.equalsIgnoreCase("valid")) {
             return "Invalid password reset token";
         }
-        User user = userService.findUserByPasswordToken(passwordResetToken);
-        if (password.equals(confirmpassword)){
-
-            if (user != null){
+        Optional<User> user = passwordResetTokenService.findUserByPasswordToken(passwordResetToken);
+        if (password.equals(confirmPassword)) {
+            if (user.isPresent()) {
                 System.out.println("Lösenord ändrat!!!!!!!!!");
-                userService.resetUserPassword(user, passwordResetRequest.getNewPassword());
+                userService.resetUserPassword(user.get(), passwordResetRequest.getNewPassword());
                 System.out.println("Token finns");
                 return "index";
             }
         }
-
         return "Invalid password reset token";
     }
 
-
-
-    public String applicationUrl(HttpServletRequest request){
+    public String applicationUrl(HttpServletRequest request) {
         System.out.println(request.getServerPort());
         return "http://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
     }
-
 }

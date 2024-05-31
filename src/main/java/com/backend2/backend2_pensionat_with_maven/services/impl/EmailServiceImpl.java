@@ -88,7 +88,7 @@ public class EmailServiceImpl implements EmailService {
         context.setVariable("antal", bokning.getAntalGäster());
         context.setVariable("startdate", bokning.getStartDatum());
         context.setVariable("slutdate", bokning.getSlutDatum());
-        sendMessageWithTemplate("unique4@ethereal.email", "Bokningsbekräftelse", "emailTemplate", context);
+        sendMessageWithTemplate("bernice54@ethereal.email", "Bokningsbekräftelse", "emailTemplate", context);
 
     }
 

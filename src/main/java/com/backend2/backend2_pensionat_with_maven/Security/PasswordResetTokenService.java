@@ -11,28 +11,41 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class PasswordResetTokenService {
+
     private final PasswordResetTokenRepo passwordResetTokenRepo;
 
-    public void createPasswordResetTokenForUser(User user, String passwordToken){
+    public void createPasswordResetTokenForUser(User user, String passwordToken) {
+        deletePasswordResetTokenForUser(user);
+
         PasswordResetToken passwordResetToken = new PasswordResetToken(passwordToken, user);
         passwordResetTokenRepo.save(passwordResetToken);
     }
 
+    public void deletePasswordResetTokenForUser(User user) {
+        PasswordResetToken token = passwordResetTokenRepo.findByUser(user);
+        if (token != null) {
+            passwordResetTokenRepo.delete(token);
+        }
+    }
+
     public String validatePasswordResetToken(String theToken) {
         PasswordResetToken token = passwordResetTokenRepo.findByToken(theToken);
-        if (token == null){
+        if (token == null) {
             return "Invalid password reset token";
         }
         User user = token.getUser();
         Calendar calendar = Calendar.getInstance();
-        if ((token.getExpirationTime().getTime()-calendar.getTime().getTime()) <= 0){
+        if ((token.getExpirationTime().getTime() - calendar.getTime().getTime()) <= 0) {
             return "Link already expired, resend link";
         }
         return "valid";
     }
 
-    public Optional<User> findUserByPasswordToken(String passwordToken){
-        return Optional.ofNullable(passwordResetTokenRepo.findByToken(passwordToken).getUser());
+    public Optional<User> findUserByPasswordToken(String passwordToken) {
+        PasswordResetToken token = passwordResetTokenRepo.findByToken(passwordToken);
+        if (token != null) {
+            return Optional.ofNullable(token.getUser());
+        }
+        return Optional.empty();
     }
-
 }
