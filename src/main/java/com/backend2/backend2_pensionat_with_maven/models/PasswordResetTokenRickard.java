@@ -2,13 +2,13 @@ package com.backend2.backend2_pensionat_with_maven.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Data
-    public class PasswordResetToken {
+public class PasswordResetTokenRickard {
 
         private static final int EXPIRATION = 60 * 24;
 
@@ -25,14 +25,9 @@ import java.util.Date;
         @Column(nullable = false)
         private boolean isUsed;
 
+        @Setter
         @Column(nullable = false)
         private LocalDateTime expireTime;
-
-
-    public void setExpireTime(LocalDateTime expireTime) {
-        this.expireTime = expireTime;
-    }
-
 
 }
 
