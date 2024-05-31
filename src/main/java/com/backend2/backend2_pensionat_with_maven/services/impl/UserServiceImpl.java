@@ -9,6 +9,16 @@ import com.backend2.backend2_pensionat_with_maven.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.backend2.backend2_pensionat_with_maven.Security.PasswordResetTokenService;
+import com.backend2.backend2_pensionat_with_maven.models.User;
+import com.backend2.backend2_pensionat_with_maven.repos.UserRepo;
+import com.backend2.backend2_pensionat_with_maven.services.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 import java.util.List;
 import java.util.Set;
@@ -20,7 +30,15 @@ import java.util.stream.StreamSupport;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private final KundRepo kundRepo;
+    private final BokningRepo bokningsRepo;
     private final UserRepo userRepo;
+    private final PasswordResetTokenService passwordResetTokenService;
+    private final PasswordEncoder passwordEncoder;
+    @Override
+    public List<User> getUsers() {
+        return (List<User>) userRepo.findAll();
+    }
     private final RoleRepo roleRepo;
     private final PasswordEncoder passwordEncoder;
 
@@ -29,6 +47,8 @@ public class UserServiceImpl implements UserService {
         return StreamSupport.stream(userRepo.findAll().spliterator(), false)
                 .map(this::userToUserDto)
                 .collect(Collectors.toList());
+    public Optional<User> findByUsername(String username) {
+        return userRepo.findByUsername(username);
     }
 
     @Override
@@ -43,9 +63,13 @@ public class UserServiceImpl implements UserService {
                 .roles(roles)
                 .password(user.getPassword())
                 .build();
+    public void createPasswordResetTokenForUser(User user, String passwordToken) {
+        passwordResetTokenService.createPasswordResetTokenForUser(user, passwordToken);
     }
 
     @Override
+    public void saveUserVerificationToken(User theUser, String verificationToken) {
+
     public User userDtoToUser(UserDto dto) {
         User user = new User();
         user.setId(dto.getId());
@@ -63,6 +87,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String validatePasswordResetToken(String passwordResetToken) {
+        return passwordResetTokenService.validatePasswordResetToken(passwordResetToken);
+    }
+
+    @Override
+    public User findUserByPasswordToken(String passwordResetToken) {
+        return passwordResetTokenService.findUserByPasswordToken(passwordResetToken).get();
+    @Override
     public void spara(UserDto userDto) {
         User user = userDtoToUser(userDto);
         userRepo.save(user);
@@ -71,6 +103,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserById(UUID id) {
         userRepo.deleteById(id);
+    public void resetUserPassword(User user, String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepo.save(user);
     }
 
     @Override
@@ -86,4 +121,5 @@ public class UserServiceImpl implements UserService {
                 existingUser.getUsername().equals(user.getUsername()) &&
                         passwordEncoder.matches(user.getPassword(), existingUser.getPassword()));
     }
+}
 }

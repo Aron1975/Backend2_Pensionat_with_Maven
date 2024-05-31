@@ -5,10 +5,12 @@ import com.backend2.backend2_pensionat_with_maven.dtos.DetailedKundDto;
 import com.backend2.backend2_pensionat_with_maven.repos.BokningRepo;
 import com.backend2.backend2_pensionat_with_maven.repos.KundRepo;
 import com.backend2.backend2_pensionat_with_maven.services.KundService;
+import com.backend2.backend2_pensionat_with_maven.services.impl.ConcreteUserDetails;
 import com.backend2.backend2_pensionat_with_maven.services.impl.KundServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -62,7 +64,7 @@ public class KundController {
         model.addAttribute("kund", new DetailedKundDto());
         model.addAttribute("redirect", "/kund/all");
         model.addAttribute("cancelRedirect", "/kund/all");
-        model.addAttribute("kat", "Lägg till kund");
+        model.addAttribute("kat", "Lägg till ny kund");
         model.addAttribute("titel", "Kund");
         return "addKund";
     }
@@ -87,4 +89,8 @@ public class KundController {
         return "addKund";
     }
 
+
+    public boolean checkIfKundHasBokning(long kundId){
+        return bokningRepo.getKundIdList().stream().anyMatch(kund -> kund.getId() == kundId);
+    }
 }

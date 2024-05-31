@@ -108,6 +108,8 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarLogout" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="${#authentication.name}"></a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                            <li><a class="dropdown-item" th:href="@{/kund/profil}">Min profil</a></li>
+                            <li><a class="dropdown-item" th:href="@{/logout}">Log out</a></li>
                             <li><a class="dropdown-item" th:href="@{/logout}">Logga ut</a></li>
                             <li><a class="dropdown-item" th:href="@{/contractCustomer/info}">Environment info</a></li>
                         </ul>
