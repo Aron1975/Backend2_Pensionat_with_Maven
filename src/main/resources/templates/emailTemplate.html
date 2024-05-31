@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title th:text="${subject}">Email Template</title>
+</head>
+<body>
+<h2>Bokningsbekräftelse</h2>
+<hr>
+<h3><p>Tack som fan <span th:text="${namn}"> </span> att du bokade ett rum på Pensionatet!</p></h3>
+<p>Din bokning
+    <br>
+    <span th:text="${antal} "></span> gäster
+    <br>
+    från: <span th:text="${startdate}"></span>
+    <br>
+    till: <span th:text="${slutdate}"></span>.</p>
+<!-- Lägg till andra delar av din e-postmall här -->
+</body>
+</html>
