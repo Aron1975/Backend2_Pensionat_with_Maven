@@ -6,8 +6,10 @@ import com.backend2.backend2_pensionat_with_maven.models.PasswordResetToken;
 import com.backend2.backend2_pensionat_with_maven.models.User;
 import com.backend2.backend2_pensionat_with_maven.repos.RoleRepo;
 import com.backend2.backend2_pensionat_with_maven.repos.UserRepo;
+import com.backend2.backend2_pensionat_with_maven.services.impl.EmailServiceImpl;
 import com.backend2.backend2_pensionat_with_maven.services.impl.ForgotPassWordServiceImpl;
 import com.backend2.backend2_pensionat_with_maven.services.impl.UserServiceImpl;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,6 +34,9 @@ public class PasswordController {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
+    @Autowired
+    private EmailServiceImpl emailService;
+
     @GetMapping("/forgotPassword")
     public String forgotPassword() {
 
@@ -42,7 +47,7 @@ public class PasswordController {
 
 
     @RequestMapping("/resetPassword")  //nullpointerexception
-    public String doesEmailExist(@RequestParam("email") String email, Model model) {
+    public String doesEmailExist(@RequestParam("email") String email, Model model) throws MessagingException {
 
         System.out.println("tog oss hit");
         List<UserDto> userDtoList = userServiceImpl.getAllUsers();
@@ -60,7 +65,15 @@ public class PasswordController {
                 passwordResetToken.setUser(userServiceImpl.userDtoToUser(userDto));
                 passwordResetToken.setUsed(false);
 
+                System.out.println(passwordResetToken);
+
                 String emailLink = "http:localhost:8080/resetPasswordLandingPage?token= " + passwordResetToken.getToken();
+                System.out.println("vi är påväg skickat");
+                System.out.println(email);
+                emailService.sendMessageResetPassword(email, "Password Reset Link", emailLink);
+                System.out.println("vi har skickat");
+
+                return "/login";
 
 
 

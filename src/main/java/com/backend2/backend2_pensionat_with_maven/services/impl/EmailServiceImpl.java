@@ -18,7 +18,7 @@ import java.io.File;
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
-   // @Autowired
+    @Autowired
     private final JavaMailSender emailSender;
 
     @Override
@@ -51,5 +51,28 @@ public class EmailServiceImpl implements EmailService {
         emailSender.send(message);
 
     }
+
+    @Override
+    public void sendMessageResetPassword(String to, String subject, String emaillink) throws MessagingException {
+
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        String emailContent = "<p> Hello</p>" + "Click the link to reset password!"
+                + "<p> <a href=\"" + emaillink + "\">Change My Password</a></p>"
+                + "<br>" + "Ignore This Email if you did not make a request";
+
+        helper.setText(emailContent, true);
+        helper.setFrom("");
+        helper.setSubject(subject);
+        helper.setTo(to);
+        System.out.println(to);
+        emailSender.send(message);
+        System.out.println("är förbi");
+
+
+
+    }
+
 
 }

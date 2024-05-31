@@ -6,4 +6,6 @@ public interface EmailService {
 
     public void sendSimpleMessage(String to, String subject, String text);
     public void sendMessageWithAttachment(String to, String subject, String text, String pathToAttachment) throws MessagingException;
+
+    public void sendMessageResetPassword(String to, String subject, String emailLink) throws MessagingException;
 }
