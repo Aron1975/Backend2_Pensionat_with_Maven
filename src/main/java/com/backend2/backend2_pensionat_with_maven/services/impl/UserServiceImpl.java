@@ -1,12 +1,10 @@
 package com.backend2.backend2_pensionat_with_maven.services.impl;
 
+import com.backend2.backend2_pensionat_with_maven.Security.PasswordResetToken;
 import com.backend2.backend2_pensionat_with_maven.dtos.UserDto;
 import com.backend2.backend2_pensionat_with_maven.models.Role;
 import com.backend2.backend2_pensionat_with_maven.models.User;
-import com.backend2.backend2_pensionat_with_maven.repos.BokningRepo;
-import com.backend2.backend2_pensionat_with_maven.repos.KundRepo;
-import com.backend2.backend2_pensionat_with_maven.repos.RoleRepo;
-import com.backend2.backend2_pensionat_with_maven.repos.UserRepo;
+import com.backend2.backend2_pensionat_with_maven.repos.*;
 import com.backend2.backend2_pensionat_with_maven.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepo roleRepo;
     private final PasswordResetTokenService passwordResetTokenService;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordResetTokenRepo passwordResetTokenRepo;
 
 
 
@@ -39,6 +38,7 @@ public class UserServiceImpl implements UserService {
     public Optional<User> findByUsername(String username) {
         return userRepo.findByUsername(username);
     }
+
     @Override
     public List<UserDto> getAllUsers() {
         return StreamSupport.stream(userRepo.findAll().spliterator(), false)
@@ -101,6 +101,7 @@ public class UserServiceImpl implements UserService {
     public void resetUserPassword(User user, String newPassword) {
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepo.save(user);
+
     }
 
     public void deleteUserById(UUID id) {
@@ -117,6 +118,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean checkIfUserExists(User user, List<User> userList) {
         return false;
+    }
+
+    @Override
+    public boolean checkIfTokenExist(User user){
+
+        return Boolean.TRUE.equals(passwordResetTokenRepo.findAll().stream().map(u -> u.getUser().getId() == user.getId()).findAny().orElse(null));
+
     }
 
 }

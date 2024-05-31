@@ -3,6 +3,7 @@ package com.backend2.backend2_pensionat_with_maven.event.listener;
 
 //import com.backend2.backend2_pensionat_with_maven.event.RegistrationCompleteEvent;
 
+import com.backend2.backend2_pensionat_with_maven.models.User;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +22,11 @@ public class RegistrationCompleteEventListener {
     private final JavaMailSender mailSender;
     private String theUser;
 
-    public void sendPasswordResetVerificationEmail(String url) throws MessagingException, UnsupportedEncodingException, jakarta.mail.MessagingException {
-        theUser ="gerry.wilkinson99@ethereal.email";
+    public void sendPasswordResetVerificationEmail(String url, User user) throws MessagingException, UnsupportedEncodingException, jakarta.mail.MessagingException {
+        theUser = user.getUsername();
         String subject = "Återställning av lösenord";
-        String senderName = "Pensionatet";
-        String mailContent = "<p> Hej.</p>"+
+        String senderName = "reception@pensionatet.se";
+        String mailContent = "<p> Hej!</p>"+
                 "<p>Du har begärt återställning av ditt lösenord," +
                 "Har du inte begärt detta så kan du ignorera detta mail.</p>"+
                 "<a href=\"" +url+ "\">Följ länken för att återställa ditt lösenord.</a>"+
@@ -33,10 +34,8 @@ public class RegistrationCompleteEventListener {
 
         MimeMessage message = mailSender.createMimeMessage();
         var messageHelper = new MimeMessageHelper(message);
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        System.out.println(theUser);
-        messageHelper.setFrom("gerry.wilkinson99@ethereal.email", senderName);
-        messageHelper.setTo(theUser/*.getUsername()*/);
+        messageHelper.setFrom(senderName);
+        messageHelper.setTo(theUser);
         messageHelper.setSubject(subject);
         messageHelper.setText(mailContent, true);
         mailSender.send(message);

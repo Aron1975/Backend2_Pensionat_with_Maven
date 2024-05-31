@@ -71,7 +71,7 @@ public class EmailServiceImpl implements EmailService {
         emailSender.send(message);
 
     }
-
+//"kristopher70@ethereal.email"
     @Override
     public void sendConfirmationMail(Bokning bokning) throws MessagingException {
         Context context = new Context();
@@ -80,7 +80,7 @@ public class EmailServiceImpl implements EmailService {
         context.setVariable("antal", bokning.getAntalGäster());
         context.setVariable("startdate", bokning.getStartDatum());
         context.setVariable("slutdate", bokning.getSlutDatum());
-        sendMessageWithTemplate("kristopher70@ethereal.email", "Bokningsbekräftelse", "emailTemplate", context);
+        sendMessageWithTemplate(bokning.getKund().getEmail(), "Bokningsbekräftelse", "emailTemplate", context);
 
     }
 

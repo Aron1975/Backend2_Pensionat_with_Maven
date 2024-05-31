@@ -15,7 +15,9 @@ public class PasswordResetTokenService {
 
     public void createPasswordResetTokenForUser(User user, String passwordToken){
         PasswordResetToken passwordResetToken = new PasswordResetToken(passwordToken, user);
-        passwordResetTokenRepo.save(passwordResetToken);
+        if(!passwordResetTokenRepo.findAll().stream().map(t -> t.getUser().getId()==user.getId()).findAny().isPresent()){
+            passwordResetTokenRepo.save(passwordResetToken);
+        }
     }
 
     public String validatePasswordResetToken(String theToken) {

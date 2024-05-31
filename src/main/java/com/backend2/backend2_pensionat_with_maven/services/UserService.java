@@ -30,4 +30,6 @@ public interface UserService {
     public UserDto getUser(UUID id);
 
     public boolean checkIfUserExists(User user, List<User> userList);
+
+    public boolean checkIfTokenExist(User user);
 }
