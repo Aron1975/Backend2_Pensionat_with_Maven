@@ -17,10 +17,14 @@ public interface UserService {
 
     void createPasswordResetTokenForUser(User user, String passwordToken);
 
+    User userDtoToUser(UserDto dto);
+
     String validatePasswordResetToken(String passwordResetToken);
     public void deleteUserById(UUID id);
 
     User findUserByPasswordToken(String passwordResetToken);
+
+    void spara(UserDto userDto);
 
     void resetUserPassword(User user, String newPassword);
     public UserDto getUser(UUID id);
