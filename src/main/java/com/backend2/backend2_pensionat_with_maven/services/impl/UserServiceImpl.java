@@ -130,4 +130,3 @@ public class UserServiceImpl implements UserService {
                         passwordEncoder.matches(user.getPassword(), existingUser.getPassword()));
     }
 }
-
