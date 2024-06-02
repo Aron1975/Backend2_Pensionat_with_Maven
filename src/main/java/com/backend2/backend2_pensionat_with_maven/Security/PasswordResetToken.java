@@ -21,7 +21,7 @@ public class PasswordResetToken {
     private Long token_id;
     private String token;
     private Date expirationTime;
-    private static final int EXPIRATION_TIME = 60;
+    private static final int EXPIRATION_TIME = 2;
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -34,11 +34,11 @@ public class PasswordResetToken {
         this.expirationTime = this.getTokenExpirationTime();
     }
 
-    public PasswordResetToken(String token){
+    /*public PasswordResetToken(String token){
         super();
         this.token = token;
         this.expirationTime = this.getTokenExpirationTime();
-    }
+    }*/
     public Date getTokenExpirationTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(new Date().getTime());

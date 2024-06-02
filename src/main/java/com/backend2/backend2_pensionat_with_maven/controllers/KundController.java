@@ -89,6 +89,25 @@ public class KundController {
         return "addKund";
     }
 
+    @GetMapping("/profil")
+    public String visaProfil(@AuthenticationPrincipal ConcreteUserDetails activeUser, Model model) {
+        String username = activeUser.getUsername();
+        List<DetailedKundDto> responseList = kundService.getAllKunder();
+        int id = 0;
+        for (int i = 0; i < responseList.size(); i++) {
+            if(responseList.get(i).getEmail().toLowerCase().equals(username.toLowerCase())){
+                id = (int) responseList.get(i).getId();
+            }
+        }
+        DetailedKundDto kund = kundService.getKund(id);
+        model.addAttribute("kat", "Ändra mina uppgifter");
+        model.addAttribute("titel", "Min profil");
+        model.addAttribute("kund", kund);
+        model.addAttribute("redirect", "/kund/profil");
+        model.addAttribute("cancelRedirect", "/");
+
+        return "addKund";
+    }
 
     public boolean checkIfKundHasBokning(long kundId){
         return bokningRepo.getKundIdList().stream().anyMatch(kund -> kund.getId() == kundId);
