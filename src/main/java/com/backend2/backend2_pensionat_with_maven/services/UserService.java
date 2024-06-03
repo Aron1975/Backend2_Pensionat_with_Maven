@@ -9,27 +9,25 @@ import java.util.UUID;
 
 public interface UserService {
 
-    public List<UserDto> getAllUsers();
+    List<User> getUsers();
 
     Optional<User> findByUsername(String username);
+    public List<UserDto> getAllUsers();
 
     public UserDto userToUserDto(User u);
 
     void createPasswordResetTokenForUser(User user, String passwordToken);
-
-    User userDtoToUser(UserDto dto);
+    void saveUserVerificationToken(User theUser, String verificationToken);
 
     String validatePasswordResetToken(String passwordResetToken);
     public void deleteUserById(UUID id);
 
     User findUserByPasswordToken(String passwordResetToken);
 
-    void spara(UserDto userDto);
-
     void resetUserPassword(User user, String newPassword);
     public UserDto getUser(UUID id);
 
     public boolean checkIfUserExists(User user, List<User> userList);
 
-    public boolean checkIfTokenExist(User user);
+    public void spara(UserDto userDto);
 }

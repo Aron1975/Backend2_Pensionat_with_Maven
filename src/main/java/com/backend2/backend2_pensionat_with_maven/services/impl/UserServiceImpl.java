@@ -1,15 +1,21 @@
 package com.backend2.backend2_pensionat_with_maven.services.impl;
 
-import com.backend2.backend2_pensionat_with_maven.Security.PasswordResetToken;
 import com.backend2.backend2_pensionat_with_maven.dtos.UserDto;
 import com.backend2.backend2_pensionat_with_maven.models.Role;
 import com.backend2.backend2_pensionat_with_maven.models.User;
-import com.backend2.backend2_pensionat_with_maven.repos.*;
+import com.backend2.backend2_pensionat_with_maven.repos.BokningRepo;
+import com.backend2.backend2_pensionat_with_maven.repos.KundRepo;
+import com.backend2.backend2_pensionat_with_maven.repos.RoleRepo;
+import com.backend2.backend2_pensionat_with_maven.repos.UserRepo;
 import com.backend2.backend2_pensionat_with_maven.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.backend2.backend2_pensionat_with_maven.Security.PasswordResetTokenService;
+
+
+import java.util.List;
+import java.util.Optional;
 
 import java.util.List;
 import java.util.Set;
@@ -17,27 +23,21 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import java.util.Optional;
-
-
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepo userRepo;
     private final KundRepo kundRepo;
     private final BokningRepo bokningsRepo;
-    private final RoleRepo roleRepo;
+    private final UserRepo userRepo;
     private final PasswordResetTokenService passwordResetTokenService;
     private final PasswordEncoder passwordEncoder;
-    private final PasswordResetTokenRepo passwordResetTokenRepo;
-
-
 
     @Override
-    public Optional<User> findByUsername(String username) {
-        return userRepo.findByUsername(username);
+    public List<User> getUsers() {
+        return (List<User>) userRepo.findAll();
     }
+    private final RoleRepo roleRepo;
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -46,10 +46,10 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public void createPasswordResetTokenForUser(User user, String passwordToken) {
-        passwordResetTokenService.createPasswordResetTokenForUser(user, passwordToken);
+    public Optional<User> findByUsername(String username) {
+        return userRepo.findByUsername(username);
     }
+
     @Override
     public UserDto userToUserDto(User user) {
         Set<String> roles = user.getRoles().stream()
@@ -64,7 +64,15 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    public void createPasswordResetTokenForUser(User user, String passwordToken) {
+        passwordResetTokenService.createPasswordResetTokenForUser(user, passwordToken);
+    }
+
     @Override
+    public void saveUserVerificationToken(User theUser, String verificationToken) {
+
+    }
+
     public User userDtoToUser(UserDto dto) {
         User user = new User();
         user.setId(dto.getId());
@@ -89,6 +97,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByPasswordToken(String passwordResetToken) {
         return passwordResetTokenService.findUserByPasswordToken(passwordResetToken).get();
+
     }
 
     @Override
@@ -98,14 +107,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteUserById(UUID id) {
+        userRepo.deleteById(id);
+    }
+
     public void resetUserPassword(User user, String newPassword) {
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepo.save(user);
-
-    }
-
-    public void deleteUserById(UUID id) {
-        userRepo.deleteById(id);
     }
 
     @Override
@@ -117,14 +125,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean checkIfUserExists(User user, List<User> userList) {
-        return false;
+        return userList.stream().anyMatch(existingUser ->
+                existingUser.getUsername().equals(user.getUsername()) &&
+                        passwordEncoder.matches(user.getPassword(), existingUser.getPassword()));
     }
-
-    @Override
-    public boolean checkIfTokenExist(User user){
-
-        return Boolean.TRUE.equals(passwordResetTokenRepo.findAll().stream().map(u -> u.getUser().getId() == user.getId()).findAny().orElse(null));
-
-    }
-
 }

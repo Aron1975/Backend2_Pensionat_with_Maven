@@ -27,13 +27,13 @@ public class UserDataSeeder {
         if (roleRepo.findByName("Customer") == null) {
             addRole("Customer");
         }
-        if(userRepo.getUserByUsername("asdf").isEmpty()){
+        if(userRepo.getUserByUserName("asdf@123.se").isEmpty()){
             addUser("asdf@123.se","Admin");
         }
-        if(userRepo.getUserByUsername("hej hej").isEmpty()) {
+        if(userRepo.getUserByUserName("hejhej@123.se").isEmpty()) {
             addUser("hejhej@123.se", "Receptionist");
         }
-        if(userRepo.getUserByUsername("qwerty").isEmpty()){
+        if(userRepo.getUserByUserName("qwerty@123.se").isEmpty()){
             addUser("qwerty@123.se","Customer");
         }
     }
