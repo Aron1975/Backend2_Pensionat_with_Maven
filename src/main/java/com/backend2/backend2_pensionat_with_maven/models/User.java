@@ -1,6 +1,5 @@
 package com.backend2.backend2_pensionat_with_maven.models;
 
-import com.backend2.backend2_pensionat_with_maven.Security.PasswordResetToken;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,8 +26,4 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private PasswordResetToken passwordResetToken;
-
 }

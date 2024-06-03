@@ -40,7 +40,7 @@ public class Backend2PensionatWithMavenApplication {
         }
     }
 
- @Bean
+    @Bean
     CommandLineRunner commandLineRunner() {
         return args -> {
             userDataSeeder.Seed();

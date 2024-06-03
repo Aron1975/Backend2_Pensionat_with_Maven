@@ -14,7 +14,7 @@ import java.util.UUID;
 public class AdminController {
 
     private final UserService userService;
-    private final RoleService roleService;   //test
+    private final RoleService roleService;
 
     public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
