@@ -27,14 +27,14 @@ public class UserDataSeeder {
         if (roleRepo.findByName("Customer") == null) {
             addRole("Customer");
         }
-        if(userRepo.getUserByUsername("asdf").isEmpty()){
-            addUser("asdf@123.se","Admin");
+        if (userRepo.getUserByUsername("asdf@123.se").isEmpty()) {
+            addUser("asdf@123.se", "Admin");
         }
-        if(userRepo.getUserByUsername("hej hej").isEmpty()) {
+        if (userRepo.getUserByUsername("hejhej@123.se").isEmpty()) {
             addUser("hejhej@123.se", "Receptionist");
         }
-        if(userRepo.getUserByUsername("qwerty").isEmpty()){
-            addUser("qwerty@123.se","Customer");
+        if (userRepo.getUserByUsername("qwerty@123.se").isEmpty()) {
+            addUser("qwerty@123.se", "Customer");
         }
     }
 
@@ -49,8 +49,7 @@ public class UserDataSeeder {
     }
 
     private void addRole(String name) {
-        Role role = new Role();
-        roleRepo.save(Role.builder().name(name).build());
+        Role role = Role.builder().name(name).build();
+        roleRepo.save(role);
     }
-
 }

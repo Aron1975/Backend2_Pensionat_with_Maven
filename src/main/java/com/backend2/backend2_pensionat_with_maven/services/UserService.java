@@ -29,7 +29,6 @@ public interface UserService {
     void resetUserPassword(User user, String newPassword);
     public UserDto getUser(UUID id);
 
-    public boolean checkIfUserExists(User user, List<User> userList);
-
     public boolean checkIfTokenExist(User user);
+
 }

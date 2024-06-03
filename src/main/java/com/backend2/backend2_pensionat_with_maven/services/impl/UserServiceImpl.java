@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.backend2.backend2_pensionat_with_maven.Security.PasswordResetTokenService;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -25,8 +26,6 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
-    private final KundRepo kundRepo;
-    private final BokningRepo bokningsRepo;
     private final RoleRepo roleRepo;
     private final PasswordResetTokenService passwordResetTokenService;
     private final PasswordEncoder passwordEncoder;
@@ -103,9 +102,14 @@ public class UserServiceImpl implements UserService {
         userRepo.save(user);
 
     }
-
+    @Transactional
     public void deleteUserById(UUID id) {
-        userRepo.deleteById(id);
+        Optional<User> userOptional = userRepo.findById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            passwordResetTokenRepo.deleteByUser(user);
+            userRepo.delete(user);
+        }
     }
 
     @Override
@@ -115,10 +119,6 @@ public class UserServiceImpl implements UserService {
                 .orElse(null);
     }
 
-    @Override
-    public boolean checkIfUserExists(User user, List<User> userList) {
-        return false;
-    }
 
     @Override
     public boolean checkIfTokenExist(User user){
