@@ -71,7 +71,7 @@ public class EmailServiceImpl implements EmailService {
         emailSender.send(message);
 
     }
-//"kristopher70@ethereal.email"
+
     @Override
     public void sendConfirmationMail(Bokning bokning) throws MessagingException {
         Context context = new Context();

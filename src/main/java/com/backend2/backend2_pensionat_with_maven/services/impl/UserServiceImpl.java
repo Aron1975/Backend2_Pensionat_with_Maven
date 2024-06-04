@@ -117,13 +117,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean checkIfUserExists(User user, List<User> userList) {
+
         return false;
     }
 
     @Override
     public boolean checkIfTokenExist(User user){
 
-        return Boolean.TRUE.equals(passwordResetTokenRepo.findAll().stream().map(u -> u.getUser().getId() == user.getId()).findAny().orElse(null));
+        System.out.println("I check if token exists. User: " + user.getUsername());
+//        if(passwordResetTokenRepo.findAll().stream().map(u -> u.getUser().getId() == user.getId()).findAny().isPresent()){
+//            System.out.println("I check if token exists. Token found ");
+//            return true;
+//        }
+        if(passwordResetTokenRepo.findPasswordResetTokenByUser(user) == null) {
+            return false;
+        }
+        return true;
+        //return Boolean.TRUE.equals(passwordResetTokenRepo.findAll().stream().map(u -> u.getUser().getId() == user.getId()).findAny().orElse(null));
 
     }
 

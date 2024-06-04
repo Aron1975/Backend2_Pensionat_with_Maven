@@ -17,11 +17,11 @@ import java.util.Date;
 public class PasswordResetToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue//(strategy = GenerationType.IDENTITY)
     private Long token_id;
     private String token;
     private Date expirationTime;
-    private static final int EXPIRATION_TIME = 2;
+    private static final int EXPIRATION_TIME = 60;
 
     @OneToOne
     @JoinColumn(name = "user_id")

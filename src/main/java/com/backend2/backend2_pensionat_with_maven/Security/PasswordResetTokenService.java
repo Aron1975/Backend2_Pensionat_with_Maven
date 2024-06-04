@@ -15,9 +15,15 @@ public class PasswordResetTokenService {
 
     public void createPasswordResetTokenForUser(User user, String passwordToken){
         PasswordResetToken passwordResetToken = new PasswordResetToken(passwordToken, user);
-        if(!passwordResetTokenRepo.findAll().stream().map(t -> t.getUser().getId()==user.getId()).findAny().isPresent()){
+        System.out.println("Password reset token created (i PRTService): " + passwordResetToken);
+//        if(!passwordResetTokenRepo.findAll().stream().map(t -> t.getUser().getId()==user.getId()).findAny().isPresent()){
+//            passwordResetTokenRepo.save(passwordResetToken);
+//        }
+
+    //    if(!passwordResetTokenRepo.findAll().stream().anyMatch(t -> t.getUser().getId()==user.getId())) {
+
             passwordResetTokenRepo.save(passwordResetToken);
-        }
+      //  }
     }
 
     public String validatePasswordResetToken(String theToken) {

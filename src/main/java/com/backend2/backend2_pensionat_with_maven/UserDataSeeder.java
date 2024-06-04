@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 @Service
 public class UserDataSeeder {
-    @Autowired
+  /*  @Autowired
     UserRepo userRepo;
     @Autowired
     RoleRepo roleRepo;
@@ -52,5 +52,5 @@ public class UserDataSeeder {
         Role role = new Role();
         roleRepo.save(Role.builder().name(name).build());
     }
-
+*/
 }

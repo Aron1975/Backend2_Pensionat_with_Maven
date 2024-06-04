@@ -37,34 +37,42 @@ public class UserController {
     public String forgotPassword(){
         return "forgotPassword";
     }
+
     @PostMapping("/user/password-reset-request")
     public String resetPasswordRequest(final HttpServletRequest request, @RequestParam(name = "email") String email) throws MessagingException, UnsupportedEncodingException {
         System.out.println(email);
 
+
         Optional<User> user = userService.findByUsername(email);
+       // System.out.println("User Id: " + user.get().getId());
         String passwordResetUrl = "";
         if (user.isPresent()){
             User existingUser = user.get();
-            System.out.println(user);
+            System.out.println("I user Controller: " + user);
             if(userService.checkIfTokenExist(existingUser)) {
-                PasswordResetToken prt = passwordResetTokenRepo.findAll().stream().filter(pt -> pt.getUser().getId()==existingUser.getId()).findAny().get();
+                //PasswordResetToken prt = passwordResetTokenRepo.findAll().stream().filter(pt -> pt.getUser().getId()==existingUser.getId()).findAny().get();
+                PasswordResetToken prt = passwordResetTokenRepo.findPasswordResetTokenByUser(existingUser);
+                System.out.println("I user Controller: users PRT: " + prt);
                 passwordResetTokenRepo.deleteById(prt.getToken_id());
                 String passwordResetToken = UUID.randomUUID().toString();
 
-                userService.createPasswordResetTokenForUser(user.get(), passwordResetToken);
-                passwordResetUrl = passwordResetEmailLink(user.get(), applicationUrl(request), passwordResetToken);
+                userService.createPasswordResetTokenForUser(existingUser, passwordResetToken);
+                passwordResetUrl = passwordResetEmailLink(existingUser, applicationUrl(request), passwordResetToken);
                 System.out.println(passwordResetUrl);
                 System.out.println("updated password reset link");
             }
             else{
                 String passwordResetToken = UUID.randomUUID().toString();
-
+                System.out.println("Generate new Token: " + passwordResetToken);
                 userService.createPasswordResetTokenForUser(user.get(), passwordResetToken);
                 passwordResetUrl = passwordResetEmailLink(user.get(), applicationUrl(request), passwordResetToken);
                 System.out.println("Nytt password reset link");
             }
         }
-        return "redirect:/rum/all";
+        else{
+            return "forgotPassword";
+        }
+        return "redirect:/login";
     }
 
     private String passwordResetEmailLink(User user, String applicationUrl, String passwordResetToken) throws MessagingException, UnsupportedEncodingException {
@@ -86,6 +94,9 @@ public class UserController {
         if (user != null){
             System.out.println("Token finns och användare hittad");
         }
+        else{
+            System.out.println("Användaren existerar inte..");
+        }
         return "changePassword";
     }
 
@@ -98,17 +109,18 @@ public class UserController {
         System.out.println("Kommer till sida för token osv");
         String tokenValidationResult = userService.validatePasswordResetToken(passwordResetToken);
         if(!tokenValidationResult.equalsIgnoreCase("valid")){
+            System.out.println("I User Controller updatePassword, Invalid password reset token.");
             return "Invalid password reset token";
         }
         User user = userService.findUserByPasswordToken(passwordResetToken);
         if (password.equals(confirmpassword)){
 
             if (user != null){
-                System.out.println("Lösenord ändrat!!!!!!!!!");
                 userService.resetUserPassword(user, passwordResetRequest.getNewPassword());
+                System.out.println("Lösenord ändrat!!!!!!!!!");
 
                 System.out.println("Token finns");
-                return "index";
+                return "login";
             }
         }
 
