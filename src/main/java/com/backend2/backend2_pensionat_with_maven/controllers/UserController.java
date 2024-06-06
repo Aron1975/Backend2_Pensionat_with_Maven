@@ -64,8 +64,8 @@ public class UserController {
             else{
                 String passwordResetToken = UUID.randomUUID().toString();
                 System.out.println("Generate new Token: " + passwordResetToken);
-                userService.createPasswordResetTokenForUser(user.get(), passwordResetToken);
-                passwordResetUrl = passwordResetEmailLink(user.get(), applicationUrl(request), passwordResetToken);
+                userService.createPasswordResetTokenForUser(existingUser, passwordResetToken);
+                passwordResetUrl = passwordResetEmailLink(existingUser, applicationUrl(request), passwordResetToken);
                 System.out.println("Nytt password reset link");
             }
         }
@@ -110,21 +110,20 @@ public class UserController {
         String tokenValidationResult = userService.validatePasswordResetToken(passwordResetToken);
         if(!tokenValidationResult.equalsIgnoreCase("valid")){
             System.out.println("I User Controller updatePassword, Invalid password reset token.");
-            return "Invalid password reset token";
+            //model.addAttribute("nånErrorVariabel",tokenValidationResult);
+            return "TokenErrorHandling(eller nåt)";
         }
+        System.out.println("Token finns");
         User user = userService.findUserByPasswordToken(passwordResetToken);
         if (password.equals(confirmpassword)){
-
             if (user != null){
-                userService.resetUserPassword(user, passwordResetRequest.getNewPassword());
+                userService.resetUserPassword(passwordResetToken, user, passwordResetRequest.getNewPassword());
                 System.out.println("Lösenord ändrat!!!!!!!!!");
-
-                System.out.println("Token finns");
                 return "login";
             }
         }
 
-        return "Invalid password reset token";
+        return "";
     }
 
 

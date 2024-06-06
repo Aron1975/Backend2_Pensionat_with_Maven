@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 @Service
 public class UserDataSeeder {
-  /*  @Autowired
+    @Autowired
     UserRepo userRepo;
     @Autowired
     RoleRepo roleRepo;
@@ -27,13 +27,13 @@ public class UserDataSeeder {
         if (roleRepo.findByName("Customer") == null) {
             addRole("Customer");
         }
-        if(userRepo.getUserByUsername("asdf").isEmpty()){
+        if(userRepo.getUserByUsername("asdf@123.se").isEmpty()){
             addUser("asdf@123.se","Admin");
         }
-        if(userRepo.getUserByUsername("hej hej").isEmpty()) {
+        if(userRepo.getUserByUsername("hejhej@123.se").isEmpty()) {
             addUser("hejhej@123.se", "Receptionist");
         }
-        if(userRepo.getUserByUsername("qwerty").isEmpty()){
+        if(userRepo.getUserByUsername("qwerty@123.se").isEmpty()){
             addUser("qwerty@123.se","Customer");
         }
     }
@@ -52,5 +52,5 @@ public class UserDataSeeder {
         Role role = new Role();
         roleRepo.save(Role.builder().name(name).build());
     }
-*/
+
 }

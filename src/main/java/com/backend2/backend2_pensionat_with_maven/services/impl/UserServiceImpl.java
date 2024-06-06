@@ -97,11 +97,19 @@ public class UserServiceImpl implements UserService {
         userRepo.save(user);
     }
 
-    @Override
+ /*   @Override
     public void resetUserPassword(User user, String newPassword) {
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepo.save(user);
+    }*/
 
+    @Override
+    public void resetUserPassword(String passwordResetToken, User user, String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepo.save(user);
+//        System.out.println("Password reset Token1:" + passwordResetTokenRepo.findPasswordResetTokenByUser(user));
+//        passwordResetTokenRepo.deleteByToken(passwordResetToken);  // Knas
+//        System.out.println("Password reset Token2:" + passwordResetTokenRepo.findPasswordResetTokenByUser(user));
     }
 
     public void deleteUserById(UUID id) {
