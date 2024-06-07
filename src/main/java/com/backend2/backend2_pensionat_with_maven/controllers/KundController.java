@@ -68,6 +68,7 @@ public class KundController {
         model.addAttribute("titel", "Kund");
         return "addKund";
     }
+
     @GetMapping("/nyFrånBokning")
     public String nyKundFrånBokning(Model model) {
         model.addAttribute("kund", new DetailedKundDto());
