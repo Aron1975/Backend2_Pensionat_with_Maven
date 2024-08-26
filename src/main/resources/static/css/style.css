@@ -40,7 +40,7 @@ button{
 }
 
 .invalid-feedback {
-    display: inline-block !important;
+    display: inline-block; /* !important;*/
     position: absolute;
     left: 100%;
     font-size: 0.8em;
@@ -50,7 +50,7 @@ button{
 }
 
 .invalid-feedback2 {
-    display: inline-block !important;
+    display: inline-block; /* !important;*/
     position: absolute;
     left: 100%;
     font-size: 0.8em;
@@ -62,6 +62,7 @@ button{
 .validation-parent {
     position: relative;
 }
+
 .is-invalid {
     border-color: red;
 }
@@ -73,6 +74,7 @@ button{
       font-size: 20px;
       text-align: center;*/
 }
+
 #moose2{
     /*   display: flex;
        justify-content: center;*/
@@ -93,6 +95,7 @@ button{
     margin-top: 15px;
     font-size: 20px;
 }
+
 .navbar {
     width: 100%;
     padding: 15px 30px;
@@ -108,7 +111,7 @@ button{
 }
 
 .nav-link {
-    color: #ffffff !important;
+    color: #ffffff;
     padding: 10px 15px;
     border-radius: 5px;
 }
